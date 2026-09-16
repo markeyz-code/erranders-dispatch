@@ -341,7 +341,7 @@
  </div>
 
  <!-- Premium Verification Interface -->
- <div v-if="(order.status === 'in_transit' || order.status === 'picked_up' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-3xl p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 shadow-sm">
+ <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'in_transit', 'picked_up', 'interception_in_progress'].includes(order.status) && isActiveErrander" class="bg-white rounded-xl md:rounded-3xl p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 shadow-sm">
  <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
  
  <div class="text-center space-y-2 relative z-10">
