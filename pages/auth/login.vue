@@ -15,7 +15,7 @@
             <img src="@/assets/img/logo-light.png" class="w-auto h-10" alt="Errandr" />
           </div>
           <h1 class="text-3xl font-medium text-gray-900 tracking-tight mb-2">Errand Ninja Login🥷</h1>
-          <p class="text-gray-500 font-medium text-sm">Sign in to your rider dashboard</p>
+          <p class="text-gray-500 font-medium text-sm">Sign in to Your Errand Ninja dashboard</p>
         </div>
 
         <!-- Form -->
