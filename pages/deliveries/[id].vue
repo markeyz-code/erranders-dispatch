@@ -332,16 +332,37 @@
    <p class="text-purple-700 text-xs mb-3">Waiting for another errander to accept the hand-off.</p>
  </div>
 
- <div v-if="order.interception?.status === 'accepted' && isPrimaryErrander" class="mt-6 bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
-   <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-3 mx-auto">
-     <span class="text-xl">🤝</span>
-   </div>
-   <h3 class="text-emerald-900 font-bold text-sm mb-1">Hand-off Accepted!</h3>
-   <p class="text-emerald-700 text-xs mb-2">Another errander is on their way to the hand-off location.</p>
- </div>
+ <div v-if="(order.interception?.status === 'accepted' || order.interception?.status === 'completed') && isPrimaryErrander" class="mt-6">
+    <!-- If order is delivered, show completion card for primary errander -->
+    <div v-if="order.status === 'delivered'" class="bg-emerald-500 rounded-2xl p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
+      <div class="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-600 opacity-90" />
+      <div class="absolute -right-16 -bottom-16 w-38 h-38 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
+      <div class="relative z-10 space-y-4 md:space-y-6">
+        <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mx-auto text-3xl border border-emerald-50 text-emerald-600 transform rotate-6 animate-pulse">💰</div>
+        <div>
+          <h3 class="text-white font-medium text-2xl mb-3">Delivery Completed</h3>
+          <p class="text-white/90 font-medium text-xl">+ ₦{{ myEarnings?.toLocaleString() }} Earned</p>
+          <p class="text-emerald-200 text-xs font-bold mt-1">(Your 60% share — Hand-off split)</p>
+        </div>
+        <div class="max-w-xs mx-auto">
+          <p class="text-emerald-100 text-xs font-medium mb-6">Funds have been added to your wallet.</p>
+          <NuxtLink to="/deliveries" class="block w-full py-3 bg-white text-emerald-600 rounded-lg font-bold text-sm hover:bg-emerald-50 active:scale-95 transition-all">Return to Deliveries</NuxtLink>
+        </div>
+      </div>
+    </div>
+    <!-- If order is still in progress, show hand-off accepted status -->
+    <div v-else class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
+      <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-3 mx-auto">
+        <span class="text-xl">🤝</span>
+      </div>
+      <h3 class="text-emerald-900 font-bold text-sm mb-1">Hand-off Accepted!</h3>
+      <p class="text-emerald-700 text-xs mb-2">Another errander is on their way to complete the delivery.</p>
+      <p class="text-emerald-600 text-[10px] font-bold mt-3 bg-emerald-100 px-3 py-1.5 rounded-lg inline-block">You'll earn 60% (₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.6).toLocaleString() }}) when delivered</p>
+    </div>
+  </div>
 
  <!-- Premium Verification Interface -->
- <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'in_transit', 'picked_up', 'interception_in_progress'].includes(order.status) && isActiveErrander" class="bg-white rounded-xl md:rounded-3xl p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 shadow-sm">
+ <div v-if="(order.status === 'in_transit' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-3xl p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 shadow-sm">
  <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
  
  <div class="text-center space-y-2 relative z-10">
@@ -390,16 +411,17 @@
  </div>
 
  <!-- Delivery Completed State -->
- <div v-if="order.status === 'delivered'" class="bg-emerald-500 rounded-2xl p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
+ <div v-if="order.status === 'delivered' && !isPrimaryErrander || (order.status === 'delivered' && isPrimaryErrander && !isInterceptionOrder)" class="bg-emerald-500 rounded-2xl p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
  <div class="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-600 opacity-90" />
  <div class="absolute -right-16 -bottom-16 w-38 h-38 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
  
  <div class="relative z-10 space-y-4 md:space-y-6">
  <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mx-auto text-3xl border border-emerald-50 text-emerald-600 transform rotate-6 animate-pulse">💰</div>
  <div>
- <h3 class="text-white font-medium text-2xl -tight -none mb-3">Delivery Completed</h3>
- <p v-if="order.type !== 'custom_errand'" class="text-white/90 font-medium text-xl -tight -none">+ ₦{{ (order.erranderPayout || order.deliveryFee || 0)?.toLocaleString() }} Earned</p>
- <p v-else class="text-white/90 font-medium text-xl -tight -none">Custom Errand Delivered ✅</p>
+ <h3 class="text-white font-medium text-2xl mb-3">Delivery Completed</h3>
+ <p v-if="order.type !== 'custom_errand'" class="text-white/90 font-medium text-xl">+ ₦{{ myEarnings?.toLocaleString() }} Earned</p>
+ <p v-if="isInterceptionOrder && order.type !== 'custom_errand'" class="text-emerald-200 text-xs font-bold mt-1">(Your {{ isActiveErrander ? '40%' : '60%' }} share — Hand-off split)</p>
+ <p v-if="order.type === 'custom_errand'" class="text-white/90 font-medium text-xl">Custom Errand Delivered ✅</p>
  </div>
  
  <div class="max-w-xs mx-auto">
@@ -579,6 +601,23 @@ const isActiveErrander = computed(() => {
     return secondErranderId === user.value._id;
   }
   return isPrimaryErrander.value;
+});
+
+const myEarnings = computed(() => {
+  if (!order.value) return 0;
+  const total = order.value.erranderPayout || order.value.deliveryFee || 0;
+  const hasInterception = order.value.interception && 
+    (order.value.interception.status === 'accepted' || order.value.interception.status === 'completed');
+  if (hasInterception && order.value.interception?.secondErrander) {
+    if (isPrimaryErrander.value) return Math.round(total * 0.6);
+    if (isActiveErrander.value) return Math.round(total * 0.4);
+  }
+  return total;
+});
+
+const isInterceptionOrder = computed(() => {
+  return order.value?.interception && 
+    (order.value.interception.status === 'accepted' || order.value.interception.status === 'completed');
 });
 
 const submitHandoff = async () => {
