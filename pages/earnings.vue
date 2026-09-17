@@ -7,11 +7,14 @@
         <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Earnings & Payouts</h1>
         <p class="text-gray-500 text-sm font-medium max-w-lg leading-relaxed">Track your delivery tips, base fees, and manage your withdrawal history with complete transparency.</p>
       </div>
-      <button v-if="balance > 0" @click="showWithdrawDrawer = true" class="group relative px-6 py-3 bg-gray-900 text-white rounded-2xl font-bold text-sm shadow-xl shadow-gray-900/20 hover:shadow-gray-900/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all flex items-center gap-3 overflow-hidden">
-        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
-        <span class="relative z-10">Request Payout</span>
-        <svg class="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-      </button>
+      <div class="flex flex-col items-end gap-1">
+        <button v-if="balance > 0" @click="showWithdrawDrawer = true" :disabled="balance < minimumPayout" class="group relative px-6 py-3 bg-gray-900 text-white rounded-2xl font-bold text-sm shadow-xl shadow-gray-900/20 hover:shadow-gray-900/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all flex items-center gap-3 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-gray-900/20">
+          <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+          <span class="relative z-10">Request Payout</span>
+          <svg class="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </button>
+        <p v-if="balance > 0 && balance < minimumPayout" class="text-xs text-rose-500 font-bold">Minimum withdrawal amount is ₦{{ minimumPayout.toLocaleString() }}</p>
+      </div>
     </div>
 
     <!-- Skeleton Loader -->
@@ -264,11 +267,12 @@
     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-parentPrimary"></div>
    </div>
   </label>
-  <p v-if="isInstant && withdrawAmount > 5000" class="text-[10px] text-red-500 font-bold px-1">Instant withdrawal is limited to ₦5,000</p>
-
-  <button @click="handleWithdraw" :disabled="withdrawAmount <= 0 || withdrawAmount > (balance || 0) || (isInstant && withdrawAmount > 5000)" class="w-full py-4 bg-parentPrimary text-white rounded-xl font-bold text-base shadow-sm border border-gray-100 shadow-parentPrimary/20 hover:brightness-110 disabled:opacity-30 active:scale-[0.98] transition-all ">
+  <p v-if="isInstant && withdrawAmount > 5000" class="text-[10px] text-red-500 font-bold px-1 text-center">Instant withdrawal is limited to ₦5,000</p>
+  
+  <button @click="handleWithdraw" :disabled="withdrawAmount < minimumPayout || withdrawAmount > (balance || 0) || (isInstant && withdrawAmount > 5000)" class="w-full py-4 bg-parentPrimary text-white rounded-xl font-bold text-base shadow-sm border border-gray-100 shadow-parentPrimary/20 hover:brightness-110 disabled:opacity-30 active:scale-[0.98] transition-all ">
   Confirm Withdrawal
   </button>
+  <p v-if="withdrawAmount > 0 && withdrawAmount < minimumPayout" class="text-[10px] text-red-500 font-bold px-1 text-center">Minimum payout is ₦{{ minimumPayout.toLocaleString() }}</p>
  </div>
  </div>
  </SideDrawer>
@@ -279,6 +283,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useWallet } from '@/composables/modules/wallets';
 import { wallets_api } from '@/api_factory/modules/wallets';
+import { settings_api } from '@/api_factory/modules/settings';
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
 import { useCustomToast } from '@/composables/core/useCustomToast';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
@@ -287,6 +292,7 @@ const { showToast } = useCustomToast();
 const { balance, wallet, fetchWallet, withdrawFunds, updatePreferences } = useWallet();
 const transactions = ref<any[]>([]);
 const loading = ref(true);
+const minimumPayout = ref(1000);
 const showWithdrawDrawer = ref(false);
 const showBankDrawer = ref(false);
 const withdrawAmount = ref(0);
@@ -318,11 +324,21 @@ const bankForm = ref({
 
 const loadData = async () => {
  loading.value = true;
- try {
- const txRes = await wallets_api.getTransactions();
- transactions.value = txRes.data;
- await fetchWallet();
- if (wallet.value?.bankDetails) {
+  try {
+  const txRes = await wallets_api.getTransactions();
+  transactions.value = txRes.data;
+  await fetchWallet();
+
+  try {
+    const pRes = await settings_api.getPayoutSettings();
+    if (pRes.data) {
+      minimumPayout.value = pRes.data.amount || 1000;
+    }
+  } catch(e) {
+    console.error('Failed to load minimum payout setting', e);
+  }
+
+  if (wallet.value?.bankDetails) {
  bankForm.value = { ...wallet.value.bankDetails };
  isAccountVerified.value = !!wallet.value.bankDetails.accountName;
  }

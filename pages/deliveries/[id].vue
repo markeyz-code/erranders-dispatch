@@ -286,6 +286,76 @@
    </button>
  </div>
 
+  <!-- Vendor Payment Section -->
+  <div v-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'pending' && (order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up')" class="bg-white border-2 border-[#FF5C1A] rounded-2xl p-4 md:p-5 flex flex-col items-center mt-6 shadow-md relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-16 h-16 bg-[#FF5C1A]/10 rounded-bl-full flex items-center justify-center">
+      <span class="text-2xl ml-4 mb-4">💳</span>
+    </div>
+    
+    <h3 class="text-[#FF5C1A] font-bold text-lg mb-2 self-start">Pay the Vendor</h3>
+    <p class="text-gray-600 text-sm mb-4 self-start leading-relaxed text-left">
+      The customer's payment is held securely in the system. 
+      You need to transfer <strong>₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</strong> directly to the vendor's bank account.
+    </p>
+
+    <!-- Photo Upload Section -->
+    <div class="w-full mb-4">
+      <label class="block text-xs font-bold text-gray-700 mb-1">1. Take a photo of the purchased items</label>
+      <button v-if="!itemsPhotoUrl" @click="isCameraModalOpen = true" :disabled="uploadingItemsPhoto" class="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 transition-colors">
+        <Loader2 v-if="uploadingItemsPhoto" class="w-6 h-6 animate-spin text-[#FF5C1A]" />
+        <Camera v-else class="w-6 h-6 text-[#FF5C1A]" />
+        <span class="text-sm font-semibold">{{ uploadingItemsPhoto ? 'Uploading...' : 'Tap to snap photo' }}</span>
+      </button>
+      <div v-else class="relative w-full rounded-xl overflow-hidden border border-gray-200 group">
+        <img :src="itemsPhotoUrl" class="w-full h-32 object-cover" />
+        <button @click="itemsPhotoUrl = ''" class="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600">
+          <X class="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+
+    <div class="w-full mb-4">
+      <label class="block text-xs font-bold text-gray-700 mb-1">2. Vendor Bank</label>
+      <select v-model="vendorBankForm.bankCode" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none">
+        <option value="" disabled>Select Bank...</option>
+        <option v-for="bank in vendorBanks" :key="bank.code" :value="bank.code">{{ bank.name }}</option>
+      </select>
+    </div>
+    
+    <div class="w-full mb-4">
+      <label class="block text-xs font-bold text-gray-700 mb-1">3. Account Number</label>
+      <div class="relative">
+        <input v-model="vendorBankForm.accountNumber" @input="resolveVendorAccount" type="text" maxlength="10" placeholder="0123456789" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none font-mono" />
+        <Loader2 v-if="resolvingVendorAccount" class="absolute right-3 top-3 w-5 h-5 text-[#FF5C1A] animate-spin" />
+      </div>
+    </div>
+
+    <div v-if="vendorBankForm.accountName" class="w-full p-3 bg-green-50 border border-green-200 rounded-xl mb-4">
+      <p class="text-xs text-green-700 font-bold mb-1">Verified Account Name:</p>
+      <p class="text-sm text-green-900 font-black">{{ vendorBankForm.accountName }}</p>
+    </div>
+
+    <div v-if="vendorBankForm.accountName" class="w-full mb-4">
+      <label class="block text-xs font-bold text-gray-700 mb-1">4. Amount to Transfer (₦)</label>
+      <input v-model="vendorBankForm.amount" type="number" :max="(order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)" placeholder="Enter exact amount" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" />
+      <p class="text-[10px] text-gray-500 mt-1">Maximum allowed: ₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</p>
+    </div>
+    
+    <button @click="isConfirmVendorPaymentModalOpen = true" :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0" class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold shadow-sm hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all">
+      Pay Vendor Now
+    </button>
+  </div>
+  
+  <div v-else-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'transferred'" class="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center gap-3 mt-6">
+    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 shrink-0">
+      <Check class="w-5 h-5" />
+    </div>
+    <div>
+      <p class="text-green-900 font-bold text-sm">Vendor has been paid!</p>
+      <p class="text-green-700 text-xs">₦{{ order.actualItemCost?.toLocaleString() || ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }} transferred successfully.</p>
+    </div>
+  </div>
+
  <!-- Status Update Actions -->
  <div v-if="order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up' || order.status === 'interception_in_progress'" class="space-y-4">
  <div v-if="order.status === 'confirmed' || order.status === 'ready_for_pickup'" class="animate-bounce-subtle space-y-2">
@@ -451,6 +521,45 @@
  </div>
  </div>
 
+  <!-- Vendor Payment Confirmation Modal -->
+  <UiModal
+    :is-open="isConfirmVendorPaymentModalOpen"
+    title="Confirm Vendor Payment"
+    description="Please verify the vendor details"
+    size="sm"
+    @close="isConfirmVendorPaymentModalOpen = false"
+  >
+    <div class="flex flex-col items-center text-center py-4">
+      <div class="w-16 h-16 rounded-full bg-[#FF5C1A]/10 border border-[#FF5C1A]/20 flex items-center justify-center mb-4">
+        <span class="text-3xl">💸</span>
+      </div>
+      <h4 class="text-lg font-bold text-gray-900 mb-2">Transfer to Vendor?</h4>
+      <p class="text-sm text-gray-500 leading-relaxed max-w-[260px]">
+        You are about to transfer 
+        <strong class="text-gray-900">₦{{ vendorBankForm.amount?.toLocaleString() }}</strong> 
+        to <strong class="text-gray-900">{{ vendorBankForm.accountName }}</strong> ({{ vendorBankForm.bankName }}). 
+        This cannot be undone.
+      </p>
+    </div>
+
+    <template #footer>
+      <button 
+        @click="isConfirmVendorPaymentModalOpen = false" 
+        class="px-5 py-3 w-full rounded-xl bg-gray-100 text-gray-500 font-bold text-sm hover:bg-gray-200 transition-colors"
+      >
+        Cancel
+      </button>
+      <button 
+        @click="executeVendorPayment" 
+        :disabled="submittingVendorPayment"
+        class="px-6 py-3 w-full rounded-xl bg-[#FF5C1A] text-center text-white font-bold text-sm hover:bg-[#E04D12] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+      >
+        <Loader2 v-if="submittingVendorPayment" class="w-4 h-4 animate-spin" />
+        <span>Yes, Pay Vendor</span>
+      </button>
+    </template>
+  </UiModal>
+
   <!-- P2P Payment Confirmation Modal -->
   <UiModal
     :is-open="isConfirmPaymentModalOpen"
@@ -519,6 +628,13 @@
       </button>
     </template>
   </UiModal>
+
+  <!-- Camera Modal -->
+  <UiCameraModal 
+    :is-open="isCameraModalOpen" 
+    @close="isCameraModalOpen = false" 
+    @capture="handleCapturedPhoto" 
+  />
 </template>
 
 <script setup lang="ts">
@@ -526,6 +642,7 @@ const route = useRoute();
 import { GATEWAY_ENDPOINT_WITH_AUTH as api, GATEWAY_ENDPOINT_WITH_AUTH_FORM_DATA } from '@/api_factory/axios.config';
 import StatusBadge from '@/components/ui/StatusBadge.vue';
 import UiModal from '@/components/ui/UiModal.vue';
+import UiCameraModal from '@/components/ui/CameraModal.vue';
 import OrderChat from '@/components/core/OrderChat.vue';
 import MapboxMap from '@/components/ui/MapboxMap.vue';
 import { useUser } from '@/composables/modules/auth/user';
@@ -727,6 +844,109 @@ const openChat = (receiverId: any, name: string, avatar?: string) => {
 const { showToast } = useCustomToast();
 
 const updatingStatus = ref(false);
+
+// Vendor Payment Flow
+const vendorBankForm = ref({
+  bankName: '',
+  bankCode: '',
+  accountNumber: '',
+  accountName: '',
+  amount: null as number | null,
+});
+const vendorBanks = ref<any[]>([]);
+const isVendorAccountVerified = ref(false);
+const resolvingVendorAccount = ref(false);
+const submittingVendorPayment = ref(false);
+const itemsPhotoUrl = ref('');
+const uploadingItemsPhoto = ref(false);
+const isConfirmVendorPaymentModalOpen = ref(false);
+const isCameraModalOpen = ref(false);
+
+const loadBanks = async () => {
+  try {
+    const res = await api.get<any>('/payments/banks');
+    if (res && res.type !== 'ERROR') {
+      vendorBanks.value = res.data;
+    }
+  } catch (e) {
+    console.error('Could not load banks', e);
+  }
+};
+
+const resolveVendorAccount = async () => {
+  if (vendorBankForm.value.accountNumber.length !== 10 || !vendorBankForm.value.bankCode) return;
+  
+  resolvingVendorAccount.value = true;
+  isVendorAccountVerified.value = false;
+  vendorBankForm.value.accountName = '';
+  
+  try {
+    const res = await api.post<any>('/payments/resolve-account', {
+      account_number: vendorBankForm.value.accountNumber,
+      account_bank: vendorBankForm.value.bankCode
+    });
+    if (res && res.type !== 'ERROR' && res.data?.account_name) {
+      vendorBankForm.value.accountName = res.data.account_name;
+      const selectedBank = vendorBanks.value.find(b => b.code === vendorBankForm.value.bankCode);
+      if (selectedBank) vendorBankForm.value.bankName = selectedBank.name;
+      isVendorAccountVerified.value = true;
+    } else {
+      showToast({ title: 'Invalid Account', message: 'Could not resolve account details.', toastType: 'error' });
+    }
+  } catch (e: any) {
+    showToast({ title: 'Error', message: e.response?.data?.message || 'Could not resolve account details.', toastType: 'error' });
+  } finally {
+    resolvingVendorAccount.value = false;
+  }
+};
+
+const handleCapturedPhoto = async (file: File) => {
+  if (!file) return;
+
+  uploadingItemsPhoto.value = true;
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const resUpload = await GATEWAY_ENDPOINT_WITH_AUTH_FORM_DATA.post<any>('/upload/image', formData);
+    
+    if (!resUpload || !resUpload.data?.url) throw new Error('Upload failed');
+    itemsPhotoUrl.value = resUpload.data.url;
+  } catch (e: any) {
+    showToast({
+      title: 'Upload Failed',
+      message: e.message || e.response?.data?.message || 'Could not upload photo.',
+      toastType: 'error'
+    });
+  } finally {
+    uploadingItemsPhoto.value = false;
+  }
+};
+
+const executeVendorPayment = async () => {
+  if (!order.value || !isVendorAccountVerified.value || !itemsPhotoUrl.value || !vendorBankForm.value.amount) return;
+  
+  submittingVendorPayment.value = true;
+  try {
+    const res = await api.post<any>(`/orders/${route.params.id}/disburse-to-vendor`, {
+      ...vendorBankForm.value,
+      itemsPhoto: itemsPhotoUrl.value
+    });
+    
+    if (res && res.type === 'ERROR') {
+      showToast({ title: 'Transfer Failed', message: res.data?.message || 'Failed to transfer funds to vendor', toastType: 'error' });
+      return;
+    }
+    
+    order.value = res.data;
+    showToast({ title: 'Transfer Successful', message: 'Vendor has been paid successfully.', toastType: 'success' });
+    isConfirmVendorPaymentModalOpen.value = false;
+  } catch (error: any) {
+    showToast({ title: 'Error', message: error.response?.data?.message || 'Could not process vendor payment', toastType: 'error' });
+  } finally {
+    submittingVendorPayment.value = false;
+  }
+};
 
 const actualItemCost = ref<number | null>(null);
 const submittingReconciliation = ref(false);
@@ -1016,6 +1236,7 @@ let statusPollingInterval: any = null;
 
  onMounted(async () => {
   await loadOrder();
+  loadBanks();
 
   // Robust fallback: Poll the order status every 5 seconds to ensure we don't get stuck on critical statuses
   statusPollingInterval = setInterval(() => {
