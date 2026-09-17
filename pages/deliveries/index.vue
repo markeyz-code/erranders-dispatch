@@ -155,11 +155,11 @@
  <span>Customer Pays</span>
  <span class="text-gray-900">₦{{ selectedOrder.total?.toLocaleString() }}</span>
  </div>
- <div class="flex justify-between items-center">
- <span class="text-xs text-gray-500 font-medium tracking-wider">Your Earnings</span>
- <span class="text-2xl font-medium text-emerald-600 tracking-tight">₦{{ (selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
- </div>
- </div>
+  <div class="flex justify-between items-center">
+  <span class="text-xs text-gray-500 font-medium tracking-wider">Your Earnings</span>
+  <span class="text-2xl font-medium text-emerald-600 tracking-tight">₦{{ (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
+  </div>
+  </div>
  </div>
 
  <!-- Actions -->
