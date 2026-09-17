@@ -337,11 +337,26 @@
 
     <div v-if="vendorBankForm.accountName" class="w-full mb-4">
       <label class="block text-xs font-bold text-gray-700 mb-1">4. Amount to Transfer (₦)</label>
-      <input v-model="vendorBankForm.amount" type="number" :max="(order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)" placeholder="Enter exact amount" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" />
+      <input 
+        type="text" 
+        :value="vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : ''" 
+        @input="e => { 
+          const val = e.target.value.replace(/\\D/g, ''); 
+          vendorBankForm.amount = val ? parseInt(val, 10) : 0;
+          e.target.value = vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : '';
+        }"
+        placeholder="Enter exact amount" 
+        class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" 
+      />
       <p class="text-[10px] text-gray-500 mt-1">Maximum allowed: ₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</p>
+      <p v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="text-xs text-red-500 mt-1 font-semibold">Amount exceeds maximum allowed</p>
     </div>
     
-    <button @click="isConfirmVendorPaymentModalOpen = true" :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0" class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold shadow-sm hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all">
+    <button 
+      @click="isConfirmVendorPaymentModalOpen = true" 
+      :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0 || vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" 
+      class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold shadow-sm hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+    >
       Pay Vendor Now
     </button>
   </div>
