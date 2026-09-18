@@ -1057,6 +1057,62 @@ const cancelCustomErrand = async () => {
   }
 };
 
+// Substitute State & Logic
+const showSubstituteModal = ref(false);
+const activeSubstituteItem = ref<any>(null);
+const substituteOptions = ref<any[]>([]);
+const isLoadingSubstitutes = ref(false);
+const isSubmittingSubstitute = ref(false);
+
+const openSubstituteModal = async (item: any) => {
+  activeSubstituteItem.value = item;
+  showSubstituteModal.value = true;
+  substituteOptions.value = [];
+  
+  if (order.value?.vendorId) {
+    isLoadingSubstitutes.value = true;
+    try {
+      // Fetch vendor items
+      const res = await api.get<any>(`/menu/items/vendor/${order.value.vendorId}`);
+      if (res && res.data) {
+        // Find items with identical price, excluding the original item
+        const originalPrice = item.price;
+        substituteOptions.value = res.data.filter((opt: any) => 
+          opt._id !== item.id && opt.price === originalPrice
+        );
+      }
+    } catch (e) {
+      console.error('Failed to load substitutes', e);
+      useNuxtApp().$toast.error('Failed to load menu items');
+    } finally {
+      isLoadingSubstitutes.value = false;
+    }
+  }
+};
+
+const closeSubstituteModal = () => {
+  showSubstituteModal.value = false;
+  activeSubstituteItem.value = null;
+};
+
+const requestSubstitute = async (substituteItemId: string) => {
+  if (!activeSubstituteItem.value || !order.value) return;
+  isSubmittingSubstitute.value = true;
+  try {
+    await api.post(`/orders/${order.value._id}/items/${activeSubstituteItem.value.id}/substitute/request`, {
+      substituteItemId
+    });
+    useNuxtApp().$toast.success('Substitute suggestion sent to student!');
+    closeSubstituteModal();
+    await loadOrder(true);
+  } catch (err: any) {
+    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to suggest substitute');
+  } finally {
+    isSubmittingSubstitute.value = false;
+  }
+};
+
+
 
 const updatingStatus = ref(false);
 
