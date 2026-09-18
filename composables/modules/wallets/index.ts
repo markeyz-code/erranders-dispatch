@@ -50,5 +50,24 @@ export const useWallet = () => {
     }
   };
 
-  return { balance, wallet, fetchWallet, withdrawFunds, updatePreferences };
+  const downloadReceipt = async (id: string) => {
+    startLoading('Downloading receipt...');
+    try {
+      const res = await wallets_api.downloadReceipt(id);
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `receipt-${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast({ title: 'Success', message: 'Receipt downloaded successfully', toastType: 'success' });
+    } catch (e: any) {
+      showToast({ title: 'Error', message: 'Failed to download receipt', toastType: 'error' });
+    } finally {
+      stopLoading();
+    }
+  };
+
+  return { balance, wallet, fetchWallet, withdrawFunds, updatePreferences, downloadReceipt };
 };

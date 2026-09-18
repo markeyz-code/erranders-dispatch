@@ -16,4 +16,8 @@ export const wallets_api = {
   withdraw: (amount: number, isInstant: boolean = false) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/wallets/withdraw', { amount, isInstant });
   },
+
+  downloadReceipt: (id: string) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/wallets/transactions/${id}/receipt`, { responseType: 'blob' });
+  },
 };

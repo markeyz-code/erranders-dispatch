@@ -156,6 +156,7 @@
                   <th class="py-4 px-8 font-bold text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap">Description</th>
                   <th class="py-4 px-8 font-bold text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap text-right">Amount</th>
                   <th class="py-4 px-8 font-bold text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap text-right">Date & Time</th>
+                  <th class="py-4 px-8 font-bold text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap text-right">Action</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100">
@@ -180,6 +181,12 @@
                   <td class="py-5 px-8 text-right">
                     <p class="text-sm text-gray-900 font-bold">{{ new Date(tx.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) }}</p>
                     <p class="text-xs text-gray-400 font-medium mt-1">{{ new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</p>
+                  </td>
+                  <td class="py-5 px-8 text-right">
+                    <button @click="downloadReceipt(tx._id)" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:text-[#FF5C1A] hover:bg-[#FF5C1A]/10 transition-colors flex items-center justify-end gap-1.5 border border-gray-100 shadow-sm bg-white ml-auto">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                      Receipt
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -289,7 +296,7 @@ import { useCustomToast } from '@/composables/core/useCustomToast';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
 
 const { showToast } = useCustomToast();
-const { balance, wallet, fetchWallet, withdrawFunds, updatePreferences } = useWallet();
+const { balance, wallet, fetchWallet, withdrawFunds, updatePreferences, downloadReceipt } = useWallet();
 const transactions = ref<any[]>([]);
 const loading = ref(true);
 const minimumPayout = ref(1000);
