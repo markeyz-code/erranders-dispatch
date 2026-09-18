@@ -1095,6 +1095,20 @@ const closeSubstituteModal = () => {
   activeSubstituteItem.value = null;
 };
 
+
+const markItemUnavailable = async (item: any) => {
+  if (!order.value) return;
+  if (!confirm(`Are you sure ${item.name} is unavailable?`)) return;
+  
+  try {
+    await api.post(`/orders/${order.value._id}/items/${item.id}/unavailable`);
+    useNuxtApp().$toast.success(`${item.name} marked as unavailable`);
+    await loadOrder(true);
+  } catch (err: any) {
+    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to mark item unavailable');
+  }
+};
+
 const requestSubstitute = async (substituteItemId: string) => {
   if (!activeSubstituteItem.value || !order.value) return;
   isSubmittingSubstitute.value = true;
