@@ -90,7 +90,7 @@
           <div class="space-y-4">
             <label class="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Settlement Frequency</label>
             <div class="flex gap-2 p-1.5 bg-gray-50 border border-gray-100 rounded-2xl shadow-inner">
-              <button v-for="p in ['daily', 'weekly']" :key="p"
+              <button v-for="p in ['daily', 'weekly', 'monthly']" :key="p"
                 @click="handleUpdateFrequency(p)"
                 class="flex-1 py-3.5 rounded-xl text-sm font-bold transition-all capitalize relative overflow-hidden group"
                 :class="wallet?.payoutPreference === p ? 'bg-white text-gray-900 shadow-md border border-gray-100' : 'text-gray-500 hover:text-gray-800 hover:bg-white/50'"
@@ -100,7 +100,7 @@
             </div>
             <div class="flex items-start gap-2 px-1">
               <svg class="w-4 h-4 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <p class="text-xs text-gray-500 font-medium leading-relaxed">Standard processing fees may apply for daily settlements. Weekly settlements are completely free.</p>
+              <p class="text-xs text-gray-500 font-medium leading-relaxed">Standard processing fees may apply for daily settlements. Weekly and monthly settlements are completely free.</p>
             </div>
           </div>
 
