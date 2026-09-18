@@ -166,6 +166,18 @@
          <div class="flex justify-end mt-2 pt-2 border-t border-gray-200">
          <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
          </div>
+
+         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+           <button @click="markItemUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
+           <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
+         </div>
+         <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
+           <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
+         </div>
+         <div v-if="item.status === 'substituted'" class="mt-3 pt-2 border-t border-blue-100">
+           <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded">🔄 Substituted</span>
+         </div>
+
         </div>
       </div>
     </div>
@@ -198,6 +210,18 @@
    <div class="flex justify-end mt-2 pt-2 border-t border-gray-200">
    <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
    </div>
+
+         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+           <button @click="markItemUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
+           <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
+         </div>
+         <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
+           <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
+         </div>
+         <div v-if="item.status === 'substituted'" class="mt-3 pt-2 border-t border-blue-100">
+           <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded">🔄 Substituted</span>
+         </div>
+
    </div>
   </template>
  </div>
@@ -650,6 +674,54 @@
     @close="isCameraModalOpen = false" 
     @capture="handleCapturedPhoto" 
   />
+
+  <!-- Substitute Modal -->
+  <div v-if="showSubstituteModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeSubstituteModal"></div>
+    <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+      <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+        <h3 class="text-lg font-black text-gray-900 tracking-tight">Suggest Substitute</h3>
+        <button @click="closeSubstituteModal" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">
+          <X class="w-4 h-4" />
+        </button>
+      </div>
+      
+      <div class="p-5 overflow-y-auto">
+        <div class="mb-5 p-4 bg-orange-50 rounded-xl border border-orange-100">
+          <p class="text-xs font-bold text-orange-800 uppercase tracking-widest mb-1">Original Item</p>
+          <p class="text-sm font-black text-gray-900">{{ activeSubstituteItem?.name }}</p>
+          <p class="text-xs font-bold text-gray-500 mt-1">₦{{ activeSubstituteItem?.price?.toLocaleString() }}</p>
+        </div>
+        
+        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Available Same-Price Options</h4>
+        
+        <div v-if="isLoadingSubstitutes" class="flex flex-col items-center justify-center py-8">
+          <Loader2 class="w-8 h-8 animate-spin text-[#FF5C1A] mb-2" />
+          <p class="text-xs font-bold text-gray-500">Loading vendor menu...</p>
+        </div>
+        
+        <div v-else-if="substituteOptions.length === 0" class="text-center py-8">
+          <p class="text-sm font-bold text-gray-500">No substitute items found with the exact same price (₦{{ activeSubstituteItem?.price?.toLocaleString() }}).</p>
+        </div>
+        
+        <div v-else class="space-y-2">
+          <button 
+            v-for="opt in substituteOptions" 
+            :key="opt._id"
+            @click="requestSubstitute(opt._id)"
+            :disabled="isSubmittingSubstitute"
+            class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:border-[#FF5C1A] hover:bg-orange-50 transition-all text-left disabled:opacity-50"
+          >
+            <div>
+              <p class="text-sm font-bold text-gray-900">{{ opt.name }}</p>
+              <p class="text-xs font-medium text-gray-500 mt-0.5" v-if="opt.description">{{ opt.description.substring(0, 40) }}...</p>
+            </div>
+            <span class="text-xs font-bold text-[#FF5C1A] bg-orange-100 px-2 py-1 rounded">Select</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
