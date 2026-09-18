@@ -1088,11 +1088,33 @@ const openSubstituteModal = async (item: any) => {
       const originalPrice = Number(item.price);
       const originalItemId = String(item._id || item.id || item.menuItemId);
       
+      
+      // FIND THE ORIGINAL ITEM IN THE MENU LIST TO GET ITS EXACT BASE PRICE
+      // We must match against base prices because item.price in the order already has markup applied.
+      const originalMenuItemRef = String(item.menuItem || item.product || item._id);
+      const originalMenuDoc = items.find((opt: any) => String(opt._id || opt.id) === originalMenuItemRef);
+      
+      let basePriceToMatch = originalPrice;
+      if (originalMenuDoc) {
+        basePriceToMatch = Number(originalMenuDoc.pricePerPortion ?? originalMenuDoc.price);
+      } else {
+        // Fallback: Try to deduce base price assuming ~5% markup
+        basePriceToMatch = Math.floor(originalPrice / 1.05);
+      }
+
       substituteOptions.value = items.filter((opt: any) => {
         const optId = String(opt._id || opt.id);
         const optPrice = Number(opt.pricePerPortion ?? opt.price);
-        return optId !== originalItemId && optPrice === originalPrice;
+        
+        // We allow items with the exact same base price, or if base price deduction failed, 
+        // we check if it's extremely close (to avoid floating point issues).
+        const priceMatches = originalMenuDoc 
+          ? (optPrice === basePriceToMatch)
+          : (Math.abs(optPrice - basePriceToMatch) <= 10 || optPrice === originalPrice);
+
+        return optId !== originalMenuItemRef && priceMatches;
       });
+
     } catch (e) {
       console.error('Failed to load substitutes', e);
       useNuxtApp().$toast.error('Failed to load menu items');
