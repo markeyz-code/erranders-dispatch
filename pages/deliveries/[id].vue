@@ -1077,16 +1077,20 @@ const openSubstituteModal = async (item: any) => {
     isLoadingSubstitutes.value = true;
     try {
       const res = await api.get<any>(`/menu/items/vendor/${vendorId}`);
-      const items = res?.data || [];
+      if (res && res.type === 'ERROR') {
+        throw new Error(res.message || 'Failed to fetch vendor items');
+      }
+      
+      const items = res?.data || res || [];
       
       // The order item price is already marked up. Menu items from findByVendor 
-      // also have markup applied (pricePerPortion). Match on pricePerPortion.
-      const originalPrice = item.price;
-      const originalItemId = item._id || item.id || item.menuItemId;
+      // also have markup applied (pricePerPortion).
+      const originalPrice = Number(item.price);
+      const originalItemId = String(item._id || item.id || item.menuItemId);
       
       substituteOptions.value = items.filter((opt: any) => {
-        const optId = opt._id || opt.id;
-        const optPrice = opt.pricePerPortion ?? opt.price;
+        const optId = String(opt._id || opt.id);
+        const optPrice = Number(opt.pricePerPortion ?? opt.price);
         return optId !== originalItemId && optPrice === originalPrice;
       });
     } catch (e) {
