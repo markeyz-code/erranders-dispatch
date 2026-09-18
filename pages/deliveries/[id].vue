@@ -125,15 +125,41 @@
  {{ order.type === 'custom_errand' ? 'Request Details' : (order.packs?.length > 0 ? `Order Content (${order.packs.length} packs)` : `Order Content (${order.items?.length || 0} items)`) }}
  </h3>
  
- <div v-if="order.type === 'custom_errand'" class="space-y-4">
- <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-700 leading-relaxed font-bold">
- {{ order.customDetails?.description }}
- </div>
- <div class="flex items-center justify-between p-4 bg-[#FF5C1A]/5 rounded-xl border border-[#FF5C1A]/10">
- <span class="text-sm font-bold text-[#FF5C1A] uppercase tracking-widest">Est. Item Cost</span>
- <span class="text-sm font-bold text-[#FF5C1A]">₦{{ order.customDetails?.estimatedItemCost?.toLocaleString() || 0 }}</span>
- </div>
- </div>
+ 
+  <div v-if="order.type === 'custom_errand'" class="space-y-4">
+    <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-700 leading-relaxed font-bold">
+      {{ order.customDetails?.description }}
+    </div>
+    
+    <div v-if="order.pendingTopupAmount > 0" class="p-4 bg-orange-50 border border-orange-200 rounded-xl flex items-center gap-3">
+      <Loader2 class="w-5 h-5 text-orange-500 animate-spin" />
+      <div>
+        <p class="text-xs font-bold text-orange-800">Waiting for Student...</p>
+        <p class="text-[10px] text-orange-600 font-medium mt-0.5">They need to authorize the extra ₦{{ order.pendingTopupAmount.toLocaleString() }} before you buy.</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center justify-between p-4 bg-[#FF5C1A]/5 rounded-xl border border-[#FF5C1A]/10">
+      <span class="text-sm font-bold text-[#FF5C1A] uppercase tracking-widest">Est. Item Cost</span>
+      <span class="text-sm font-bold text-[#FF5C1A]">₦{{ order.customDetails?.estimatedItemCost?.toLocaleString() || 0 }}</span>
+    </div>
+    
+    <div v-if="order.status === 'confirmed' || order.status === 'preparing'" class="flex gap-2">
+      <button 
+        @click="showCancelModal = true"
+        class="flex-1 py-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 border border-red-200 transition-all"
+      >
+        Cancel Errand (Item Unavailable)
+      </button>
+      <button 
+        @click="showTopupModal = true"
+        :disabled="order.pendingTopupAmount > 0"
+        class="flex-1 py-3 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 border border-blue-200 transition-all disabled:opacity-50"
+      >
+        Request Extra Funds
+      </button>
+    </div>
+  </div>
 
  <div v-else class="space-y-3">
   <!-- Packs Rendering -->
@@ -325,7 +351,7 @@
     <!-- Photo Upload Section -->
     <div class="w-full mb-4">
       <label class="block text-xs font-bold text-gray-700 mb-1">1. Take a photo of the purchased items</label>
-      <button v-if="!itemsPhotoUrl" @click="isCameraModalOpen = true" :disabled="uploadingItemsPhoto" class="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 transition-colors">
+      <button v-if="!itemsPhotoUrl" @click="cameraTarget = 'items'; isCameraModalOpen = true" :disabled="uploadingItemsPhoto" class="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 transition-colors">
         <Loader2 v-if="uploadingItemsPhoto" class="w-6 h-6 animate-spin text-[#FF5C1A]" />
         <Camera v-else class="w-6 h-6 text-[#FF5C1A]" />
         <span class="text-sm font-semibold">{{ uploadingItemsPhoto ? 'Uploading...' : 'Tap to snap photo' }}</span>
@@ -509,7 +535,7 @@
  <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
  <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Customer unavailable?</p>
  <label class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-200 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95">
- <input type="file" class="hidden" accept="image/*" @change="handleContactlessDropoff" :disabled="uploadingDropoff" />
+ 
  <div class="flex items-center justify-center gap-2">
  <Loader2 v-if="uploadingDropoff" class="w-4 h-4 animate-spin text-[#FF5C1A]" />
  <span v-else class="text-lg opacity-80">📸</span>
@@ -722,8 +748,62 @@
       </div>
     </div>
   </div>
-</template>
 
+  <!-- Request Topup Modal -->
+  <div v-if="showTopupModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showTopupModal = false"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6">
+      <h3 class="text-lg font-black text-gray-900 mb-2">Request Extra Funds</h3>
+      <p class="text-sm text-gray-500 mb-4">How much extra do you need to buy the item?</p>
+      <input type="number" v-model="topupAmount" placeholder="Amount (e.g. 1000)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-blue-500" />
+      <div class="flex gap-2">
+        <button @click="showTopupModal = false" class="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-bold hover:bg-gray-200">Cancel</button>
+        <button @click="requestTopup" :disabled="isRequestingTopup || !topupAmount" class="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">Request</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Cancel Errand Modal -->
+  <div v-if="showCancelModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showCancelModal = false"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6">
+      <h3 class="text-lg font-black text-gray-900 mb-2">Cancel Errand</h3>
+      <p class="text-sm text-gray-500 mb-4">Why are you cancelling this errand?</p>
+      <select v-model="cancelReason" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-red-500">
+        <option value="">Select a reason</option>
+        <option value="Item completely unavailable">Item completely unavailable</option>
+        <option value="Student declined substitute">Student declined substitute</option>
+        <option value="Store is closed">Store is closed</option>
+      </select>
+      
+      <p class="text-sm text-gray-500 mb-2 font-bold">Provide Photo Proof</p>
+      <div class="mb-4">
+        <div v-if="cancellationPhotoUrl" class="relative rounded-xl overflow-hidden mb-2">
+          <img :src="cancellationPhotoUrl" class="w-full h-32 object-cover" />
+          <button @click="cancellationPhotoUrl = ''" class="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1.5 backdrop-blur-sm hover:bg-black/70">
+            <X class="w-4 h-4" />
+          </button>
+        </div>
+        <button v-else @click="cameraTarget = 'cancellation'; isCameraModalOpen = true" class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" :disabled="uploadingCancellationPhoto">
+          <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <Loader2 v-if="uploadingCancellationPhoto" class="w-6 h-6 text-red-500 animate-spin mb-2" />
+            <Camera v-else class="w-6 h-6 text-gray-400 mb-2" />
+            <p class="text-xs text-gray-500 font-semibold">{{ uploadingCancellationPhoto ? 'Uploading...' : 'Tap to snap photo' }}</p>
+          </div>
+          
+        </button>
+      </div>
+
+      <div class="flex gap-2">
+        <button @click="showCancelModal = false" class="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-bold hover:bg-gray-200">Go Back</button>
+        <button @click="cancelCustomErrand" :disabled="isCancelling || !cancelReason || !cancellationPhotoUrl" class="flex-1 py-3 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 disabled:opacity-50 transition-all">Cancel Errand</button>
+      </div>
+    </div>
+  </div>
+
+
+</template>
 <script setup lang="ts">
 const route = useRoute();
 import { GATEWAY_ENDPOINT_WITH_AUTH as api, GATEWAY_ENDPOINT_WITH_AUTH_FORM_DATA } from '@/api_factory/axios.config';
@@ -930,6 +1010,54 @@ const openChat = (receiverId: any, name: string, avatar?: string) => {
 
 const { showToast } = useCustomToast();
 
+// Custom Errand State
+const showTopupModal = ref(false);
+const topupAmount = ref<number | null>(null);
+const isRequestingTopup = ref(false);
+
+const showCancelModal = ref(false);
+const cancelReason = ref('');
+const isCancelling = ref(false);
+const cancellationPhotoUrl = ref('');
+const uploadingCancellationPhoto = ref(false);
+
+const requestTopup = async () => {
+  if (!topupAmount.value || topupAmount.value <= 0 || !order.value) return;
+  isRequestingTopup.value = true;
+  try {
+    await api.post(`/orders/${order.value._id}/custom/topup/request`, {
+      amount: topupAmount.value
+    });
+    useNuxtApp().$toast.success('Top-up request sent to student!');
+    showTopupModal.value = false;
+    topupAmount.value = null;
+    await loadOrder(true);
+  } catch (err: any) {
+    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to request top-up');
+  } finally {
+    isRequestingTopup.value = false;
+  }
+};
+
+const cancelCustomErrand = async () => {
+  if (!cancelReason.value || !cancellationPhotoUrl.value || !order.value) return;
+  isCancelling.value = true;
+  try {
+    await api.post(`/orders/${order.value._id}/custom/cancel`, {
+      reason: cancelReason.value,
+      photoProof: cancellationPhotoUrl.value
+    });
+    useNuxtApp().$toast.success('Errand cancelled and student refunded');
+    showCancelModal.value = false;
+    navigateTo('/deliveries');
+  } catch (err: any) {
+    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to cancel errand');
+  } finally {
+    isCancelling.value = false;
+  }
+};
+
+
 const updatingStatus = ref(false);
 
 // Vendor Payment Flow
@@ -948,6 +1076,7 @@ const itemsPhotoUrl = ref('');
 const uploadingItemsPhoto = ref(false);
 const isConfirmVendorPaymentModalOpen = ref(false);
 const isCameraModalOpen = ref(false);
+const cameraTarget = ref<'items' | 'receipt' | 'dropoff' | 'cancellation'>('items');
 
 const loadBanks = async () => {
   try {
@@ -987,28 +1116,52 @@ const resolveVendorAccount = async () => {
   }
 };
 
+
 const handleCapturedPhoto = async (file: File) => {
   if (!file) return;
 
-  uploadingItemsPhoto.value = true;
+  const target = cameraTarget.value;
+  if (target === 'items') uploadingItemsPhoto.value = true;
+  else if (target === 'cancellation') uploadingCancellationPhoto.value = true;
+  else if (target === 'receipt') uploadingReceipt.value = true;
+  else if (target === 'dropoff') uploadingDropoff.value = true;
+
   try {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('image', file);
     
     const resUpload = await GATEWAY_ENDPOINT_WITH_AUTH_FORM_DATA.post<any>('/upload/image', formData);
-    
-    if (!resUpload || !resUpload.data?.url) throw new Error('Upload failed');
-    itemsPhotoUrl.value = resUpload.data.url;
+    const uploadedUrl = resUpload.data.imageUrl || resUpload.data.url || resUpload.data;
+
+    if (!uploadedUrl) throw new Error('Upload failed');
+
+    if (target === 'items') {
+      itemsPhotoUrl.value = uploadedUrl;
+    } else if (target === 'cancellation') {
+      cancellationPhotoUrl.value = uploadedUrl;
+    } else if (target === 'receipt') {
+      receiptUrl.value = uploadedUrl;
+    } else if (target === 'dropoff') {
+      // Execute contactless dropoff automatically
+      await api.post(`/orders/${order.value?._id}/contactless-dropoff`, {
+        proofImageUrl: uploadedUrl
+      });
+      useNuxtApp().$toast.success('Contactless drop-off successful');
+      navigateTo('/deliveries');
+    }
   } catch (e: any) {
-    showToast({
+    useNuxtApp().$toast.error({
       title: 'Upload Failed',
-      message: e.message || e.response?.data?.message || 'Could not upload photo.',
-      toastType: 'error'
+      message: e.message || e.response?.data?.message || 'Could not upload photo.'
     });
   } finally {
-    uploadingItemsPhoto.value = false;
+    if (target === 'items') uploadingItemsPhoto.value = false;
+    else if (target === 'cancellation') uploadingCancellationPhoto.value = false;
+    else if (target === 'receipt') uploadingReceipt.value = false;
+    else if (target === 'dropoff') uploadingDropoff.value = false;
   }
 };
+
 
 const executeVendorPayment = async () => {
   if (!order.value || !isVendorAccountVerified.value || !itemsPhotoUrl.value || !vendorBankForm.value.amount) return;
@@ -1041,15 +1194,13 @@ const submittingReconciliation = ref(false);
 const receiptUrl = ref('');
 const uploadingReceipt = ref(false);
 const receiptInput = ref<HTMLInputElement | null>(null);
-const receiptCameraInput = ref<HTMLInputElement | null>(null);
+
 
 const triggerReceiptUpload = () => {
   receiptInput.value?.click();
 };
 
-const triggerReceiptCamera = () => {
-  receiptCameraInput.value?.click();
-};
+
 
 const handleReceiptUpload = async (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -1234,45 +1385,7 @@ const completeOrder = async () => {
 };
 
 const uploadingDropoff = ref(false);
-const handleContactlessDropoff = async (event: Event) => {
- const target = event.target as HTMLInputElement;
- const file = target.files?.[0];
- if (!file) return;
 
- uploadingDropoff.value = true;
- try {
- const formData = new FormData();
- formData.append('file', file);
- 
- const resUpload = await GATEWAY_ENDPOINT_WITH_AUTH_FORM_DATA.post<any>('/upload/image', formData);
- 
- if (!resUpload || !resUpload.data?.url) throw new Error('Upload failed');
-
- const res = await api.post<any>(`/orders/${route.params.id}/complete-contactless`, { 
- imageUrl: resUpload.data.url 
- });
- 
- if (res && res.type === 'ERROR') {
- throw new Error(res.data?.message || 'Failed to complete contactless delivery');
- }
-
- order.value = res.data;
- emit('orderStatusUpdate', { orderId: route.params.id, status: 'delivered' });
- showToast({
- title: 'Drop-off Confirmed',
- message: 'Photo submitted successfully!',
- toastType: 'success'
- });
- } catch (e: any) {
- showToast({
- title: 'Upload Failed',
- message: e.message || e.response?.data?.message || 'Could not upload photo.',
- toastType: 'error'
- });
- } finally {
- uploadingDropoff.value = false;
- }
-};
 
 const getStatusBg = (s: string) => {
  if (['delivered', 'confirmed'].includes(s)) return 'bg-emerald-50 text-emerald-600';
