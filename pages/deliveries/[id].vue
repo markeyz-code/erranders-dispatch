@@ -1069,18 +1069,26 @@ const openSubstituteModal = async (item: any) => {
   showSubstituteModal.value = true;
   substituteOptions.value = [];
   
-  if (order.value?.vendorId) {
+  // Resolve vendor ID: order.vendor can be a populated object or a raw ObjectId string
+  const vendorRef = order.value?.vendor;
+  const vendorId = vendorRef?._id || vendorRef;
+  
+  if (vendorId) {
     isLoadingSubstitutes.value = true;
     try {
-      // Fetch vendor items
-      const res = await api.get<any>(`/menu/items/vendor/${order.value.vendorId}`);
-      if (res && res.data) {
-        // Find items with identical price, excluding the original item
-        const originalPrice = item.price;
-        substituteOptions.value = res.data.filter((opt: any) => 
-          opt._id !== item.id && opt.price === originalPrice
-        );
-      }
+      const res = await api.get<any>(`/menu/items/vendor/${vendorId}`);
+      const items = res?.data || [];
+      
+      // The order item price is already marked up. Menu items from findByVendor 
+      // also have markup applied (pricePerPortion). Match on pricePerPortion.
+      const originalPrice = item.price;
+      const originalItemId = item._id || item.id || item.menuItemId;
+      
+      substituteOptions.value = items.filter((opt: any) => {
+        const optId = opt._id || opt.id;
+        const optPrice = opt.pricePerPortion ?? opt.price;
+        return optId !== originalItemId && optPrice === originalPrice;
+      });
     } catch (e) {
       console.error('Failed to load substitutes', e);
       useNuxtApp().$toast.error('Failed to load menu items');
@@ -1089,6 +1097,7 @@ const openSubstituteModal = async (item: any) => {
     }
   }
 };
+
 
 const closeSubstituteModal = () => {
   showSubstituteModal.value = false;
