@@ -1151,8 +1151,10 @@ const requestSubstitute = async (substituteItemId: string) => {
     const item = activeSubstituteItem.value;
     const itemId = item._id || item.id || item.menuItem || item.product;
     
-    await api.post(`/orders/${order.value._id}/items/${itemId}/substitute/request`, {
-      substituteItemId
+    await api.post(`/orders/${order.value._id}/substitute/request`, {
+      itemId,
+      substituteItemId,
+      itemName: item.name
     });
     useNuxtApp().$toast.success('Substitute suggestion sent to student!');
     closeSubstituteModal();
