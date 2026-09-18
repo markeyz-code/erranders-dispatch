@@ -728,6 +728,7 @@
         
         <div v-else-if="substituteOptions.length === 0" class="text-center py-8">
           <p class="text-sm font-bold text-gray-500">No substitute items found with the exact same price (₦{{ activeSubstituteItem?.price?.toLocaleString() }}).</p>
+          <p class="text-xs mt-2 text-gray-400">Debug: Vendor ID: {{ order?.vendor?._id || order?.vendor || order?.vendorId || 'Missing' }}</p>
         </div>
         
         <div v-else class="space-y-2">
@@ -1090,8 +1091,7 @@ const openSubstituteModal = async (item: any) => {
       
       substituteOptions.value = items.filter((opt: any) => {
         const optId = String(opt._id || opt.id);
-        const optPrice = Number(opt.pricePerPortion ?? opt.price);
-        return optId !== originalItemId && optPrice === originalPrice;
+        return optId !== originalItemId;
       });
     } catch (e) {
       console.error('Failed to load substitutes', e);
