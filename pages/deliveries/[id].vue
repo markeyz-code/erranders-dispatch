@@ -1340,12 +1340,12 @@ const handleCapturedPhoto = async (file: File) => {
 
   try {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
     
     const resUpload = await GATEWAY_ENDPOINT_WITH_AUTH_FORM_DATA.post<any>('/upload/image', formData);
-    const uploadedUrl = resUpload.data.imageUrl || resUpload.data.url || resUpload.data;
+    const uploadedUrl = resUpload.data?.imageUrl || resUpload.data?.url || (typeof resUpload.data === 'string' ? resUpload.data : null);
 
-    if (!uploadedUrl) throw new Error('Upload failed');
+    if (!uploadedUrl || typeof uploadedUrl !== 'string') throw new Error('Upload failed — no valid URL returned');
 
     if (target === 'items') {
       itemsPhotoUrl.value = uploadedUrl;
