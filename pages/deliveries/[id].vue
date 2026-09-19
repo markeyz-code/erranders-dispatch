@@ -1028,12 +1028,12 @@ const requestTopup = async () => {
     await api.post(`/orders/${order.value._id}/custom/topup/request`, {
       amount: topupAmount.value
     });
-    useNuxtApp().$toast.success('Top-up request sent to student!');
+    showToast({ title: 'Success', message: 'Top-up request sent to student!', toastType: 'success' });
     showTopupModal.value = false;
     topupAmount.value = null;
     await loadOrder(true);
   } catch (err: any) {
-    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to request top-up');
+    showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to request top-up', toastType: 'error' });
   } finally {
     isRequestingTopup.value = false;
   }
@@ -1047,11 +1047,11 @@ const cancelCustomErrand = async () => {
       reason: cancelReason.value,
       photoProof: cancellationPhotoUrl.value
     });
-    useNuxtApp().$toast.success('Errand cancelled and student refunded');
+    showToast({ title: 'Success', message: 'Errand cancelled and student refunded', toastType: 'success' });
     showCancelModal.value = false;
     navigateTo('/deliveries');
   } catch (err: any) {
-    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to cancel errand');
+    showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to cancel errand', toastType: 'error' });
   } finally {
     isCancelling.value = false;
   }
@@ -1117,7 +1117,7 @@ const openSubstituteModal = async (item: any) => {
 
     } catch (e) {
       console.error('Failed to load substitutes', e);
-      useNuxtApp().$toast.error('Failed to load menu items');
+      showToast({ title: 'Error', message: 'Failed to load menu items', toastType: 'error' });
     } finally {
       isLoadingSubstitutes.value = false;
     }
@@ -1137,10 +1137,10 @@ const markItemUnavailable = async (item: any) => {
   
   try {
     await api.post(`/orders/${order.value._id}/items/${item.id}/unavailable`);
-    useNuxtApp().$toast.success(`${item.name} marked as unavailable`);
+    showToast({ title: 'Success', message: `${item.name} marked as unavailable`, toastType: 'success' });
     await loadOrder(true);
   } catch (err: any) {
-    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to mark item unavailable');
+    showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to mark item unavailable', toastType: 'error' });
   }
 };
 
@@ -1156,11 +1156,11 @@ const requestSubstitute = async (substituteItemId: string) => {
       substituteItemId,
       itemName: item.name
     });
-    useNuxtApp().$toast.success('Substitute suggestion sent to student!');
+    showToast({ title: 'Success', message: 'Substitute suggestion sent to student!', toastType: 'success' });
     closeSubstituteModal();
     await loadOrder(true);
   } catch (err: any) {
-    useNuxtApp().$toast.error(err.response?.data?.message || 'Failed to suggest substitute');
+    showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to suggest substitute', toastType: 'error' });
   } finally {
     isSubmittingSubstitute.value = false;
   }
@@ -1256,13 +1256,11 @@ const handleCapturedPhoto = async (file: File) => {
       await api.post(`/orders/${order.value?._id}/contactless-dropoff`, {
         proofImageUrl: uploadedUrl
       });
-      useNuxtApp().$toast.success('Contactless drop-off successful');
+      showToast({ title: 'Success', message: 'Contactless drop-off successful', toastType: 'success' });
       navigateTo('/deliveries');
     }
   } catch (e: any) {
-    useNuxtApp().$toast.error(
-      e.message || e.response?.data?.message || 'Could not upload photo.'
-    );
+    showToast({ title: 'Error', message: e.message || e.response?.data?.message || 'Could not upload photo.', toastType: 'error' });
   } finally {
     if (target === 'items') uploadingItemsPhoto.value = false;
     else if (target === 'cancellation') uploadingCancellationPhoto.value = false;
