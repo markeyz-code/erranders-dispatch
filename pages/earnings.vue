@@ -90,7 +90,7 @@
           <div class="space-y-4">
             <label class="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Settlement Frequency</label>
             <div class="flex gap-2 p-1.5 bg-gray-50 border border-gray-100 rounded-2xl shadow-inner">
-              <button v-for="p in ['daily', 'weekly', 'monthly']" :key="p"
+              <button v-for="p in ['manual', 'daily', 'weekly', 'monthly']" :key="p"
                 @click="handleUpdateFrequency(p)"
                 class="flex-1 py-3.5 rounded-xl text-sm font-bold transition-all capitalize relative overflow-hidden group"
                 :class="wallet?.payoutPreference === p ? 'bg-white text-gray-900 shadow-md border border-gray-100' : 'text-gray-500 hover:text-gray-800 hover:bg-white/50'"
@@ -395,7 +395,7 @@ const handleUpdateFrequency = async (preference: string) => {
 const handleSaveBank = async () => {
  if (!isAccountVerified.value) return;
  await updatePreferences({
- preference: wallet.value?.payoutPreference || 'weekly',
+ preference: wallet.value?.payoutPreference || 'manual',
  bankDetails: bankForm.value
  });
  showBankDrawer.value = false;
