@@ -1,56 +1,58 @@
 <template>
-  <Teleport to="body">
-    <div class="fixed left-1/2 transform -translate-x-1/2 z-[9999999] flex flex-col gap-3 max-w-sm w-full items-center px-4 pointer-events-none" style="top: calc(env(safe-area-inset-top, 0px) + 1rem)">
-      <TransitionGroup name="toast">
-        <div
-          v-for="toast in toasts"
-          :key="toast.id"
-          :class="[
-            'toast-base',
-            {
-              'bg-rose-500 border-rose-600 text-white': toast.type === 'error',
-              'bg-emerald-500 border-emerald-600 text-white': toast.type === 'success',
-              'bg-amber-500 border-amber-600 text-white': toast.type === 'warning',
-              'bg-blue-500 border-blue-600 text-white': toast.type === 'info'
-            }
-          ]"
-          class="w-full rounded-2xl border p-[12px] flex items-center gap-3 cursor-pointer pointer-events-auto"
-          @click="removeToast(toast.id)"
-        >
-          <div class="flex-shrink-0">
-            <div :class="[
-              'w-8 h-8 rounded-full flex items-center justify-center',
+  <ClientOnly>
+    <Teleport to="body">
+      <div class="fixed left-1/2 transform -translate-x-1/2 z-[9999999] flex flex-col gap-3 max-w-sm w-full items-center px-4 pointer-events-none" style="top: calc(env(safe-area-inset-top, 0px) + 1rem)">
+        <TransitionGroup name="toast">
+          <div
+            v-for="toast in toasts"
+            :key="toast.id"
+            :class="[
+              'toast-base',
               {
-                'bg-white/20 text-white': toast.type === 'error',
-                'bg-white/20 text-white': toast.type === 'success', 
-                'bg-white/20 text-white': toast.type === 'warning',
-                'bg-white/20 text-white': toast.type === 'info'
+                'bg-rose-500 border-rose-600 text-white': toast.type === 'error',
+                'bg-emerald-500 border-emerald-600 text-white': toast.type === 'success',
+                'bg-amber-500 border-amber-600 text-white': toast.type === 'warning',
+                'bg-blue-500 border-blue-600 text-white': toast.type === 'info'
               }
-            ]">
-              <CheckCircle v-if="toast.type === 'success'" :size="18" />
-              <AlertCircle v-else-if="toast.type === 'error'" :size="18" />
+            ]"
+            class="w-full rounded-2xl border p-[12px] flex items-center gap-3 cursor-pointer pointer-events-auto"
+            @click="removeToast(toast.id)"
+          >
+            <div class="flex-shrink-0">
+              <div :class="[
+                'w-8 h-8 rounded-full flex items-center justify-center',
+                {
+                  'bg-white/20 text-white': toast.type === 'error',
+                  'bg-white/20 text-white': toast.type === 'success', 
+                  'bg-white/20 text-white': toast.type === 'warning',
+                  'bg-white/20 text-white': toast.type === 'info'
+                }
+              ]">
+                <CheckCircle v-if="toast.type === 'success'" :size="18" />
+                <AlertCircle v-else-if="toast.type === 'error'" :size="18" />
 
-              <AlertTriangle v-else-if="toast.type === 'warning'" :size="18" />
-              <Info v-else :size="18" />
+                <AlertTriangle v-else-if="toast.type === 'warning'" :size="18" />
+                <Info v-else :size="18" />
+              </div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p :class="[
+                'font-medium text-sm leading-tight',
+                {
+                  'text-white': toast.type === 'error',
+                  'text-white': toast.type === 'success',
+                  'text-white': toast.type === 'warning', 
+                  'text-white': toast.type === 'info'
+                }
+              ]">
+                {{ toast.message }}
+              </p>
             </div>
           </div>
-          <div class="flex-1 min-w-0">
-            <p :class="[
-              'font-medium text-sm leading-tight',
-              {
-                'text-white': toast.type === 'error',
-                'text-white': toast.type === 'success',
-                'text-white': toast.type === 'warning', 
-                'text-white': toast.type === 'info'
-              }
-            ]">
-              {{ toast.message }}
-            </p>
-          </div>
-        </div>
-      </TransitionGroup>
-    </div>
-  </Teleport>
+        </TransitionGroup>
+      </div>
+    </Teleport>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">

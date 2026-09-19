@@ -1,103 +1,105 @@
 <template>
-  <Teleport to="body">
-    <TransitionGroup name="toast" tag="div" class="fixed left-1/2 md:left-auto md:right-4 transform -translate-x-1/2 md:translate-x-0 z-[9999] flex flex-col gap-3 w-[calc(100%-2rem)] md:w-full max-w-md pointer-events-none" style="top: calc(env(safe-area-inset-top, 0px) + 1rem);">
-      <div
-        v-for="toast in activeToasts"
-        :key="toast.id"
-        class="pointer-events-auto bg-white rounded-2xl shadow-sm border border-gray-100 border border-gray-100 overflow-hidden animate-slide-in"
-        @mouseenter="pauseDismiss(toast.id)"
-        @mouseleave="resumeDismiss(toast.id)"
-      >
-        <!-- Colored top bar based on type -->
+  <ClientOnly>
+    <Teleport to="body">
+      <TransitionGroup name="toast" tag="div" class="fixed left-1/2 md:left-auto md:right-4 transform -translate-x-1/2 md:translate-x-0 z-[9999] flex flex-col gap-3 w-[calc(100%-2rem)] md:w-full max-w-md pointer-events-none" style="top: calc(env(safe-area-inset-top, 0px) + 1rem);">
         <div
-          :class="{
-            'bg-gradient-to-r from-[#FF5C1A] to-blue-500': toast.type === 'NEW_ORDER_AVAILABLE',
-            'bg-gradient-to-r from-emerald-500 to-green-500': toast.type === 'ORDER_ACCEPTED',
-            'bg-gradient-to-r from-parentPrimary to-accent': toast.type === 'ORDER_STATUS_UPDATE',
-            'bg-gradient-to-r from-gray-700 to-gray-900': !['NEW_ORDER_AVAILABLE', 'ORDER_ACCEPTED', 'ORDER_STATUS_UPDATE'].includes(toast.type),
-          }"
-          class="h-1"
-        />
-        
-        <div class="p-4">
-          <div class="flex items-start gap-3">
-            <!-- Icon -->
-            <div
-              :class="{
-                'bg-blue-50 text-blue-600': toast.type === 'NEW_ORDER_AVAILABLE',
-                'bg-emerald-50 text-emerald-600': toast.type === 'ORDER_ACCEPTED',
-                'bg-secondary text-parentPrimary': toast.type === 'ORDER_STATUS_UPDATE',
-                'bg-gray-50 text-gray-600': !['NEW_ORDER_AVAILABLE', 'ORDER_ACCEPTED', 'ORDER_STATUS_UPDATE'].includes(toast.type),
-              }"
-              class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
-            >
-              {{ getTypeEmoji(toast.type) }}
-            </div>
-            
-            <!-- Content -->
-            <div class="flex-1 min-w-0">
-              <h4 class="text-sm font-bold text-gray-900 mb-0.5">{{ toast.title }}</h4>
-              <p class="text-xs text-gray-500 leading-relaxed">{{ toast.body }}</p>
-              
-              <!-- Earnings for new orders -->
-              <div v-if="toast.type === 'NEW_ORDER_AVAILABLE' && toast.data?.erranderShare" class="mt-2 flex items-center gap-2">
-                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
-                  💰 Earn ₦{{ toast.data.erranderShare.toLocaleString() }}
-                </span>
-                <span class="text-[10px] text-gray-400">
-                  {{ toast.data.itemCount || 0 }} item{{ (toast.data.itemCount || 0) !== 1 ? 's' : '' }}
-                </span>
+          v-for="toast in activeToasts"
+          :key="toast.id"
+          class="pointer-events-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-slide-in"
+          @mouseenter="pauseDismiss(toast.id)"
+          @mouseleave="resumeDismiss(toast.id)"
+        >
+          <!-- Colored top bar based on type -->
+          <div
+            :class="{
+              'bg-gradient-to-r from-[#FF5C1A] to-blue-500': toast.type === 'NEW_ORDER_AVAILABLE',
+              'bg-gradient-to-r from-emerald-500 to-green-500': toast.type === 'ORDER_ACCEPTED',
+              'bg-gradient-to-r from-parentPrimary to-accent': toast.type === 'ORDER_STATUS_UPDATE',
+              'bg-gradient-to-r from-gray-700 to-gray-900': !['NEW_ORDER_AVAILABLE', 'ORDER_ACCEPTED', 'ORDER_STATUS_UPDATE'].includes(toast.type),
+            }"
+            class="h-1"
+          />
+          
+          <div class="p-4">
+            <div class="flex items-start gap-3">
+              <!-- Icon -->
+              <div
+                :class="{
+                  'bg-blue-50 text-blue-600': toast.type === 'NEW_ORDER_AVAILABLE',
+                  'bg-emerald-50 text-emerald-600': toast.type === 'ORDER_ACCEPTED',
+                  'bg-secondary text-parentPrimary': toast.type === 'ORDER_STATUS_UPDATE',
+                  'bg-gray-50 text-gray-600': !['NEW_ORDER_AVAILABLE', 'ORDER_ACCEPTED', 'ORDER_STATUS_UPDATE'].includes(toast.type),
+                }"
+                class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+              >
+                {{ getTypeEmoji(toast.type) }}
               </div>
+              
+              <!-- Content -->
+              <div class="flex-1 min-w-0">
+                <h4 class="text-sm font-bold text-gray-900 mb-0.5">{{ toast.title }}</h4>
+                <p class="text-xs text-gray-500 leading-relaxed">{{ toast.body }}</p>
+                
+                <!-- Earnings for new orders -->
+                <div v-if="toast.type === 'NEW_ORDER_AVAILABLE' && toast.data?.erranderShare" class="mt-2 flex items-center gap-2">
+                  <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+                    💰 Earn ₦{{ toast.data.erranderShare.toLocaleString() }}
+                  </span>
+                  <span class="text-[10px] text-gray-400">
+                    {{ toast.data.itemCount || 0 }} item{{ (toast.data.itemCount || 0) !== 1 ? 's' : '' }}
+                  </span>
+                </div>
+              </div>
+              
+              <!-- Close button -->
+              <button @click="dismissToast(toast.id)" class="text-gray-300 hover:text-gray-500 transition-colors flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
             </div>
             
-            <!-- Close button -->
-            <button @click="dismissToast(toast.id)" class="text-gray-300 hover:text-gray-500 transition-colors flex-shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
-          </div>
-          
-          <!-- Action buttons for new orders -->
-          <div v-if="toast.type === 'NEW_ORDER_AVAILABLE'" class="flex items-center gap-2 mt-3">
-            <button
-              @click="viewManifest(toast)"
-              class="flex-1 py-2.5 text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
-            >
-              View Details
-            </button>
-            <button
-              @click="acceptOrder(toast)"
-              :disabled="toast.accepting"
-              class="flex-1 py-2.5 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 disabled:opacity-50"
-            >
-              {{ toast.accepting ? 'Accepting...' : '✅ Accept Order' }}
-            </button>
-          </div>
-          
-          <!-- Action button for chat updates -->
-          <div v-else-if="toast.type === 'NEW_CHAT_MESSAGE' && toast.data?.orderId" class="mt-3">
-            <NuxtLink
-              :to="`/deliveries/${toast.data.orderId}?openChat=${toast.data.senderId || 'true'}`"
-              @click="dismissToast(toast.id)"
-              class="block w-full py-2 text-xs font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
-            >
-              Reply to Chat 💬
-            </NuxtLink>
-          </div>
-          
-          <!-- Action button for status updates -->
-          <div v-else-if="toast.data?.orderId" class="mt-3">
-            <NuxtLink
-              :to="`/deliveries/${toast.data.orderId}`"
-              @click="dismissToast(toast.id)"
-              class="block w-full py-2 text-xs font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
-            >
-              View Order →
-            </NuxtLink>
+            <!-- Action buttons for new orders -->
+            <div v-if="toast.type === 'NEW_ORDER_AVAILABLE'" class="flex items-center gap-2 mt-3">
+              <button
+                @click="viewManifest(toast)"
+                class="flex-1 py-2.5 text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
+              >
+                View Details
+              </button>
+              <button
+                @click="acceptOrder(toast)"
+                :disabled="toast.accepting"
+                class="flex-1 py-2.5 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 disabled:opacity-50"
+              >
+                {{ toast.accepting ? 'Accepting...' : '✅ Accept Order' }}
+              </button>
+            </div>
+            
+            <!-- Action button for chat updates -->
+            <div v-else-if="toast.type === 'NEW_CHAT_MESSAGE' && toast.data?.orderId" class="mt-3">
+              <NuxtLink
+                :to="`/deliveries/${toast.data.orderId}?openChat=${toast.data.senderId || 'true'}`"
+                @click="dismissToast(toast.id)"
+                class="block w-full py-2 text-xs font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
+              >
+                Reply to Chat 💬
+              </NuxtLink>
+            </div>
+            
+            <!-- Action button for status updates -->
+            <div v-else-if="toast.data?.orderId" class="mt-3">
+              <NuxtLink
+                :to="`/deliveries/${toast.data.orderId}`"
+                @click="dismissToast(toast.id)"
+                class="block w-full py-2 text-xs font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
+              >
+                View Order →
+              </NuxtLink>
+            </div>
           </div>
         </div>
-      </div>
-    </TransitionGroup>
-  </Teleport>
+      </TransitionGroup>
+    </Teleport>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
