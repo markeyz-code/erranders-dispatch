@@ -193,12 +193,15 @@
          <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
          </div>
 
-         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
            <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
+         </div>
+         <div v-if="item.status === 'pending_substitute'" class="mt-3 pt-2 border-t border-amber-100">
+           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Suggestion Sent, Awaiting Response</span>
          </div>
          <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
            <div class="flex items-center gap-2 flex-wrap">
@@ -244,12 +247,15 @@
    <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
    </div>
 
-         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
            <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
+         </div>
+         <div v-if="item.status === 'pending_substitute'" class="mt-3 pt-2 border-t border-amber-100">
+           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Suggestion Sent, Awaiting Response</span>
          </div>
          <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
            <div class="flex items-center gap-2 flex-wrap">
@@ -1149,7 +1155,7 @@ const sendSubstituteRequest = async () => {
     
     showToast({ title: 'Success', message: 'Substitute options sent to student', toastType: 'success' });
     closeSubstituteModal();
-    // Re-fetch order to update UI statuses if needed, though they don't change locally yet until resolved
+    await loadOrder(true);
   } catch (err: any) {
     showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to request substitute', toastType: 'error' });
   } finally {
