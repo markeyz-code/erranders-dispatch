@@ -201,7 +201,7 @@
            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
          </div>
          <div v-if="item.status === 'pending_substitute'" class="mt-3 pt-2 border-t border-amber-100">
-           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Suggestion Sent, Awaiting Response</span>
+           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Negotiation request initiated, awaiting response/payment</span>
          </div>
          <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
            <div class="flex items-center gap-2 flex-wrap">
@@ -255,7 +255,7 @@
            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
          </div>
          <div v-if="item.status === 'pending_substitute'" class="mt-3 pt-2 border-t border-amber-100">
-           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Suggestion Sent, Awaiting Response</span>
+           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Negotiation request initiated, awaiting response/payment</span>
          </div>
          <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
            <div class="flex items-center gap-2 flex-wrap">
