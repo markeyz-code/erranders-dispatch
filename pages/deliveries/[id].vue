@@ -194,7 +194,7 @@
          </div>
 
          <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
-           <button @click="markItemUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
+           <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
@@ -238,7 +238,7 @@
    </div>
 
          <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
-           <button @click="markItemUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
+           <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
@@ -727,23 +727,64 @@
         </div>
         
         <div v-else-if="substituteOptions.length === 0" class="text-center py-8">
-          <p class="text-sm font-bold text-gray-500">No substitute items found with the exact same price (₦{{ activeSubstituteItem?.price?.toLocaleString() }}).</p>
+          <p class="text-sm font-bold text-gray-500">No substitute items found.</p>
         </div>
         
-        <div v-else class="space-y-2">
+        <div v-else class="space-y-2 pb-24">
           <button 
             v-for="opt in substituteOptions" 
             :key="opt._id"
-            @click="requestSubstitute(opt._id)"
-            :disabled="isSubmittingSubstitute"
-            class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:border-[#FF5C1A] hover:bg-orange-50 transition-all text-left disabled:opacity-50"
+            @click="toggleSubstituteSelection(opt._id)"
+            class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl transition-all text-left"
+            :class="selectedSubstituteIds.includes(opt._id) ? 'border-[#FF5C1A] bg-orange-50 ring-2 ring-orange-200' : 'hover:border-gray-300'"
           >
             <div>
               <p class="text-sm font-bold text-gray-900">{{ opt.name }}</p>
-              <p class="text-xs font-medium text-gray-500 mt-0.5" v-if="opt.description">{{ opt.description.substring(0, 40) }}...</p>
+              <div class="flex items-center gap-2 mt-0.5">
+                <p class="text-xs font-black text-gray-900 font-mono">₦{{ (opt.pricePerPortion ?? opt.price).toLocaleString() }}</p>
+                <span v-if="(opt.pricePerPortion ?? opt.price) > basePriceToMatch" class="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">Costs Extra</span>
+                <span v-else-if="(opt.pricePerPortion ?? opt.price) < basePriceToMatch" class="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">Cheaper</span>
+              </div>
             </div>
-            <span class="text-xs font-bold text-[#FF5C1A] bg-orange-100 px-2 py-1 rounded">Select</span>
+            <div class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full border"
+                 :class="selectedSubstituteIds.includes(opt._id) ? 'bg-[#FF5C1A] border-[#FF5C1A] text-white' : 'border-gray-300 text-transparent'">
+              <Check class="w-4 h-4" />
+            </div>
           </button>
+        </div>
+      </div>
+      <div v-if="substituteOptions.length > 0" class="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+        <button 
+          @click="sendSubstituteRequest"
+          :disabled="isSubmittingSubstitute || selectedSubstituteIds.length === 0"
+          class="w-full py-4 bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#e04f14] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-orange-200"
+        >
+          <Loader2 v-if="isSubmittingSubstitute" class="w-5 h-5 animate-spin" />
+          <span>Send Options to Student ({{ selectedSubstituteIds.length }})</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unavailable Confirmation Modal -->
+  <div v-if="showUnavailableModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="cancelUnavailable"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-red-50/50">
+        <h3 class="text-lg font-black text-red-600 tracking-tight flex items-center gap-2">
+          <AlertCircle class="w-5 h-5" /> Mark Unavailable
+        </h3>
+        <button @click="cancelUnavailable" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">
+          <X class="w-4 h-4" />
+        </button>
+      </div>
+      <div class="p-5">
+        <p class="text-sm font-medium text-gray-700 mb-4">Are you sure <strong>{{ itemToMarkUnavailable?.name }}</strong> is unavailable?</p>
+        <p class="text-xs text-gray-500 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-100">This action will immediately refund the item's cost to the student and update their order.</p>
+        
+        <div class="flex gap-3">
+          <button @click="cancelUnavailable" class="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
+          <button @click="confirmUnavailable" class="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-200">Confirm</button>
         </div>
       </div>
     </div>
@@ -814,7 +855,7 @@ import OrderChat from '@/components/core/OrderChat.vue';
 import MapboxMap from '@/components/ui/MapboxMap.vue';
 import { useUser } from '@/composables/modules/auth/user';
 import { useCustomToast } from "@/composables/core/useCustomToast"
-import { Phone, MessageSquare, Loader2, Camera, X, Upload, Check } from 'lucide-vue-next';
+import { Phone, MessageSquare, Loader2, Camera, X, Upload, Check, AlertCircle } from 'lucide-vue-next';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const { user } = useUser();
@@ -1064,12 +1105,50 @@ const substituteOptions = ref<any[]>([]);
 const isLoadingSubstitutes = ref(false);
 const isSubmittingSubstitute = ref(false);
 
+const selectedSubstituteIds = ref<string[]>([]);
+const basePriceToMatch = ref<number>(0);
+
+const toggleSubstituteSelection = (id: string) => {
+  if (selectedSubstituteIds.value.includes(id)) {
+    selectedSubstituteIds.value = selectedSubstituteIds.value.filter(i => i !== id);
+  } else {
+    if (selectedSubstituteIds.value.length >= 3) {
+      showToast({ title: 'Limit Reached', message: 'You can select up to 3 options.', toastType: 'info' });
+      return;
+    }
+    selectedSubstituteIds.value.push(id);
+  }
+};
+
+const sendSubstituteRequest = async () => {
+  if (!order.value || !activeSubstituteItem.value || selectedSubstituteIds.value.length === 0) return;
+  
+  isSubmittingSubstitute.value = true;
+  try {
+    const payload = {
+      itemId: activeSubstituteItem.value.id || activeSubstituteItem.value._id || activeSubstituteItem.value.menuItemId,
+      substituteItemIds: selectedSubstituteIds.value,
+      itemName: activeSubstituteItem.value.name
+    };
+    
+    await api.post(`/orders/${order.value._id}/items/${payload.itemId}/substitute/request`, payload);
+    
+    showToast({ title: 'Success', message: 'Substitute options sent to student', toastType: 'success' });
+    closeSubstituteModal();
+    // Re-fetch order to update UI statuses if needed, though they don't change locally yet until resolved
+  } catch (err: any) {
+    showToast({ title: 'Error', message: err.response?.data?.message || 'Failed to request substitute', toastType: 'error' });
+  } finally {
+    isSubmittingSubstitute.value = false;
+  }
+};
+
 const openSubstituteModal = async (item: any) => {
   activeSubstituteItem.value = item;
   showSubstituteModal.value = true;
   substituteOptions.value = [];
+  selectedSubstituteIds.value = [];
   
-  // Resolve vendor ID: order.vendor can be a populated object or a raw ObjectId string
   const vendorRef = order.value?.vendor;
   const vendorId = vendorRef?._id || vendorRef;
   
@@ -1082,37 +1161,21 @@ const openSubstituteModal = async (item: any) => {
       }
       
       const items = res?.data || res || [];
-      
-      // The order item price is already marked up. Menu items from findByVendor 
-      // also have markup applied (pricePerPortion).
       const originalPrice = Number(item.price);
-      const originalItemId = String(item._id || item.id || item.menuItemId);
-      
-      
-      // FIND THE ORIGINAL ITEM IN THE MENU LIST TO GET ITS EXACT BASE PRICE
-      // We must match against base prices because item.price in the order already has markup applied.
       const originalMenuItemRef = String(item.menuItem || item.product || item._id);
       const originalMenuDoc = items.find((opt: any) => String(opt._id || opt.id) === originalMenuItemRef);
       
-      let basePriceToMatch = originalPrice;
+      let basePrice = originalPrice;
       if (originalMenuDoc) {
-        basePriceToMatch = Number(originalMenuDoc.pricePerPortion ?? originalMenuDoc.price);
+        basePrice = Number(originalMenuDoc.pricePerPortion ?? originalMenuDoc.price);
       } else {
-        // Fallback: Try to deduce base price assuming ~5% markup
-        basePriceToMatch = Math.floor(originalPrice / 1.05);
+        basePrice = Math.floor(originalPrice / 1.05);
       }
+      basePriceToMatch.value = basePrice;
 
       substituteOptions.value = items.filter((opt: any) => {
         const optId = String(opt._id || opt.id);
-        const optPrice = Number(opt.pricePerPortion ?? opt.price);
-        
-        // We allow items with the exact same base price, or if base price deduction failed, 
-        // we check if it's extremely close (to avoid floating point issues).
-        const priceMatches = originalMenuDoc 
-          ? (optPrice === basePriceToMatch)
-          : (Math.abs(optPrice - basePriceToMatch) <= 10 || optPrice === originalPrice);
-
-        return optId !== originalMenuItemRef && priceMatches;
+        return optId !== originalMenuItemRef;
       });
 
     } catch (e) {
@@ -1131,9 +1194,28 @@ const closeSubstituteModal = () => {
 };
 
 
+const showUnavailableModal = ref(false);
+const itemToMarkUnavailable = ref<any>(null);
+
+const promptUnavailable = (item: any) => {
+  itemToMarkUnavailable.value = item;
+  showUnavailableModal.value = true;
+};
+
+const cancelUnavailable = () => {
+  showUnavailableModal.value = false;
+  itemToMarkUnavailable.value = null;
+};
+
+const confirmUnavailable = () => {
+  if (!itemToMarkUnavailable.value) return;
+  const item = itemToMarkUnavailable.value;
+  cancelUnavailable();
+  markItemUnavailable(item);
+};
+
 const markItemUnavailable = async (item: any) => {
   if (!order.value) return;
-  if (!confirm(`Are you sure ${item.name} is unavailable?`)) return;
   
   try {
     await api.post(`/orders/${order.value._id}/items/${item.id}/unavailable`);
@@ -1567,6 +1649,15 @@ let statusPollingInterval: any = null;
   on('notification:new', (payload: any) => {
     if (matchesOrder(payload.data?.orderId) || matchesOrder(payload.orderId)) {
       loadOrder();
+      
+      // Explicit notification when student accepts/resolves substitute
+      if (['SUBSTITUTE_RESOLVED', 'substitute_accepted'].includes(payload.type)) {
+        showToast({
+          title: '✅ Substitute Accepted',
+          message: payload.body || 'The student accepted your substitute suggestion.',
+          toastType: 'success'
+        });
+      }
     }
   });
   
