@@ -200,8 +200,15 @@
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
          </div>
-         <div v-if="item.status === 'substituted'" class="mt-3 pt-2 border-t border-blue-100">
-           <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded">🔄 Substituted</span>
+         <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
+           <div class="flex items-center gap-2 flex-wrap">
+             <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded line-through flex items-center gap-1"><X class="w-3 h-3" /> {{ item.substitutedWith?.originalName || 'Old Item' }}</span>
+             <ArrowRight class="w-3 h-3 text-gray-300" />
+             <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded flex items-center gap-1"><Check class="w-3 h-3" /> {{ item.substitutedWith?.name || item.name }}</span>
+           </div>
+           <div v-if="item.substitutedWith?.note" class="bg-amber-50 border border-amber-100 p-2 rounded-lg mt-1">
+             <p class="text-[11px] text-amber-800 font-medium flex items-start gap-1.5"><MessageSquare class="w-3.5 h-3.5 mt-0.5 shrink-0" /> {{ item.substitutedWith.note }}</p>
+           </div>
          </div>
 
         </div>
@@ -244,8 +251,15 @@
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
            <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
          </div>
-         <div v-if="item.status === 'substituted'" class="mt-3 pt-2 border-t border-blue-100">
-           <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded">🔄 Substituted</span>
+         <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
+           <div class="flex items-center gap-2 flex-wrap">
+             <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded line-through flex items-center gap-1"><X class="w-3 h-3" /> {{ item.substitutedWith?.originalName || 'Old Item' }}</span>
+             <ArrowRight class="w-3 h-3 text-gray-300" />
+             <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded flex items-center gap-1"><Check class="w-3 h-3" /> {{ item.substitutedWith?.name || item.name }}</span>
+           </div>
+           <div v-if="item.substitutedWith?.note" class="bg-amber-50 border border-amber-100 p-2 rounded-lg mt-1">
+             <p class="text-[11px] text-amber-800 font-medium flex items-start gap-1.5"><MessageSquare class="w-3.5 h-3.5 mt-0.5 shrink-0" /> {{ item.substitutedWith.note }}</p>
+           </div>
          </div>
 
    </div>
@@ -855,7 +869,7 @@ import OrderChat from '@/components/core/OrderChat.vue';
 import MapboxMap from '@/components/ui/MapboxMap.vue';
 import { useUser } from '@/composables/modules/auth/user';
 import { useCustomToast } from "@/composables/core/useCustomToast"
-import { Phone, MessageSquare, Loader2, Camera, X, Upload, Check, AlertCircle } from 'lucide-vue-next';
+import { Phone, MessageSquare, Loader2, Camera, X, Upload, Check, AlertCircle, ArrowRight } from 'lucide-vue-next';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const { user } = useUser();
