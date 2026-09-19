@@ -1658,6 +1658,14 @@ let statusPollingInterval: any = null;
           toastType: 'success'
         });
       }
+      
+      if (payload.type === 'ORDER_UPDATED' && payload.body?.includes('unavailable')) {
+        showToast({
+          title: '❌ Substitute Declined',
+          message: 'The student declined the substitute. Item marked unavailable.',
+          toastType: 'error'
+        });
+      }
     }
   });
   
