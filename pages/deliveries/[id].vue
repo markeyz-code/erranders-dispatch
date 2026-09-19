@@ -1677,6 +1677,7 @@ let statusPollingInterval: any = null;
           message: payload.body || 'The student accepted your substitute suggestion.',
           toastType: 'success'
         });
+        loadOrder(true);
       }
       
       if (payload.type === 'ORDER_UPDATED' && payload.body?.includes('unavailable')) {
@@ -1685,6 +1686,7 @@ let statusPollingInterval: any = null;
           message: 'The student declined the substitute. Item marked unavailable.',
           toastType: 'error'
         });
+        loadOrder(true);
       }
     }
   });
