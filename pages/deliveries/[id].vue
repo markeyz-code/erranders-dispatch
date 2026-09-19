@@ -1131,7 +1131,7 @@ const sendSubstituteRequest = async () => {
       itemName: activeSubstituteItem.value.name
     };
     
-    await api.post(`/orders/${order.value._id}/items/${payload.itemId}/substitute/request`, payload);
+    await api.post(`/orders/${order.value._id}/substitute/request`, payload);
     
     showToast({ title: 'Success', message: 'Substitute options sent to student', toastType: 'success' });
     closeSubstituteModal();
