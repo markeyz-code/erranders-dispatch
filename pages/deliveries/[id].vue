@@ -1260,10 +1260,9 @@ const handleCapturedPhoto = async (file: File) => {
       navigateTo('/deliveries');
     }
   } catch (e: any) {
-    useNuxtApp().$toast.error({
-      title: 'Upload Failed',
-      message: e.message || e.response?.data?.message || 'Could not upload photo.'
-    });
+    useNuxtApp().$toast.error(
+      e.message || e.response?.data?.message || 'Could not upload photo.'
+    );
   } finally {
     if (target === 'items') uploadingItemsPhoto.value = false;
     else if (target === 'cancellation') uploadingCancellationPhoto.value = false;
