@@ -1565,20 +1565,8 @@ let statusPollingInterval: any = null;
   });
   
   on('notification:new', (payload: any) => {
-    const reloadTypes = [
-      'ORDER_STATUS_UPDATE', 
-      'ORDER_BIDS_UPDATE', 
-      'ORDER_AWAITING_PAYMENT_CONFIRMATION',
-      'ORDER_ACCEPTED',
-      'ORDER_BID_ACCEPTED',
-      'ORDER_INTERCEPTION_ACCEPTED',
-      'ORDER_INTERCEPTION_REQUESTED'
-    ];
-    
-    if (reloadTypes.includes(payload?.type)) {
-      if (matchesOrder(payload.data?.orderId) || matchesOrder(payload.orderId)) {
-        loadOrder();
-      }
+    if (matchesOrder(payload.data?.orderId) || matchesOrder(payload.orderId)) {
+      loadOrder();
     }
   });
   
