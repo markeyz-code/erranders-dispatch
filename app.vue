@@ -1,17 +1,24 @@
 <template>
   <div>
-    <VitePwaManifest />
-    <UiToast class="z-[9999999]" />
-    <CoreGlobalConfirmModal />
-    <CoreNetworkStatusBanner />
-    <NuxtLayout class="z-10">
-      <NuxtPage class="z-10" />
-    </NuxtLayout>
-    
-    <!-- Chat Widget - Bottom Right -->
-    <!-- <div class="fixed bottom-6 right-6 z-[999998]">
-      <ChatWidget />
-    </div> -->
+    <!-- Platform Closed Overlay -->
+    <ClientOnly>
+      <CorePlatformClosed v-if="isPlatformClosed" />
+    </ClientOnly>
+
+    <template v-if="!isPlatformClosed">
+      <VitePwaManifest />
+      <UiToast class="z-[9999999]" />
+      <CoreGlobalConfirmModal />
+      <CoreNetworkStatusBanner />
+      <NuxtLayout class="z-10">
+        <NuxtPage class="z-10" />
+      </NuxtLayout>
+      
+      <!-- Chat Widget - Bottom Right -->
+      <!-- <div class="fixed bottom-6 right-6 z-[999998]">
+        <ChatWidget />
+      </div> -->
+    </template>
     
     <!-- Background Audio - Bottom Left -->
     <!-- <ClientOnly>
@@ -30,17 +37,33 @@ body {
 
 <script setup lang="ts">
 // Global app configuration
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useAuth } from '@/composables/modules/auth'
 import { useUser } from '@/composables/modules/auth/user'
+
+const isPlatformClosed = ref(false)
 
 const { fetchProfile } = useAuth()
 const { token } = useUser()
 
 useRealtimeNotifications()
 
+// Check platform status
+const checkPlatformStatus = async () => {
+  try {
+    const envApiUrl = import.meta.env?.VITE_API_BASE_URL
+    const baseUrl = envApiUrl || 'https://api.erranders.org'
+    const cleanBase = baseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
+    const res = await $fetch<{ isClosed: boolean }>(`${cleanBase}/api/v1/settings/platform-status/public`)
+    isPlatformClosed.value = res?.isClosed ?? false
+  } catch (e) {
+    isPlatformClosed.value = false
+  }
+}
+
 onMounted(() => {
+  checkPlatformStatus()
   if (token.value) {
     fetchProfile()
   }
