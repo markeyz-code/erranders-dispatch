@@ -69,6 +69,7 @@
   justify-content: center;
   overflow: hidden;
   font-family: 'Roobert PRO', 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #ffffff !important;
 }
 
 .bg-layer {
