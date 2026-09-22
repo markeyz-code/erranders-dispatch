@@ -46,7 +46,16 @@ export const useAuth = () => {
             message: "You've successfully signed in with Google.",
             toastType: "success",
           });
-          await navigateTo('/dashboard');
+          if (!userData.phone) {
+            showToast({
+              title: "Action Required",
+              message: "Please add your phone number to complete account setup.",
+              toastType: "info",
+            });
+            await navigateTo('/auth/setup');
+          } else {
+            await navigateTo('/dashboard');
+          }
         }
       }
     } catch (e: any) {
@@ -101,7 +110,15 @@ export const useAuth = () => {
       if (options.redirect) {
         const route = useRoute();
         try {
-          const redirectPath = (route.query.redirect as string) || '/dashboard';
+          let redirectPath = (route.query.redirect as string) || '/dashboard';
+          if (!userData.phone) {
+            redirectPath = '/auth/setup';
+            showToast({
+              title: "Action Required",
+              message: "Please add your phone number to complete account setup.",
+              toastType: "info",
+            });
+          }
           await navigateTo(redirectPath);
         } catch (navError) {
           // Ignore navigation aborts
