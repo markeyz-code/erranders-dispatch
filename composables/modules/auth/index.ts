@@ -1,13 +1,126 @@
 import { ref } from 'vue';
 import { auth_api } from '@/api_factory/modules/auth';
 import { useUser } from './user';
-import { navigateTo, useRoute } from '#imports';
+import { navigateTo, useRoute, useRuntimeConfig } from '#imports';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, signInWithRedirect } from 'firebase/auth';
 
 export const useAuth = () => {
   const { setUser, setToken, logOut } = useUser();
   const { showToast } = useCustomToast();
   const loading = ref(false);
+  const firebaseLoading = ref(false);
+
+  const getFirebaseAuth = () => {
+    const config = useRuntimeConfig();
+    const firebaseConfig = {
+      apiKey: config.public.firebaseApiKey,
+      authDomain: config.public.firebaseAuthDomain,
+      projectId: config.public.firebaseProjectId,
+    };
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    return getAuth(app);
+  };
+
+  const checkRedirectResult = async () => {
+    try {
+      const auth = getFirebaseAuth();
+      const result = await getRedirectResult(auth);
+      if (result) {
+        firebaseLoading.value = true;
+        const idToken = await result.user.getIdToken();
+        const res = await auth_api.firebaseLogin({ idToken, role: 'errander' });
+
+        if (res.type === 'ERROR') throw { data: res.data || { message: 'Firebase login failed' } };
+
+        const responseData = res.data?.data || res.data;
+        const userData = responseData?.user;
+        const tokenValue = responseData?.token;
+
+        if (userData && tokenValue) {
+          setUser(userData);
+          setToken(tokenValue);
+          showToast({
+            title: "Welcome!",
+            message: "You've successfully signed in with Google.",
+            toastType: "success",
+          });
+          await navigateTo('/dashboard');
+        }
+      }
+    } catch (e: any) {
+      console.error('Redirect login error:', e);
+    } finally {
+      firebaseLoading.value = false;
+    }
+  };
+
+  const firebaseLogin = async (options: { redirect?: boolean } = { redirect: true }) => {
+    firebaseLoading.value = true;
+    try {
+      const auth = getFirebaseAuth();
+      const provider = new GoogleAuthProvider();
+
+      let result;
+      try {
+        result = await signInWithPopup(auth, provider);
+      } catch (err: any) {
+        if (err.code === 'auth/popup-blocked') {
+          console.warn('Popup blocked by browser. Falling back to signInWithRedirect...');
+          await signInWithRedirect(auth, provider);
+          return new Promise(() => {});
+        }
+        throw err;
+      }
+      const idToken = await result.user.getIdToken();
+
+      const res = await auth_api.firebaseLogin({ idToken, role: 'errander' });
+
+      if (res.type === 'ERROR') {
+        throw { data: res.data || { message: 'Firebase login failed' } };
+      }
+
+      const responseData = res.data?.data || res.data;
+      const userData = responseData?.user;
+      const tokenValue = responseData?.token;
+
+      if (!userData || !tokenValue) {
+        throw { data: { message: 'Firebase login failed: unexpected response format' } };
+      }
+
+      setUser(userData);
+      setToken(tokenValue);
+
+      showToast({
+        title: "Welcome!",
+        message: "You've successfully signed in with Google.",
+        toastType: "success",
+      });
+
+      if (options.redirect) {
+        const route = useRoute();
+        try {
+          const redirectPath = (route.query.redirect as string) || '/dashboard';
+          await navigateTo(redirectPath);
+        } catch (navError) {
+          // Ignore navigation aborts
+        }
+      }
+
+      return responseData;
+    } catch (e: any) {
+      console.error('Firebase login failed:', e);
+      showToast({
+        title: "Login Failed",
+        message: e.message || "Failed to login with Google.",
+        toastType: "error",
+      });
+      throw e;
+    } finally {
+      firebaseLoading.value = false;
+    }
+  };
 
   const login = async (payload: any, options: { redirect?: boolean } = { redirect: true }) => {
     const route = useRoute();
@@ -176,7 +289,9 @@ export const useAuth = () => {
 
   return {
     loading,
+    firebaseLoading,
     login,
+    firebaseLogin,
     register,
     fetchProfile,
     forgotPassword,
@@ -184,6 +299,7 @@ export const useAuth = () => {
     verifyOTP,
     resendOTP,
     resetPassword,
-    logOut
+    logOut,
+    checkRedirectResult
   };
 };

@@ -36,4 +36,8 @@ export const auth_api = {
   updateFcmToken: (payload: { token: string }) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.put('/users/me/fcm-token', payload);
   },
+
+  firebaseLogin: (payload: { idToken: string; role?: string }) => {
+    return GATEWAY_ENDPOINT.post('/auth/firebase', payload);
+  },
 };

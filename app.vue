@@ -55,8 +55,8 @@ const checkPlatformStatus = async () => {
     const envApiUrl = import.meta.env?.VITE_API_BASE_URL
     const baseUrl = envApiUrl || 'https://api.erranders.org'
     const cleanBase = baseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
-    const res = await $fetch<{ isClosed: boolean }>(`${cleanBase}/api/v1/settings/platform-status/public`)
-    isPlatformClosed.value = res?.isClosed ?? false
+    const res = await $fetch<{ isDispatchAppClosed: boolean; isClosed: boolean }>(`${cleanBase}/api/v1/settings/platform-status/public`)
+    isPlatformClosed.value = res?.isDispatchAppClosed ?? res?.isClosed ?? false
   } catch (e) {
     isPlatformClosed.value = false
   }
