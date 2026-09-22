@@ -5,6 +5,10 @@ export const erranders_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.get('/erranders/me');
   },
 
+  register: (payload: any) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/erranders/register', payload);
+  },
+
   getEarnings: () => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get('/erranders/earnings');
   },
