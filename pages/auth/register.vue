@@ -1,27 +1,27 @@
 <template>
-  <div class="min-h-screen w-full bg-white flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
+  <div class="min-h-screen w-full bg-white flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
     <div class="w-full max-w-[420px] relative z-10">
       <div class="w-full">
         <!-- Header -->
-        <div class="text-center space-y-3 mb-10">
+        <div class="text-center space-y-3 mb-6">
           <div class="flex items-center justify-center transition-transform">
             <img src="@/assets/img/logo-light.png" class="w-auto h-10" alt="Errandr" />
           </div>
-          <h1 class="text-3xl font-medium text-gray-900 tracking-tight mb-2">Become an Errand Ninja! 🥷</h1>
+          <h1 class="text-xl font-medium text-gray-900 tracking-tight mb-2">Become an Errand Ninja! 🥷</h1>
           <p class="text-gray-500 font-medium text-sm">Sign up with Google to start delivering</p>
         </div>
 
         <!-- Google Sign Up -->
         <div class="space-y-5">
           <transition name="fade">
-            <div v-if="error" class="flex items-center gap-2 p-4 bg-red-50 border border-red-100 rounded-2xl text-[13px] font-bold text-red-600">
+            <div v-if="error" class="flex items-center gap-2 p-4 bg-red-50 border border-red-100 rounded-xl text-[13px] font-bold text-red-600">
               <AlertCircle class="w-4 h-4 shrink-0" />
               {{ error }}
             </div>
           </transition>
 
           <button type="button" @click="handleGoogleSignup" :disabled="firebaseLoading"
-            class="w-full py-4 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-2xl flex items-center justify-center gap-3 font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-md shadow-[#FF5C1A]/20">
+            class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl flex items-center justify-center gap-3 font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-md shadow-[#FF5C1A]/20">
             <Loader2 v-if="firebaseLoading" class="animate-spin w-5 h-5" />
             <svg v-else class="w-5 h-5" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="currentColor" fill-opacity="0.3"/>
@@ -41,7 +41,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="mt-10 text-center pt-8 border-t border-gray-200">
+        <div class="mt-6 text-center pt-8 border-t border-gray-200">
           <p class="text-gray-500 font-medium text-sm">
             Already have an account?
             <NuxtLink to="/auth/login" class="text-[#FF5C1A] font-bold hover:underline">Sign in</NuxtLink>
@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <div class="mt-8 text-center flex items-center justify-center gap-4 text-sm font-bold text-gray-400 border-t border-gray-100 pt-8">
+      <div class="mt-5 text-center flex items-center justify-center gap-4 text-sm font-bold text-gray-400 border-t border-gray-100 pt-8">
         <p>&copy; {{ new Date().getFullYear() }} Errandr</p>
         <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
         <NuxtLink to="/terms" class="hover:text-gray-600 transition-colors">Terms & Privacy</NuxtLink>
