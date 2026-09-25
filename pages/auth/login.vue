@@ -80,7 +80,7 @@ onMounted(() => {
 const handleGoogleLogin = async () => {
   error.value = ''
   try {
-    const res = await firebaseLogin({ redirect: false })
+    const res = await firebaseLogin({ redirect: false, isSignUp: false })
     const isNewUser = res?.isNewUser
     if (isNewUser) {
       // New user trying to login — redirect to signup to complete profile

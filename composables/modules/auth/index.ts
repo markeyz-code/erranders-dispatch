@@ -30,7 +30,7 @@ export const useAuth = () => {
       if (result) {
         firebaseLoading.value = true;
         const idToken = await result.user.getIdToken();
-        const res = await auth_api.firebaseLogin({ idToken, role: 'errander' });
+        const res = await auth_api.firebaseLogin({ idToken, role: 'errander', isSignUp: false });
 
         if (res.type === 'ERROR') throw { data: res.data || { message: 'Firebase login failed' } };
 
@@ -65,7 +65,7 @@ export const useAuth = () => {
     }
   };
 
-  const firebaseLogin = async (options: { redirect?: boolean } = { redirect: true }) => {
+  const firebaseLogin = async (options: { redirect?: boolean; isSignUp?: boolean } = { redirect: true, isSignUp: false }) => {
     firebaseLoading.value = true;
     try {
       const auth = getFirebaseAuth();
@@ -84,7 +84,7 @@ export const useAuth = () => {
       }
       const idToken = await result.user.getIdToken();
 
-      const res = await auth_api.firebaseLogin({ idToken, role: 'errander' });
+      const res = await auth_api.firebaseLogin({ idToken, role: 'errander', isSignUp: options?.isSignUp });
 
       if (res.type === 'ERROR') {
         throw { data: res.data || { message: 'Firebase login failed' } };
@@ -130,7 +130,7 @@ export const useAuth = () => {
       console.error('Firebase login failed:', e);
       showToast({
         title: "Login Failed",
-        message: e.message || "Failed to login with Google.",
+        message: e?.data?.message || e?.message || "Failed to login with Google.",
         toastType: "error",
       });
       throw e;

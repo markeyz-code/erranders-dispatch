@@ -72,7 +72,7 @@ const error = ref('')
 const handleGoogleSignup = async () => {
   error.value = ''
   try {
-    const res = await firebaseLogin({ redirect: false })
+    const res = await firebaseLogin({ redirect: false, isSignUp: true })
     // After Google signup, always redirect to complete-profile to fill remaining info
     navigateTo('/auth/complete-profile')
   } catch (e: any) {
