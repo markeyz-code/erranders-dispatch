@@ -264,14 +264,51 @@
           </div>
           
           <div class="space-y-4">
-            <div>
+            <div class="relative">
               <label class="block text-xs font-bold text-gray-700 mb-2">School</label>
-              <select v-model="form.school" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
-                <option value="" disabled>Select your school</option>
-                <option value="UNILAG">UNILAG</option>
-                <option value="CMUL">CMUL</option>
-                <option value="YABATECH">YABATECH</option>
-              </select>
+              <div 
+                @click="isSchoolDropdownOpen = !isSchoolDropdownOpen" 
+                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors shadow-sm"
+              >
+                <span :class="form.school ? 'text-gray-900' : 'text-gray-400'">
+                  {{ form.school || 'Select your school' }}
+                </span>
+                <ChevronDown class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': isSchoolDropdownOpen }" />
+              </div>
+              
+              <!-- Dropdown Menu -->
+              <div v-if="isSchoolDropdownOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden animate-fade-in">
+                <div class="p-2 border-b border-gray-100 sticky top-0 bg-white">
+                  <div class="relative">
+                    <Search class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input 
+                      v-model="schoolSearchQuery" 
+                      type="text" 
+                      placeholder="Search universities..." 
+                      class="w-full pl-9 pr-3 py-2 bg-gray-50 border-none rounded-md text-xs focus:ring-1 focus:ring-[#FF5C1A] outline-none"
+                      @click.stop
+                    />
+                  </div>
+                </div>
+                <ul class="max-h-60 overflow-y-auto overscroll-contain">
+                  <li 
+                    v-for="uni in filteredUniversities" 
+                    :key="uni"
+                    @click="selectSchool(uni)"
+                    class="px-4 py-3 text-xs cursor-pointer hover:bg-orange-50 hover:text-[#FF5C1A] transition-colors flex items-center justify-between"
+                    :class="{'bg-orange-50 text-[#FF5C1A] font-bold': form.school === uni, 'text-gray-700': form.school !== uni}"
+                  >
+                    {{ uni }}
+                    <Check v-if="form.school === uni" class="w-4 h-4" />
+                  </li>
+                  <li v-if="filteredUniversities.length === 0" class="px-4 py-4 text-xs text-gray-400 text-center">
+                    No universities found
+                  </li>
+                </ul>
+              </div>
+              
+              <!-- Transparent overlay to click outside -->
+              <div v-if="isSchoolDropdownOpen" @click="isSchoolDropdownOpen = false" class="fixed inset-0 z-40"></div>
             </div>
 
             <div>
@@ -391,7 +428,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast'
@@ -404,7 +441,10 @@ import {
   Smartphone, 
   PartyPopper,
   Users,
-  X
+  X,
+  ChevronDown,
+  Search,
+  Check
 } from 'lucide-vue-next'
 import { erranders_api } from '@/api_factory/modules/erranders'
 
@@ -415,7 +455,46 @@ const step = ref(1)
 const ninMode = ref('number')
 const loading = ref(false)
 const router = useRouter()
+
 const { showToast } = useToast()
+
+const isSchoolDropdownOpen = ref(false)
+const schoolSearchQuery = ref('')
+
+const universities = [
+  "UNILAG (University of Lagos)",
+  "CMUL (College of Medicine, University of Lagos)",
+  "YABATECH (Yaba College of Technology)",
+  "LASU (Lagos State University)",
+  "LASUSTECH (Lagos State University of Science and Technology)",
+  "LASUED (Lagos State University of Education)",
+  "UI (University of Ibadan)",
+  "OAU (Obafemi Awolowo University)",
+  "UNILORIN (University of Ilorin)",
+  "UNIBEN (University of Benin)",
+  "UNN (University of Nigeria, Nsukka)",
+  "ABU (Ahmadu Bello University)",
+  "FUTA (Federal University of Technology, Akure)",
+  "FUTO (Federal University of Technology, Owerri)",
+  "FUNAAB (Federal University of Agriculture, Abeokuta)",
+  "COVENANT (Covenant University)",
+  "BABCOCK (Babcock University)",
+  "BOWEN (Bowen University)",
+  "PAU (Pan-Atlantic University)",
+  "REDEEMERS (Redeemer's University)",
+  "Other"
+]
+
+const filteredUniversities = computed(() => {
+  if (!schoolSearchQuery.value) return universities
+  return universities.filter(u => u.toLowerCase().includes(schoolSearchQuery.value.toLowerCase()))
+})
+
+const selectSchool = (school: string) => {
+  form.school = school
+  isSchoolDropdownOpen.value = false
+  schoolSearchQuery.value = ''
+}
 
 const profileLoading = ref(true)
 const errandrProfile = ref<any>(null)
