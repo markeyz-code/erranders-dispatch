@@ -419,16 +419,52 @@
         class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" 
       />
       <p class="text-[10px] text-gray-500 mt-1">Maximum allowed: ₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</p>
-      <p v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="text-xs text-red-500 mt-1 font-semibold">Amount exceeds maximum allowed</p>
+      <p v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="text-[11px] text-amber-600 mt-1 font-semibold bg-amber-50 p-2 rounded border border-amber-100">
+        Price is higher than customer's limit. You must request approval before transferring.
+      </p>
     </div>
     
-    <button 
-      @click="isConfirmVendorPaymentModalOpen = true" 
-      :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0 || vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" 
-      class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold shadow-sm hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
-    >
-      Pay Vendor Now
-    </button>
+    <div v-if="order.reconciliationStatus === 'submitted'" class="w-full bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-center">
+      <div class="animate-pulse mb-2 text-blue-600">
+        <Loader2 class="w-6 h-6 animate-spin mx-auto" />
+      </div>
+      <h4 class="text-sm font-bold text-blue-900">Waiting for Customer</h4>
+      <p class="text-xs text-blue-700 mt-1 mb-3">Customer needs to approve ₦{{ vendorBankForm.amount?.toLocaleString() }}</p>
+      
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <span class="text-xs font-bold px-3 py-1 rounded-full" :class="reconciliationTimeLeft > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'">
+          {{ reconciliationTimeLeft > 0 ? formattedReconciliationTime : 'TIMEOUT EXPIRED' }}
+        </span>
+      </div>
+      
+      <div class="flex gap-2">
+        <a 
+          :href="'tel:' + (order.customer?.phoneNumber || order.customer?.phone || '')"
+          class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-xs font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
+        >
+          <Phone class="w-3.5 h-3.5" /> Call Customer
+        </a>
+      </div>
+    </div>
+    <div v-else class="flex gap-2">
+      <button 
+        v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))"
+        @click="requestPriceApproval"
+        :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0 || submittingReconciliation"
+        class="w-full py-3.5 bg-amber-500 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+      >
+        <Loader2 v-if="submittingReconciliation" class="w-4 h-4 animate-spin" />
+        Request Price Approval
+      </button>
+      <button 
+        v-else
+        @click="isConfirmVendorPaymentModalOpen = true" 
+        :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0" 
+        class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold shadow-sm hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+      >
+        Pay Vendor Now
+      </button>
+    </div>
   </div>
   
   <div v-else-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'transferred'" class="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center gap-3 mt-6">
@@ -1434,6 +1470,70 @@ const handleReceiptUpload = async (event: Event) => {
   } finally {
     uploadingReceipt.value = false;
     if (receiptInput.value) receiptInput.value.value = '';
+  }
+};
+
+
+const reconciliationTimeLeft = ref(300);
+let reconciliationInterval: any = null;
+
+const formattedReconciliationTime = computed(() => {
+  const mins = Math.floor(reconciliationTimeLeft.value / 60);
+  const secs = reconciliationTimeLeft.value % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+});
+
+const startReconciliationTimer = () => {
+  clearInterval(reconciliationInterval);
+  if (order.value?.reconciliationStatus === 'submitted' && order.value?.reconciliationSubmittedAt) {
+    const submittedTime = new Date(order.value.reconciliationSubmittedAt).getTime();
+    const now = Date.now();
+    const elapsed = Math.floor((now - submittedTime) / 1000);
+    const remaining = 300 - elapsed;
+    
+    if (remaining > 0) {
+      reconciliationTimeLeft.value = remaining;
+      reconciliationInterval = setInterval(() => {
+        reconciliationTimeLeft.value--;
+        if (reconciliationTimeLeft.value <= 0) {
+          clearInterval(reconciliationInterval);
+        }
+      }, 1000);
+    } else {
+      reconciliationTimeLeft.value = 0;
+    }
+  }
+};
+
+watch(order, () => {
+  if (order.value?.reconciliationStatus === 'submitted') {
+    startReconciliationTimer();
+  } else {
+    clearInterval(reconciliationInterval);
+  }
+});
+
+const requestPriceApproval = async () => {
+  if (!vendorBankForm.value.amount || vendorBankForm.value.amount <= 0) return;
+  submittingReconciliation.value = true;
+  try {
+    const res = await api.put(`/orders/${route.params.id}/reconcile`, {
+      actualItemCost: vendorBankForm.value.amount,
+      receiptImage: itemsPhotoUrl.value
+    });
+    
+    if (res && res.type === 'ERROR') {
+      showToast({ title: 'Request Failed', message: res.data?.message || 'Failed to request approval', toastType: 'error' });
+      return;
+    }
+
+    order.value = res.data;
+    startReconciliationTimer();
+    showToast({ title: 'Approval Requested', message: 'Customer has been notified.', toastType: 'success' });
+  } catch (e: any) {
+    showToast({ title: 'Error', message: e.response?.data?.message || 'Failed to request approval', toastType: 'error' });
+  } finally {
+    submittingReconciliation.value = false;
   }
 };
 
