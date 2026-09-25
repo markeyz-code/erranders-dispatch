@@ -374,9 +374,36 @@
                 <label class="block text-xs font-bold text-gray-700 mb-2">Guarantor Phone</label>
                 <input v-model="guarantorForm.phone" type="tel" placeholder="Phone Number" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
               </div>
-              <div>
+              <div class="relative">
                 <label class="block text-xs font-bold text-gray-700 mb-2">Relationship</label>
-                <input v-model="guarantorForm.relationship" type="text" placeholder="e.g. Parent, Sibling" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
+                <div 
+                  @click="isRelationshipDropdownOpen = !isRelationshipDropdownOpen" 
+                  class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors shadow-sm"
+                >
+                  <span :class="guarantorForm.relationship ? 'text-gray-900' : 'text-gray-400'">
+                    {{ guarantorForm.relationship || 'Select relationship' }}
+                  </span>
+                  <ChevronDown class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': isRelationshipDropdownOpen }" />
+                </div>
+                
+                <!-- Dropdown Menu -->
+                <div v-if="isRelationshipDropdownOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden animate-fade-in">
+                  <ul class="max-h-60 overflow-y-auto overscroll-contain">
+                    <li 
+                      v-for="rel in relationships" 
+                      :key="rel"
+                      @click="selectRelationship(rel)"
+                      class="px-4 py-3 text-xs cursor-pointer hover:bg-orange-50 hover:text-[#FF5C1A] transition-colors flex items-center justify-between"
+                      :class="{'bg-orange-50 text-[#FF5C1A] font-bold': guarantorForm.relationship === rel, 'text-gray-700': guarantorForm.relationship !== rel}"
+                    >
+                      {{ rel }}
+                      <Check v-if="guarantorForm.relationship === rel" class="w-4 h-4" />
+                    </li>
+                  </ul>
+                </div>
+                
+                <!-- Transparent overlay to click outside -->
+                <div v-if="isRelationshipDropdownOpen" @click="isRelationshipDropdownOpen = false" class="fixed inset-0 z-40"></div>
               </div>
             </div>
 
@@ -457,6 +484,24 @@ const loading = ref(false)
 const router = useRouter()
 
 const { showToast } = useToast()
+
+
+const isRelationshipDropdownOpen = ref(false)
+const relationships = [
+  "Parent",
+  "Sibling",
+  "Spouse",
+  "Uncle/Aunt",
+  "Cousin",
+  "Friend",
+  "Colleague",
+  "Other"
+]
+
+const selectRelationship = (rel: string) => {
+  guarantorForm.relationship = rel
+  isRelationshipDropdownOpen.value = false
+}
 
 const isSchoolDropdownOpen = ref(false)
 const schoolSearchQuery = ref('')
