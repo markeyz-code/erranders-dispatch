@@ -144,7 +144,7 @@
       <span class="text-sm font-bold text-[#FF5C1A]">₦{{ order.customDetails?.estimatedItemCost?.toLocaleString() || 0 }}</span>
     </div>
     
-    <div v-if="order.status === 'confirmed' || order.status === 'preparing'" class="flex gap-2">
+    <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status)" class="flex gap-2">
       <button 
         @click="showCancelModal = true"
         class="flex-1 py-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 border border-red-200 transition-all"
@@ -193,7 +193,7 @@
          <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
          </div>
 
-         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+         <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
            <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
@@ -247,7 +247,7 @@
    <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
    </div>
 
-         <div v-if="['confirmed', 'preparing'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
+         <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
            <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
@@ -442,8 +442,8 @@
   </div>
 
  <!-- Status Update Actions -->
- <div v-if="order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up' || order.status === 'interception_in_progress'" class="space-y-4">
- <div v-if="order.status === 'confirmed' || order.status === 'ready_for_pickup'" class="animate-bounce-subtle space-y-2">
+ <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'interception_in_progress'].includes(order.status)" class="space-y-4">
+ <div v-if="order.status === 'confirmed' || order.status === 'preparing' || order.status === 'ready_for_pickup'" class="animate-bounce-subtle space-y-2">
  <button @click="updateStatus('picked_up')" :disabled="updatingStatus" class="w-full py-3 bg-[#FF5C1A] text-white rounded-lg text-sm font-semibold hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed transform active:scale-95 transition-all flex items-center justify-center gap-2 group">
  <Loader2 v-if="updatingStatus" class="w-4 h-4 animate-spin" />
  <span v-else class="text-lg group-hover:rotate-12 transition-transform">📦</span> 
