@@ -1,21 +1,21 @@
 <template>
   <div class="min-h-screen w-full flex flex-col items-center justify-center bg-white overflow-hidden py-8 px-4 sm:px-4 lg:px-5">
     <!-- Form Card -->
-    <div class="w-full max-w-md flex flex-col justify-center px-0 sm:px-4 py-8 bg-white relative z-10 my-8">
+    <div class="w-full max-w-sm flex flex-col justify-center px-0 sm:px-4 py-8 bg-white relative z-10 my-8">
       
       <transition name="fade" mode="out-in">
         <div v-if="!showSuccess">
           <div class="mb-6 text-center flex flex-col items-center">
             <NuxtLink to="/" class="flex items-center gap-2 mb-8 inline-block group">
                      <div class="flex items-center justify-center group-hover:scale-110 transition-transform">
-                <img src="@/assets/img/logo-light.png" class="w-auto h-10" alt="Errandr" />
+                <img src="@/assets/img/logo-light.png" class="w-auto h-9" alt="Errandr" />
               </div>
             </NuxtLink>
-            <h1 class="text-xl sm:text-xl font-extrabold text-gray-900 mb-2 tracking-tight">Check your inbox</h1>
+            <h1 class="text-lg sm:text-lg font-extrabold text-gray-900 mb-2 tracking-tight">Check your inbox</h1>
             <p class="text-gray-500 text-sm sm:text-sm">We sent a verification code to <span class="font-semibold text-gray-900">{{ email }}</span></p>
           </div>
 
-          <form @submit.prevent="handleVerify" class="space-y-8 max-w-md">
+          <form @submit.prevent="handleVerify" class="space-y-8 max-w-sm">
             <div class="space-y-4">
               <label class="text-sm font-bold text-gray-700 ml-1">Verification code</label>
               <UiOtpInput v-model="otp" />
@@ -24,8 +24,8 @@
             <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
             <button type="submit" :disabled="loading || otp.length < 6"
-              class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-95">
-              <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
+              class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-95">
+              <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
               {{ loading ? 'Verifying...' : 'Verify Email' }}
             </button>
 
@@ -53,12 +53,12 @@
             <div class="absolute inset-0 bg-[#FF5C1A]/10 rounded-full animate-ping" style="animation-duration: 2s;"></div>
             <div class="absolute inset-2 bg-[#FF5C1A]/20 rounded-full animate-ping" style="animation-duration: 2s; animation-delay: 0.5s;"></div>
             <div class="w-24 h-24 bg-gradient-to-br from-[#FF5C1A] to-[#FFA785] rounded-full flex items-center justify-center text-white shadow-sm border border-gray-100 shadow-[#FF5C1A]/40 relative z-10 animate-bounce">
-              <Check class="w-12 h-10" stroke-width="3" />
+              <Check class="w-12 h-9" stroke-width="3" />
             </div>
           </div>
           
           <div class="space-y-3">
-            <h2 class="text-xl font-medium text-gray-900 tracking-tight">Welcome to the fleet! 🎉</h2>
+            <h2 class="text-lg font-medium text-gray-900 tracking-tight">Welcome to the fleet! 🎉</h2>
             <div class="relative">
               <p class="text-gray-500 font-medium leading-relaxed max-w-[300px] mx-auto text-[15px]">
                 You're officially a campus rider. Get ready to hit the road and start earning! 🚀
@@ -67,7 +67,7 @@
           </div>
 
           <div class="w-full pt-8 mt-auto">
-            <button @click="proceedToDashboard" class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-[17px] transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/25 active:scale-[0.98] group">
+            <button @click="proceedToDashboard" class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-[17px] transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/25 active:scale-[0.98] group">
               Proceed to Dashboard <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen w-full bg-white flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="w-full max-w-[420px] relative z-10">
+    <div class="w-full max-w-[340px] relative z-10">
       <!-- Main Content -->
       <div class="w-full">
         <!-- Header -->
@@ -8,7 +8,7 @@
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-[#FF5C1A]/10 text-[#FF5C1A] mb-6 shadow-inner">
             <Lock class="w-8 h-8" />
           </div>
-          <h1 class="text-xl font-medium text-gray-900 tracking-tight mb-2">Create New Password</h1>
+          <h1 class="text-lg font-medium text-gray-900 tracking-tight mb-2">Create New Password</h1>
           <p class="text-gray-500 font-medium text-sm">Your new password must be different from previous used passwords.</p>
         </div>
 
@@ -40,8 +40,8 @@
           </transition>
 
           <button type="submit" :disabled="loading"
-            class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 group active:scale-[0.98]">
-            <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
+            class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 group active:scale-[0.98]">
+            <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
             <span v-else>Reset Password</span>
             <ArrowRight v-if="!loading" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>

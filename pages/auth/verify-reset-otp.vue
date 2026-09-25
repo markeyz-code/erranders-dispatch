@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen w-full bg-white flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="w-full max-w-[420px] relative z-10">
+    <div class="w-full max-w-[340px] relative z-10">
       <NuxtLink to="/auth/forgot-password" class="absolute -top-16 left-0 flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors">
         <ArrowLeft class="w-4 h-4" /> Back
       </NuxtLink>
@@ -10,14 +10,14 @@
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-[#FF5C1A]/10 text-[#FF5C1A] mb-6 shadow-inner">
             <Mail class="w-8 h-8" />
           </div>
-          <h1 class="text-xl font-medium text-gray-900 tracking-tight mb-2">Check your email</h1>
+          <h1 class="text-lg font-medium text-gray-900 tracking-tight mb-2">Check your email</h1>
           <p class="text-gray-500 font-medium text-sm leading-relaxed">
             We sent a 6-digit verification code to <br>
             <strong class="text-gray-900">{{ email }}</strong>
           </p>
         </div>
 
-        <div class="flex justify-center gap-2 py-2.5 mb-6">
+        <div class="flex justify-center gap-2 py-2 mb-6">
           <input 
             v-for="(_, i) in 6" 
             :key="i" 
@@ -29,7 +29,7 @@
             type="text" 
             maxlength="1" 
             inputmode="numeric" 
-            class="w-12 h-14 text-center text-xl font-medium bg-gray-50 border border-gray-200 rounded-xl focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 outline-none transition-all" 
+            class="w-12 h-14 text-center text-lg font-medium bg-gray-50 border border-gray-200 rounded-xl focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 outline-none transition-all" 
           />
         </div>
 
@@ -43,8 +43,8 @@
         <button 
           @click="verifyOTP" 
           :disabled="loading || otpDigits.join('').length < 6" 
-          class="w-full py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-[0.98]">
-          <Loader2 v-if="loading" class="animate-spin w-5 h-5" />
+          class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-[0.98]">
+          <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
           <span v-else>Verify Code</span>
         </button>
 
