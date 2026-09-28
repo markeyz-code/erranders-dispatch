@@ -20,6 +20,28 @@
             </div>
           </transition>
 
+          <form @submit.prevent="handleEmailSignup" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <UiAnimatedInput v-model="form.firstName" type="text" label="First Name" required />
+              <UiAnimatedInput v-model="form.lastName" type="text" label="Last Name" required />
+            </div>
+            <UiAnimatedInput v-model="form.email" type="email" label="Email Address" required />
+            <UiAnimatedInput v-model="form.phone" type="tel" label="Phone Number" required />
+            <UiAnimatedInput v-model="form.password" type="password" label="Password" required minlength="6" />
+
+            <button type="submit" :disabled="loading"
+              class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 mt-4">
+              <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
+              {{ loading ? 'Creating account...' : 'Create Account' }}
+            </button>
+          </form>
+
+          <div class="flex items-center gap-3 my-4">
+            <div class="flex-1 h-px bg-gray-100" />
+            <span class="text-xs text-gray-400 font-bold">or</span>
+            <div class="flex-1 h-px bg-gray-100" />
+          </div>
+
           <button type="button" @click="handleGoogleSignup" :disabled="firebaseLoading"
             class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl flex items-center justify-center gap-3 font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-md shadow-[#FF5C1A]/20">
             <Loader2 v-if="firebaseLoading" class="animate-spin w-4 h-4" />
@@ -60,19 +82,38 @@
 
 <script setup lang="ts">
 import { Loader2, AlertCircle } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useAuth } from '@/composables/modules/auth'
 
 definePageMeta({ layout: false })
 useHead({ title: 'Become a Rider - Errandr' })
 
-const { firebaseLogin, firebaseLoading } = useAuth()
+const { register, firebaseLogin, loading, firebaseLoading } = useAuth()
 const error = ref('')
+
+const form = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  password: '',
+  role: 'dispatch'
+})
+
+const handleEmailSignup = async () => {
+  error.value = ''
+  try {
+    await register(form)
+    navigateTo('/auth/complete-profile')
+  } catch (e: any) {
+    error.value = e?.data?.message || e?.message || 'Signup failed. Please try again.'
+  }
+}
 
 const handleGoogleSignup = async () => {
   error.value = ''
   try {
-    const res = await firebaseLogin({ redirect: false, isSignUp: true })
+    const res = await firebaseLogin({ redirect: false, isSignUp: true, role: 'dispatch' })
     // After Google signup, always redirect to complete-profile to fill remaining info
     navigateTo('/auth/complete-profile')
   } catch (e: any) {

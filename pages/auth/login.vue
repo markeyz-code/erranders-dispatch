@@ -20,6 +20,47 @@
             </div>
           </transition>
 
+          <form @submit.prevent="handleEmailLogin" class="space-y-4">
+            <UiAnimatedInput 
+              v-model="email" 
+              type="email" 
+              label="Email Address" 
+              :hasError="!!validationErrors.email"
+              :errorMessage="validationErrors.email"
+              @input="validationErrors.email = ''" 
+              required 
+            />
+            
+            <div class="space-y-2">
+              <UiAnimatedInput 
+                v-model="password" 
+                type="password" 
+                label="Password" 
+                :hasError="!!validationErrors.password"
+                :errorMessage="validationErrors.password"
+                @input="validationErrors.password = ''" 
+                required 
+              />
+              <div class="flex justify-end">
+                <NuxtLink to="/auth/forgot-password" class="text-xs font-semibold text-[#FF5C1A] hover:underline">
+                  Forgot password?
+                </NuxtLink>
+              </div>
+            </div>
+
+            <button type="submit" :disabled="loading"
+              class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl flex items-center justify-center gap-3 font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-sm">
+              <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
+              {{ loading ? 'signing in...' : 'Sign in' }}
+            </button>
+          </form>
+
+          <div class="flex items-center gap-3 my-4">
+            <div class="flex-1 h-px bg-gray-100" />
+            <span class="text-xs text-gray-400 font-bold">or</span>
+            <div class="flex-1 h-px bg-gray-100" />
+          </div>
+
           <button type="button" @click="handleGoogleLogin" :disabled="firebaseLoading"
             class="w-full py-2 border-2 border-gray-100 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-sm">
             <Loader2 v-if="firebaseLoading" class="animate-spin w-4 h-4" />
@@ -59,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { Loader2, AlertCircle } from 'lucide-vue-next'
 import { useAuth } from '@/composables/modules/auth'
 import { useUser } from '@/composables/modules/auth/user'
@@ -67,9 +108,17 @@ import { useUser } from '@/composables/modules/auth/user'
 definePageMeta({ layout: false })
 useHead({ title: 'Rider Sign In - Errandr' })
 
-const { firebaseLogin, firebaseLoading } = useAuth()
+const { login, firebaseLogin, loading, firebaseLoading } = useAuth()
 const { isLoggedIn } = useUser()
 const error = ref('')
+
+const email = ref('')
+const password = ref('')
+
+const validationErrors = reactive({
+  email: '',
+  password: ''
+})
 
 onMounted(() => {
   if (isLoggedIn.value) {
@@ -77,10 +126,43 @@ onMounted(() => {
   }
 })
 
+const validate = () => {
+  let isValid = true
+  validationErrors.email = ''
+  validationErrors.password = ''
+
+  if (!email.value) {
+    validationErrors.email = 'Email address is required'
+    isValid = false
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    validationErrors.email = 'Please enter a valid email'
+    isValid = false
+  }
+
+  if (!password.value) {
+    validationErrors.password = 'Password is required'
+    isValid = false
+  }
+
+  return isValid
+}
+
+const handleEmailLogin = async () => {
+  error.value = ''
+  if (!validate()) return
+
+  try {
+    await login({ email: email.value, password: password.value, role: 'dispatch' })
+    navigateTo('/dashboard')
+  } catch (e: any) {
+    error.value = e?.data?.message || e?.response?.data?.message || 'Invalid credentials'
+  }
+}
+
 const handleGoogleLogin = async () => {
   error.value = ''
   try {
-    const res = await firebaseLogin({ redirect: false, isSignUp: false })
+    const res = await firebaseLogin({ redirect: false, isSignUp: false, role: 'dispatch' })
     const isNewUser = res?.isNewUser
     if (isNewUser) {
       // New user trying to login — redirect to signup to complete profile
