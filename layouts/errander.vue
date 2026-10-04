@@ -1,5 +1,5 @@
 <template>
- <div class="min-h-screen bg-[#f8f9fb]">
+ <div class="min-h-screen bg-[#f8f9fb] overflow-x-hidden w-full max-w-[100vw]">
  <!-- Desktop Sidebar -->
  <aside class="hidden lg:flex flex-col bg-white border-r border-gray-100 min-h-screen fixed left-0 top-0 z-50 transition-all duration-300" :class="isSidebarMinimized ? 'w-20' : 'w-64'">
  <!-- Logo -->

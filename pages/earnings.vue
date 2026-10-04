@@ -39,9 +39,9 @@
               </div>
             </div>
             
-            <div>
-              <h2 class="text-5xl md:text-6xl font-black tracking-tighter mb-4 text-gray-900">
-                <span class="text-3xl font-bold align-top text-gray-400">₦</span>{{ balance?.toLocaleString() || '0' }}
+            <div class="overflow-hidden w-full">
+              <h2 class="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-gray-900 truncate">
+                <span class="text-2xl font-bold align-top text-gray-400">₦</span>{{ balance?.toLocaleString() || '0' }}
               </h2>
               <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -63,9 +63,9 @@
               </div>
             </div>
             
-            <div>
-              <h2 class="text-5xl md:text-6xl font-black tracking-tighter mb-4 text-gray-900">
-                <span class="text-3xl font-bold align-top text-gray-300">₦</span>{{ wallet?.totalEarned?.toLocaleString() || '0' }}
+            <div class="overflow-hidden w-full">
+              <h2 class="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-gray-900 truncate">
+                <span class="text-2xl font-bold align-top text-gray-300">₦</span>{{ wallet?.totalEarned?.toLocaleString() || '0' }}
               </h2>
               <p class="text-sm font-medium text-gray-500">Total revenue generated from all your completed errands.</p>
             </div>
