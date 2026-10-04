@@ -7,14 +7,14 @@
  </div>
 
  <div v-if="loading" class="space-y-4">
- <div v-for="i in 3" :key="i" class="h-24 bg-white rounded-2xl border border-gray-100 animate-pulse"></div>
+ <div v-for="i in 3" :key="i" class="h-24 bg-white rounded-lg border border-gray-100 animate-pulse"></div>
  </div>
 
  <div v-else class="space-y-6">
  <!-- Avatar & Name -->
- <div class="bg-white rounded-2xl border border-gray-100 p-4">
+ <div class="bg-white rounded-lg border border-gray-100 p-4">
  <div class="flex items-center gap-5">
- <div class="w-20 h-20 rounded-2xl bg-[#FF5C1A] text-white flex items-center justify-center font-bold text-2xl shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 flex-shrink-0">
+ <div class="w-20 h-20 rounded-lg bg-[#FF5C1A] text-white flex items-center justify-center font-bold text-2xl border border-gray-200 shadow-[#FF5C1A]/20 flex-shrink-0">
  {{ userInitials }}
  </div>
  <div class="flex-1 min-w-0">
@@ -31,7 +31,7 @@
  </div>
 
  <!-- Personal Information -->
- <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50 flex items-center justify-between">
  <h3 class="text-base font-bold text-gray-900">Personal Information</h3>
  <button v-if="!isEditing" @click="startEdit" class="text-xs font-semibold text-[#FF5C1A] hover:underline">Edit</button>
@@ -83,7 +83,7 @@
  </div>
 
  <!-- Account Stats -->
- <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
  <h3 class="text-base font-bold text-gray-900">Account Overview</h3>
  </div>
@@ -110,7 +110,7 @@
  </div>
 
  <!-- Availability Toggle -->
- <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
  <h3 class="text-base font-bold text-gray-900">Availability</h3>
  </div>
@@ -128,7 +128,7 @@
  >
  <span 
  :class="isOnline ? 'translate-x-6' : 'translate-x-1'"
- class="inline-block h-5 w-5 transform rounded-full bg-white shadow-sm border border-gray-100 transition-transform"
+ class="inline-block h-5 w-5 transform rounded-full bg-white border border-gray-200 transition-transform"
  />
  </button>
  </div>
@@ -136,7 +136,7 @@
  </div>
 
  <!-- Security -->
- <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
  <h3 class="text-base font-bold text-gray-900">Security</h3>
  </div>

@@ -17,7 +17,7 @@
 
     <!-- Loading -->
     <div v-if="loading" class="space-y-3">
-      <div v-for="i in 5" :key="i" class="h-20 bg-white rounded-2xl border border-gray-100 animate-pulse" />
+      <div v-for="i in 5" :key="i" class="h-20 bg-white rounded-lg border border-gray-100 animate-pulse" />
     </div>
 
     <!-- Empty State -->
@@ -33,7 +33,7 @@
         v-for="notif in notifications"
         :key="notif.id"
         :class="notif.read ? 'bg-white' : 'bg-[#FF5C1A]/[0.02] border-[#FF5C1A]/10'"
-        class="rounded-2xl border border-gray-100 overflow-hidden transition-all hover:shadow-sm border border-gray-100 group cursor-pointer"
+        class="rounded-lg border border-gray-100 overflow-hidden transition-all hover:border border-gray-200 group cursor-pointer"
         @click="handleNotifClick(notif)"
       >
         <div class="p-4 flex items-start gap-4">
@@ -73,7 +73,7 @@
               <button
                 @click.stop="acceptNotifOrder(notif)"
                 :disabled="notif.accepting"
-                class="px-4 py-2 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm disabled:opacity-50"
+                class="px-4 py-2 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all  disabled:opacity-50"
               >
                 {{ notif.accepting ? 'Accepting...' : 'Accept Order' }}
               </button>

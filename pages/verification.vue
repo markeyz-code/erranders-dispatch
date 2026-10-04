@@ -39,9 +39,9 @@
             </div>
           </div>
           
-          <div v-if="cameraActiveFor === 'id'" class="relative rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+          <div v-if="cameraActiveFor === 'id'" class="relative rounded-lg overflow-hidden bg-black aspect-video flex items-center justify-center">
             <video ref="videoRef" autoplay playsinline class="w-full h-full object-cover"></video>
-            <button @click="capturePhoto('idCardImage')" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-gray-900 font-bold px-4 py-2 rounded-full shadow-sm border border-gray-100 hover:scale-105 transition-transform">
+            <button @click="capturePhoto('idCardImage')" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-gray-900 font-bold px-4 py-2 rounded-full border border-gray-200 hover:scale-105 transition-transform">
               📸 Capture
             </button>
             <button @click="stopCamera" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70">
@@ -67,10 +67,10 @@
               <button @click.stop="$refs.idInput.click()" class="text-[10px] text-[#FF5C1A] font-bold hover:underline mt-1">Or upload a file (Fallback)</button>
             </div>
             <div v-else class="space-y-3">
-              <div class="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+              <div class="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-200 ">
                 <img :src="form.idCardImage" class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-gray-900/10 flex items-center justify-center pointer-events-none">
-                  <div class="w-8 h-8 bg-white text-emerald-600 rounded-full flex items-center justify-center shadow-sm border border-gray-100">
+                  <div class="w-8 h-8 bg-white text-emerald-600 rounded-full flex items-center justify-center border border-gray-200">
                     <CheckCircle2 class="w-5 h-5" />
                   </div>
                 </div>
@@ -86,7 +86,7 @@
           <button 
             @click="step = 2" 
             :disabled="!form.idCardImage" 
-            class="w-full py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all shadow-sm border border-gray-100"
+            class="w-full py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all border border-gray-200"
           >
             Continue
           </button>
@@ -104,9 +104,9 @@
             </div>
           </div>
           
-          <div v-if="cameraActiveFor === 'selfie'" class="relative rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+          <div v-if="cameraActiveFor === 'selfie'" class="relative rounded-lg overflow-hidden bg-black aspect-video flex items-center justify-center">
             <video ref="videoRef" autoplay playsinline class="w-full h-full object-cover transform scale-x-[-1]"></video>
-            <button @click="capturePhoto('selfieImage')" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-gray-900 font-bold px-4 py-2 rounded-full shadow-sm border border-gray-100 hover:scale-105 transition-transform">
+            <button @click="capturePhoto('selfieImage')" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-gray-900 font-bold px-4 py-2 rounded-full border border-gray-200 hover:scale-105 transition-transform">
               📸 Capture Selfie
             </button>
             <button @click="stopCamera" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70">
@@ -132,10 +132,10 @@
               <button @click.stop="$refs.selfieInput.click()" class="text-[10px] text-[#FF5C1A] font-bold hover:underline mt-1">Or upload a file (Fallback)</button>
             </div>
             <div v-else class="space-y-3">
-              <div class="relative w-32 h-32 mx-auto rounded-full overflow-hidden border-2 border-gray-200 shadow-sm">
+              <div class="relative w-32 h-32 mx-auto rounded-full overflow-hidden border-2 border-gray-200 ">
                 <img :src="form.selfieImage" class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-gray-900/10 flex items-center justify-center pointer-events-none">
-                  <div class="w-8 h-8 bg-white text-emerald-600 rounded-full flex items-center justify-center shadow-sm border border-gray-100">
+                  <div class="w-8 h-8 bg-white text-emerald-600 rounded-full flex items-center justify-center border border-gray-200">
                     <CheckCircle2 class="w-5 h-5" />
                   </div>
                 </div>
@@ -153,7 +153,7 @@
             <button 
               @click="step = 3" 
               :disabled="!form.selfieImage" 
-              class="flex-1 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all shadow-sm border border-gray-100"
+              class="flex-1 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all border border-gray-200"
             >
               Continue
             </button>
@@ -174,8 +174,8 @@
           
           <div>
             <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
-              <button @click="ninMode = 'number'" :class="ninMode === 'number' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Enter NIN Number</button>
-              <button @click="ninMode = 'slip'" :class="ninMode === 'slip' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Upload NIN Slip</button>
+              <button @click="ninMode = 'number'" :class="ninMode === 'number' ? 'bg-white  text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Enter NIN Number</button>
+              <button @click="ninMode = 'slip'" :class="ninMode === 'slip' ? 'bg-white  text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Upload NIN Slip</button>
             </div>
             
             <div v-if="ninMode === 'number'">
@@ -185,7 +185,7 @@
                 type="text" 
                 maxlength="11" 
                 placeholder="e.g. 12345678901" 
-                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm" 
+                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all " 
                 @input="form.ninNumber = form.ninNumber.replace(/\D/g, '')"
               />
               <p v-if="form.ninNumber && form.ninNumber.length !== 11" class="text-[10px] text-red-500 mt-1 font-bold">NIN must be exactly 11 digits</p>
@@ -194,9 +194,9 @@
           </div>
           
           <div v-if="ninMode === 'slip'">
-          <div v-if="cameraActiveFor === 'ninSlip'" class="relative rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+          <div v-if="cameraActiveFor === 'ninSlip'" class="relative rounded-lg overflow-hidden bg-black aspect-video flex items-center justify-center">
             <video ref="videoRef" autoplay playsinline class="w-full h-full object-cover"></video>
-            <button @click="capturePhoto('ninSlipImage')" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-gray-900 font-bold px-4 py-2 rounded-full shadow-sm border border-gray-100 hover:scale-105 transition-transform">
+            <button @click="capturePhoto('ninSlipImage')" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-gray-900 font-bold px-4 py-2 rounded-full border border-gray-200 hover:scale-105 transition-transform">
               📸 Capture
             </button>
             <button @click="stopCamera" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70">
@@ -222,10 +222,10 @@
               <button @click.stop="$refs.ninInput.click()" class="text-[10px] text-[#FF5C1A] font-bold hover:underline mt-1">Or upload a file (Fallback)</button>
             </div>
             <div v-else class="space-y-3">
-              <div class="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+              <div class="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-200 ">
                 <img :src="form.ninSlipImage" class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-gray-900/10 flex items-center justify-center pointer-events-none">
-                  <div class="w-8 h-8 bg-white text-emerald-600 rounded-full flex items-center justify-center shadow-sm border border-gray-100">
+                  <div class="w-8 h-8 bg-white text-emerald-600 rounded-full flex items-center justify-center border border-gray-200">
                     <CheckCircle2 class="w-5 h-5" />
                   </div>
                 </div>
@@ -244,7 +244,7 @@
             <button 
               @click="step = 4" 
               :disabled="ninMode === 'number' ? !(form.ninNumber && form.ninNumber.length === 11) : !form.ninSlipImage" 
-              class="flex-1 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all shadow-sm border border-gray-100"
+              class="flex-1 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all border border-gray-200"
             >
               Continue
             </button>
@@ -268,7 +268,7 @@
               <label class="block text-xs font-bold text-gray-700 mb-2">School</label>
               <div 
                 @click="isSchoolDropdownOpen = !isSchoolDropdownOpen" 
-                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors shadow-sm"
+                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors "
               >
                 <span :class="form.school ? 'text-gray-900' : 'text-gray-400'">
                   {{ form.school || 'Select your school' }}
@@ -277,7 +277,7 @@
               </div>
               
               <!-- Dropdown Menu -->
-              <div v-if="isSchoolDropdownOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden animate-fade-in">
+              <div v-if="isSchoolDropdownOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg  overflow-hidden animate-fade-in">
                 <div class="p-2 border-b border-gray-100 sticky top-0 bg-white">
                   <div class="relative">
                     <Search class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -313,12 +313,12 @@
 
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-2">Matric Number</label>
-              <input v-model="form.matricNumber" type="text" placeholder="e.g. 190801021" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
+              <input v-model="form.matricNumber" type="text" placeholder="e.g. 190801021" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
             </div>
 
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-2">WhatsApp Number</label>
-              <input v-model="form.whatsappNumber" type="tel" placeholder="e.g. 08012345678" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
+              <input v-model="form.whatsappNumber" type="tel" placeholder="e.g. 08012345678" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
             </div>
           </div>
 
@@ -327,7 +327,7 @@
             <button 
               @click="submitVerification" 
               :disabled="loading || !form.whatsappNumber || !form.school || !form.matricNumber" 
-              class="flex-1 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all flex justify-center items-center gap-2 shadow-sm border border-gray-100"
+              class="flex-1 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all flex justify-center items-center gap-2 border border-gray-200"
             >
               <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
               {{ loading ? 'Submitting...' : 'Submit Verification' }}
@@ -345,7 +345,7 @@
             Your identity documents have been submitted securely. Reviews typically take less than 24 hours.
           </p>
           <div class="pt-6">
-            <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#E54D12] transition-all shadow-sm border border-gray-100">
+            <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#E54D12] transition-all border border-gray-200">
               Return to Dashboard
             </NuxtLink>
           </div>
@@ -368,17 +368,17 @@
             <div class="space-y-4">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-2">Guarantor Name</label>
-                <input v-model="guarantorForm.name" type="text" placeholder="Full Name" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
+                <input v-model="guarantorForm.name" type="text" placeholder="Full Name" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-2">Guarantor Phone</label>
-                <input v-model="guarantorForm.phone" type="tel" placeholder="Phone Number" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all shadow-sm">
+                <input v-model="guarantorForm.phone" type="tel" placeholder="Phone Number" class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
               </div>
               <div class="relative">
                 <label class="block text-xs font-bold text-gray-700 mb-2">Relationship</label>
                 <div 
                   @click="isRelationshipDropdownOpen = !isRelationshipDropdownOpen" 
-                  class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors shadow-sm"
+                  class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors "
                 >
                   <span :class="guarantorForm.relationship ? 'text-gray-900' : 'text-gray-400'">
                     {{ guarantorForm.relationship || 'Select relationship' }}
@@ -387,7 +387,7 @@
                 </div>
                 
                 <!-- Dropdown Menu -->
-                <div v-if="isRelationshipDropdownOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden animate-fade-in">
+                <div v-if="isRelationshipDropdownOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg  overflow-hidden animate-fade-in">
                   <ul class="max-h-60 overflow-y-auto overscroll-contain">
                     <li 
                       v-for="rel in relationships" 
@@ -410,7 +410,7 @@
             <button 
               @click="submitTier3" 
               :disabled="loading || !guarantorForm.name || !guarantorForm.phone || !guarantorForm.relationship" 
-              class="w-full py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all flex justify-center items-center gap-2 shadow-sm border border-gray-100"
+              class="w-full py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#E54D12] transition-all flex justify-center items-center gap-2 border border-gray-200"
             >
               <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
               {{ loading ? 'Submitting...' : 'Submit Verification' }}
@@ -427,7 +427,7 @@
               Your guarantor details have been submitted securely. Reviews typically take less than 24 hours.
             </p>
             <div class="pt-6">
-              <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#E54D12] transition-all shadow-sm border border-gray-100">
+              <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#E54D12] transition-all border border-gray-200">
                 Return to Dashboard
               </NuxtLink>
             </div>
@@ -443,7 +443,7 @@
             <h2 class="text-xl font-bold text-gray-900 tracking-tight">Fully Verified!</h2>
             <p class="text-gray-500 text-xs mt-2 max-w-xs mx-auto">You are a Pro rider (Tier 3) with full access to all deliveries.</p>
             <div class="pt-6">
-              <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all shadow-sm border border-gray-100">
+              <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all border border-gray-200">
                 Return to Dashboard
               </NuxtLink>
             </div>

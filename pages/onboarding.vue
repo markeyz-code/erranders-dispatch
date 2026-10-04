@@ -16,12 +16,12 @@
       </div>
 
       <!-- Step Content -->
-      <div class="bg-white/5 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white/10 relative overflow-hidden shadow-sm border border-gray-100">
+      <div class="bg-white/5  p-10 rounded-[2.5rem] border border-white/10 relative overflow-hidden border border-gray-200">
         
         <!-- Step 1: Rider Profile -->
         <div v-if="step === 1" class="space-y-6 animate-fade-in">
           <div class="text-center space-y-2 mb-10">
-            <div class="w-20 h-20 bg-[#FF5C1A]/20 text-[#FF5C1A] rounded-3xl flex items-center justify-center mx-auto mb-6 border border-[#FF5C1A]/20 shadow-inner">
+            <div class="w-20 h-20 bg-[#FF5C1A]/20 text-[#FF5C1A] rounded-lg flex items-center justify-center mx-auto mb-6 border border-[#FF5C1A]/20 ">
               <User class="w-10 h-10" />
             </div>
             <h2 class="text-3xl font-medium text-white tracking-tighter">Become a Rider</h2>
@@ -32,16 +32,16 @@
             <div class="grid grid-cols-2 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-[10px] font-medium text-gray-500 uppercase tracking-widest ml-1">First Name</label>
-                <input v-model="form.firstName" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="John" />
+                <input v-model="form.firstName" type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="John" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-[10px] font-medium text-gray-500 uppercase tracking-widest ml-1">Last Name</label>
-                <input v-model="form.lastName" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="Doe" />
+                <input v-model="form.lastName" type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="Doe" />
               </div>
             </div>
             <div class="space-y-1.5">
               <label class="block text-[10px] font-medium text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
-              <input v-model="form.phone" type="tel" class="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="0801 234 5678" />
+              <input v-model="form.phone" type="tel" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="0801 234 5678" />
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@
         <!-- Step 2: Vehicle Selection -->
         <div v-if="step === 2" class="space-y-6 animate-fade-in">
           <div class="text-center space-y-2 mb-10">
-            <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-emerald-400/20 shadow-inner">
+            <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center mx-auto mb-6 border border-emerald-400/20 ">
               <Bike class="w-10 h-10" />
             </div>
             <h2 class="text-3xl font-medium text-white tracking-tighter">How do you deliver?</h2>
@@ -58,12 +58,12 @@
 
           <div class="grid grid-cols-1 gap-4">
             <div v-for="mode in deliveryModes" :key="mode.id" 
-              class="flex items-center justify-between p-4 rounded-[2rem] border transition-all cursor-pointer group"
-              :class="form.deliveryMode === mode.id ? 'bg-[#FF5C1A] border-[#FF5C1A] shadow-sm border border-gray-100' : 'bg-white/5 border-white/10 hover:border-white/30'"
+              class="flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer group"
+              :class="form.deliveryMode === mode.id ? 'bg-[#FF5C1A] border-[#FF5C1A] border border-gray-200' : 'bg-white/5 border-white/10 hover:border-white/30'"
               @click="form.deliveryMode = mode.id"
             >
               <div class="flex items-center gap-5">
-                <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-colors" :class="form.deliveryMode === mode.id ? 'bg-white text-[#FF5C1A]' : 'bg-white/10 text-white'">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center text-xl transition-colors" :class="form.deliveryMode === mode.id ? 'bg-white text-[#FF5C1A]' : 'bg-white/10 text-white'">
                   <component :is="mode.icon" class="w-6 h-6" />
                 </div>
                 <div>
@@ -81,7 +81,7 @@
         <!-- Step 3: Student Status -->
         <div v-if="step === 3" class="space-y-6 animate-fade-in">
           <div class="text-center space-y-2 mb-10">
-            <div class="w-20 h-20 bg-purple-500/20 text-purple-400 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-purple-400/20 shadow-inner">
+            <div class="w-20 h-20 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center mx-auto mb-6 border border-purple-400/20 ">
               <ShieldCheck class="w-10 h-10" />
             </div>
             <h2 class="text-3xl font-medium text-white tracking-tighter">Verification</h2>
@@ -90,16 +90,16 @@
 
           <div class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
-              <div class="p-5 border-2 border-dashed border-white/10 rounded-[2rem] text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
-                <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div class="p-5 border-2 border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Upload class="w-6 h-6 text-gray-400" />
                 </div>
                 <p class="text-xs font-bold text-white mb-1">Student ID</p>
                 <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest leading-tight">Required</p>
               </div>
               
-              <div class="p-5 border-2 border-dashed border-white/10 rounded-[2rem] text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
-                <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div class="p-5 border-2 border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
+                <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Upload class="w-6 h-6 text-gray-400" />
                 </div>
                 <p class="text-xs font-bold text-white mb-1">NIN Slip</p>
@@ -107,7 +107,7 @@
               </div>
             </div>
             
-            <div class="flex items-center gap-4 p-5 bg-[#FF5C1A]/10 rounded-2xl border border-[#FF5C1A]/20">
+            <div class="flex items-center gap-4 p-5 bg-[#FF5C1A]/10 rounded-lg border border-[#FF5C1A]/20">
               <Info class="w-5 h-5 text-[#FF5C1A] flex-shrink-0" />
               <p class="text-[10px] text-[#FF5C1A] font-medium leading-tight uppercase tracking-wider">Verification usually takes less than 2 hours during session.</p>
             </div>
@@ -116,8 +116,8 @@
 
         <!-- Nav Buttons -->
         <div class="flex gap-4 mt-12 pt-6 border-t border-white/10">
-          <button v-if="step > 1" @click="step--" class="flex-1 py-5 bg-white/5 text-white rounded-2xl text-[10px] font-medium uppercase tracking-widest hover:bg-white/10 transition-all">Back</button>
-          <button @click="nextStep" class="flex-[2] py-5 bg-[#FF5C1A] text-white rounded-2xl text-[10px] font-medium uppercase tracking-widest hover:brightness-110 transition-all shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
+          <button v-if="step > 1" @click="step--" class="flex-1 py-5 bg-white/5 text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:bg-white/10 transition-all">Back</button>
+          <button @click="nextStep" class="flex-[2] py-5 bg-[#FF5C1A] text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:brightness-110 transition-all border border-gray-200 shadow-[#FF5C1A]/20">
             {{ step === 3 ? 'Start My Journey' : 'Continue' }}
           </button>
         </div>

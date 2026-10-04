@@ -49,7 +49,7 @@
             </div>
 
             <button type="submit" :disabled="loading"
-              class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl flex items-center justify-center gap-3 font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-sm">
+              class="w-full py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl flex items-center justify-center gap-3 font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-sm">
               <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
               {{ loading ? 'signing in...' : 'Sign in' }}
             </button>
@@ -62,7 +62,7 @@
           </div>
 
           <button type="button" @click="handleGoogleLogin" :disabled="firebaseLoading"
-            class="w-full py-2 border-2 border-gray-100 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-sm">
+            class="w-full py-3 border border-gray-100 rounded-xl flex items-center justify-center gap-3 font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
             <Loader2 v-if="firebaseLoading" class="animate-spin w-4 h-4" />
             <svg v-else class="w-4 h-4" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>

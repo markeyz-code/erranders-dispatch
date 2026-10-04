@@ -40,7 +40,7 @@
  </div>
 
  <!-- Empty State -->
- <div v-else-if="filteredOrders.length === 0" class="bg-white rounded-2xl border border-gray-100 py-20 text-center">
+ <div v-else-if="filteredOrders.length === 0" class="bg-white rounded-lg border border-gray-100 py-20 text-center">
  <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">📦</div>
  <h3 class="text-base font-bold text-gray-900 mb-1">{{ activeFilter === 'all' ? 'No deliveries yet' : `No ${activeFilter} deliveries` }}</h3>
  <p class="text-sm text-gray-400 mb-6">{{ activeFilter === 'all' ? 'Accept orders from the marketplace to get started!' : 'Check back later for updates.' }}</p>
@@ -50,7 +50,7 @@
  </div>
 
  <!-- Deliveries Table -->
- <div v-else class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+ <div v-else class="bg-white rounded-lg border border-gray-100 overflow-hidden">
  <div class="overflow-x-auto">
  <table class="w-full text-left">
  <thead>
@@ -126,7 +126,7 @@
 
  <div class="py-4 space-y-4 md:space-y-6">
  <!-- Route Info -->
- <div class="bg-gray-50/50 rounded-2xl p-5 border border-gray-100 space-y-4">
+ <div class="bg-gray-50/50 rounded-lg p-5 border border-gray-100 space-y-4">
  <p class="text-[10px] font-medium text-gray-400 tracking-widest mb-2">Delivery Intelligence</p>
  
  <div class="space-y-4 relative">

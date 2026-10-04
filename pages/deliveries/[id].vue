@@ -16,7 +16,7 @@
 
   <div class="max-w-4xl w-full mx-auto space-y-4 md:space-y-6 md:space-y-10 pb-32 animate-fade-in mt-6" v-else-if="order">
  <!-- Stunning Header -->
- <div class="relative p-4 md:p-5 rounded-xl md:rounded-3xl overflow-hidden border border-gray-100 bg-white shadow-sm group">
+ <div class="relative p-4 md:p-5 rounded-xl md:rounded-lg overflow-hidden border border-gray-100 bg-white  group">
  <!-- Animated Background Effects -->
  <div class="absolute -right-20 -top-20 w-64 h-64 bg-[#FF5C1A]/10 rounded-full blur-[80px] group-hover:scale-150 group-hover:opacity-70 transition-all duration-1000 ease-in-out" />
  
@@ -31,12 +31,12 @@
    <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold tracking-widest text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
  </div>
  </div>
- <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-2xl border border-gray-100 ">
+ <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100 ">
  <StatusBadge :status="order.status" class="scale-110 " />
  </div>
  </div>
 
- <div class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-2xl border border-gray-100 ">
+ <div class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-100 ">
  <div class="flex items-center justify-between">
  <span class="text-xs font-bold text-gray-500 tracking-wide uppercase">Delivery Progress</span>
  <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-full border border-[#FF5C1A]/20">Step {{ currentStep + 1 }} of 4</span>
@@ -53,7 +53,7 @@
  <!-- Delivery Info & Content -->
  <div class="lg:col-span-3 space-y-4 md:space-y-6">
  <!-- Delivery Points -->
- <div class="bg-white p-4 md:p-4 rounded-2xl border border-gray-100 space-y-5 md:space-y-8 relative group">
+ <div class="bg-white p-4 md:p-4 rounded-lg border border-gray-100 space-y-5 md:space-y-8 relative group">
  <div class="flex items-start gap-3 md:gap-6 relative">
  <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm border border-amber-100/20 flex-shrink-0 group-hover:scale-105 transition-transform">🏪</div>
  <div class="min-w-0 pt-0.5 w-full">
@@ -119,7 +119,7 @@
   </div>
 
  <!-- Order Items / Custom Description -->
- <div class="bg-white p-4 md:p-5 rounded-2xl border border-gray-100 relative overflow-hidden group shadow-sm">
+ <div class="bg-white p-4 md:p-5 rounded-lg border border-gray-100 relative overflow-hidden group ">
  <h3 class="text-sm font-bold text-gray-900 tracking-wider mb-6 flex items-center gap-3 uppercase">
  <div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]" /> 
  {{ order.type === 'custom_errand' ? 'Request Details' : (order.packs?.length > 0 ? `Order Content (${order.packs.length} packs)` : `Order Content (${order.items?.length || 0} items)`) }}
@@ -274,7 +274,7 @@
  </div>
 
  <!-- Delivery Location (Interactive) -->
- <div class="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden relative group h-[300px]">
+ <div class="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden relative group h-[300px]">
   <MapboxMap 
     v-if="mapboxToken" 
     :order="order" :mapbox-token="mapboxToken" 
@@ -290,10 +290,10 @@
  <!-- Sidebar: Actions & Customer -->
  <div class="lg:col-span-2 space-y-4 md:space-y-6"> 
  <!-- Customer Details Card -->
- <div class="bg-gradient-to-b from-gray-50 to-white p-4 md:p-5 rounded-xl md:rounded-3xl border border-gray-100 flex flex-col items-center text-center group hover:-translate-y-1 hover: transition-all duration-500 relative overflow-hidden">
+ <div class="bg-gradient-to-b from-gray-50 to-white p-4 md:p-5 rounded-xl md:rounded-lg border border-gray-100 flex flex-col items-center text-center group hover:-translate-y-1 hover: transition-all duration-500 relative overflow-hidden">
  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-blue-500"></div>
  
- <div class="w-20 h-20 bg-gray-900 rounded-2xl flex items-center justify-center text-white text-2xl font-black mb-4 group-hover:rotate-6 transition-transform border-4 border-white relative overflow-hidden">
+ <div class="w-20 h-20 bg-gray-900 rounded-lg flex items-center justify-center text-white text-2xl font-black mb-4 group-hover:rotate-6 transition-transform border-4 border-white relative overflow-hidden">
  <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
  {{ order.customer?.firstName?.[0] }}{{ order.customer?.lastName?.[0] }}
  </div>
@@ -324,7 +324,7 @@
  </div>
 
   <!-- Awaiting Payment -->
-  <div v-if="order.status === 'awaiting_payment'" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 md:p-5 flex flex-col items-center text-center mt-6">
+  <div v-if="order.status === 'awaiting_payment'" class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 md:p-5 flex flex-col items-center text-center mt-6">
     <h3 class="text-xl font-black text-emerald-900 tracking-tight mb-2">Offer Accepted!</h3>
     <p class="text-sm font-medium text-emerald-700 leading-relaxed">The student has accepted your offer of ₦{{ order.deliveryFee?.toLocaleString() }}. The system is now waiting for them to make a secure payment.</p>
     
@@ -337,7 +337,7 @@
   </div>
 
   <!-- P2P Payment Confirmation -->
-  <div v-if="order.status === 'awaiting_payment_confirmation'" class="bg-blue-50 border border-blue-200 rounded-2xl p-4 md:p-5 flex flex-col items-center text-center mt-6">
+  <div v-if="order.status === 'awaiting_payment_confirmation'" class="bg-blue-50 border border-blue-200 rounded-lg p-4 md:p-5 flex flex-col items-center text-center mt-6">
    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-3">
      <Check class="w-6 h-6" />
    </div>
@@ -349,7 +349,7 @@
      <img :src="order.customDetails.proofOfPayment" class="w-full h-auto rounded-lg" alt="Proof of payment" />
    </div>
    
-   <button @click="confirmP2PPayment" :disabled="confirmingPayment" class="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all">
+   <button @click="confirmP2PPayment" :disabled="confirmingPayment" class="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold  hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all">
      <Loader2 v-if="confirmingPayment" class="w-5 h-5 animate-spin" />
      <span v-else>✅</span>
      {{ confirmingPayment ? 'CONFIRMING...' : 'I Have Received The Money' }}
@@ -357,7 +357,7 @@
  </div>
 
   <!-- Vendor Payment Section -->
-  <div v-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'pending' && (order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up')" class="bg-white border-2 border-[#FF5C1A] rounded-2xl p-4 md:p-5 flex flex-col items-center mt-6 shadow-md relative overflow-hidden">
+  <div v-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'pending' && (order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up')" class="bg-white border-2 border-[#FF5C1A] rounded-lg p-4 md:p-5 flex flex-col items-center mt-6  relative overflow-hidden">
     <div class="absolute top-0 right-0 w-16 h-16 bg-[#FF5C1A]/10 rounded-bl-full flex items-center justify-center">
       <span class="text-2xl ml-4 mb-4">💳</span>
     </div>
@@ -451,7 +451,7 @@
         v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))"
         @click="requestPriceApproval"
         :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0 || submittingReconciliation"
-        class="w-full py-3.5 bg-amber-500 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+        class="w-full py-3.5 bg-amber-500 text-white rounded-xl text-sm font-bold  hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
       >
         <Loader2 v-if="submittingReconciliation" class="w-4 h-4 animate-spin" />
         Request Price Approval
@@ -460,14 +460,14 @@
         v-else
         @click="isConfirmVendorPaymentModalOpen = true" 
         :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0" 
-        class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold shadow-sm hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+        class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold  hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
       >
         Pay Vendor Now
       </button>
     </div>
   </div>
   
-  <div v-else-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'transferred'" class="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center gap-3 mt-6">
+  <div v-else-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'transferred'" class="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3 mt-6">
     <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 shrink-0">
       <Check class="w-5 h-5" />
     </div>
@@ -517,7 +517,7 @@
    <p class="text-xs text-gray-400 text-center font-medium mt-2 leading-tight">Need someone else to complete the delivery? You will split the earnings (60:40).</p>
  </div>
  
- <div v-if="order.interception?.status === 'pending' && isPrimaryErrander" class="mt-6 bg-purple-50 border border-purple-200 rounded-2xl p-4 text-center">
+ <div v-if="order.interception?.status === 'pending' && isPrimaryErrander" class="mt-6 bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
    <div class="text-3xl mb-2 animate-bounce">⏳</div>
    <h3 class="text-purple-900 font-bold text-sm mb-1">Hand-off Requested</h3>
    <p class="text-purple-700 text-xs mb-3">Waiting for another errander to accept the hand-off.</p>
@@ -525,7 +525,7 @@
 
  <div v-if="(order.interception?.status === 'accepted' || order.interception?.status === 'completed') && isPrimaryErrander" class="mt-6">
     <!-- If order is delivered, show completion card for primary errander -->
-    <div v-if="order.status === 'delivered'" class="bg-emerald-500 rounded-2xl p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
+    <div v-if="order.status === 'delivered'" class="bg-emerald-500 rounded-lg p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
       <div class="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-600 opacity-90" />
       <div class="absolute -right-16 -bottom-16 w-38 h-38 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
       <div class="relative z-10 space-y-4 md:space-y-6">
@@ -542,7 +542,7 @@
       </div>
     </div>
     <!-- If order is still in progress, show hand-off accepted status -->
-    <div v-else class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
+    <div v-else class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center">
       <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-3 mx-auto">
         <span class="text-xl">🤝</span>
       </div>
@@ -553,7 +553,7 @@
   </div>
 
  <!-- Premium Verification Interface -->
- <div v-if="(order.status === 'in_transit' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-3xl p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 shadow-sm">
+ <div v-if="(order.status === 'in_transit' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 ">
  <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
  
  <div class="text-center space-y-2 relative z-10">
@@ -574,14 +574,14 @@
       inputmode="text"
       maxlength="1"
       placeholder="•"
-      class="w-16 h-20 text-center text-4xl font-black text-gray-900 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 focus:bg-white focus:outline-none transition-all placeholder:text-gray-300 uppercase shadow-inner"
+      class="w-16 h-20 text-center text-4xl font-black text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 focus:bg-white focus:outline-none transition-all placeholder:text-gray-300 uppercase "
     />
   </div>
  
  <button 
  @click="completeOrder" 
  :disabled="verificationCode.length !== 4 || completing"
- class="w-full py-2 bg-[#FF5C1A] text-white rounded-xl text-sm font-black shadow-sm hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all relative z-10 group active:scale-95"
+ class="w-full py-2 bg-[#FF5C1A] text-white rounded-xl text-sm font-black  hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all relative z-10 group active:scale-95"
  >
  <Loader2 v-if="completing" class="w-5 h-5 animate-spin flex-shrink-0" />
  <span v-else class="text-lg group-hover:scale-110 transition-transform">✅</span> 
@@ -602,7 +602,7 @@
  </div>
 
  <!-- Delivery Completed State -->
- <div v-if="order.status === 'delivered' && !isPrimaryErrander || (order.status === 'delivered' && isPrimaryErrander && !isInterceptionOrder)" class="bg-emerald-500 rounded-2xl p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
+ <div v-if="order.status === 'delivered' && !isPrimaryErrander || (order.status === 'delivered' && isPrimaryErrander && !isInterceptionOrder)" class="bg-emerald-500 rounded-lg p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
  <div class="absolute inset-0 bg-gradient-to-br from-emerald-400 to-emerald-600 opacity-90" />
  <div class="absolute -right-16 -bottom-16 w-38 h-38 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
  
@@ -760,7 +760,7 @@
   <!-- Substitute Modal -->
   <div v-if="showSubstituteModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeSubstituteModal"></div>
-    <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+    <div class="relative w-full max-w-md bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
       <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
         <h3 class="text-lg font-black text-gray-900 tracking-tight">Suggest Substitute</h3>
         <button @click="closeSubstituteModal" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">
@@ -813,7 +813,7 @@
         <button 
           @click="sendSubstituteRequest"
           :disabled="isSubmittingSubstitute || selectedSubstituteIds.length === 0"
-          class="w-full py-4 bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#e04f14] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-orange-200"
+          class="w-full py-4 bg-[#FF5C1A] text-white font-bold rounded-xl hover:bg-[#e04f14] transition-all disabled:opacity-50 flex items-center justify-center gap-2  shadow-orange-200"
         >
           <Loader2 v-if="isSubmittingSubstitute" class="w-5 h-5 animate-spin" />
           <span>Send Options to Student ({{ selectedSubstituteIds.length }})</span>
@@ -825,7 +825,7 @@
   <!-- Unavailable Confirmation Modal -->
   <div v-if="showUnavailableModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="cancelUnavailable"></div>
-    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+    <div class="relative w-full max-w-sm bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col">
       <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-red-50/50">
         <h3 class="text-lg font-black text-red-600 tracking-tight flex items-center gap-2">
           <AlertCircle class="w-5 h-5" /> Mark Unavailable
@@ -840,7 +840,7 @@
         
         <div class="flex gap-3">
           <button @click="cancelUnavailable" class="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
-          <button @click="confirmUnavailable" class="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-200">Confirm</button>
+          <button @click="confirmUnavailable" class="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors  shadow-red-200">Confirm</button>
         </div>
       </div>
     </div>
@@ -849,7 +849,7 @@
   <!-- Request Topup Modal -->
   <div v-if="showTopupModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showTopupModal = false"></div>
-    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6">
+    <div class="relative w-full max-w-sm bg-white rounded-lg shadow-2xl p-6">
       <h3 class="text-lg font-black text-gray-900 mb-2">Request Extra Funds</h3>
       <p class="text-sm text-gray-500 mb-4">How much extra do you need to buy the item?</p>
       <input type="number" v-model="topupAmount" placeholder="Amount (e.g. 1000)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-blue-500" />
@@ -864,7 +864,7 @@
   <!-- Cancel Errand Modal -->
   <div v-if="showCancelModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showCancelModal = false"></div>
-    <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl p-6">
+    <div class="relative w-full max-w-sm bg-white rounded-lg shadow-2xl p-6">
       <h3 class="text-lg font-black text-gray-900 mb-2">Cancel Errand</h3>
       <p class="text-sm text-gray-500 mb-4">Why are you cancelling this errand?</p>
       <select v-model="cancelReason" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-red-500">

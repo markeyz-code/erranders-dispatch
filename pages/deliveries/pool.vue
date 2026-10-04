@@ -13,7 +13,7 @@
     </div>
 
     <!-- Alert for Batching -->
-    <div v-if="batchStatus?.isActive" class="bg-parentPrimary/[0.03] border border-parentPrimary/10 rounded-2xl p-5 flex items-center gap-4 group hover:bg-parentPrimary/5 transition-all">
+    <div v-if="batchStatus?.isActive" class="bg-parentPrimary/[0.03] border border-parentPrimary/10 rounded-lg p-5 flex items-center gap-4 group hover:bg-parentPrimary/5 transition-all">
       <div class="w-12 h-12 rounded-xl bg-parentPrimary flex items-center justify-center text-white text-xl flex-shrink-0">📦</div>
       <div>
         <h4 class="text-sm font-medium text-gray-900">Multi-Order Mode Active</h4>
@@ -22,19 +22,19 @@
     </div>
 
     <!-- Orders Table -->
-    <div v-if="loading" class="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse">
+    <div v-if="loading" class="bg-white rounded-lg border border-gray-100 overflow-hidden animate-pulse">
       <div class="p-5 space-y-4">
         <div v-for="i in 4" :key="i" class="h-24 bg-gray-50 rounded-xl w-full"></div>
       </div>
     </div>
 
-    <div v-else-if="availableOrders.length === 0" class="bg-white rounded-2xl border border-gray-100 py-32 text-center">
+    <div v-else-if="availableOrders.length === 0" class="bg-white rounded-lg border border-gray-100 py-32 text-center">
       <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 scale-110">🚲</div>
       <h3 class="text-xl font-medium text-gray-900 mb-2">The pool is currently empty</h3>
       <p class="text-xs text-gray-400 max-w-xs mx-auto mb-8 font-medium">All orders have been claimed. New orders will appear here automatically.</p>
     </div>
 
-    <div v-else class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div v-else class="bg-white rounded-lg border border-gray-100 overflow-hidden">
       <!-- Mobile Card Layout (visible on small screens only) -->
       <div class="md:hidden divide-y divide-gray-100">
         <div 
@@ -88,7 +88,7 @@
 
           <!-- Voice Note -->
           <div v-if="order.type === 'custom_errand' && order.customDetails?.attachedVoiceNote" class="mb-3" @click.stop>
-            <audio :src="order.customDetails.attachedVoiceNote" controls class="h-8 w-full max-w-[250px] shadow-sm rounded-full" preload="metadata" />
+            <audio :src="order.customDetails.attachedVoiceNote" controls class="h-8 w-full max-w-[250px]  rounded-full" preload="metadata" />
           </div>
 
           <!-- Card Footer: Earnings + Actions -->
@@ -184,7 +184,7 @@
                       </div>
                     </div>
                     <div v-if="order.type === 'custom_errand' && order.customDetails?.attachedVoiceNote" class="mt-2" @click.stop>
-                      <audio :src="order.customDetails.attachedVoiceNote" controls class="h-8 w-48 max-w-[200px] shadow-sm rounded-full" preload="metadata" />
+                      <audio :src="order.customDetails.attachedVoiceNote" controls class="h-8 w-48 max-w-[200px]  rounded-full" preload="metadata" />
                     </div>
                   </div>
                 </div>
@@ -235,14 +235,14 @@
                   <button 
                     v-if="order.status === 'negotiating'"
                     @click.stop="viewDetails(order)"
-                    class="px-4 py-2 bg-amber-500 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-amber-600 hover:shadow-sm border border-amber-400 transition-all min-w-[90px]"
+                    class="px-4 py-2 bg-amber-500 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-amber-600 hover: border border-amber-400 transition-all min-w-[90px]"
                   >
                     Place Bid
                   </button>
                   <button 
                     @click.stop="order.status === 'interception_pending' ? acceptInterception(order._id) : acceptOrder(order._id)"
                     :disabled="acceptingId === order._id"
-                    class="px-4 py-2 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-parentPrimary hover:shadow-sm border border-gray-100 hover:shadow-parentPrimary/20 transition-all disabled:opacity-50 min-w-[90px]"
+                    class="px-4 py-2 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-parentPrimary hover:border border-gray-200 hover:shadow-parentPrimary/20 transition-all disabled:opacity-50 min-w-[90px]"
                   >
                     <span v-if="acceptingId === order._id" class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                     <span v-else>Accept</span>
@@ -274,23 +274,23 @@
 
         <!-- Info Grid -->
         <div class="grid grid-cols-2 gap-4">
-          <div v-if="selectedOrder.status === 'negotiating'" class="p-4 bg-amber-50 rounded-2xl border border-amber-100">
+          <div v-if="selectedOrder.status === 'negotiating'" class="p-4 bg-amber-50 rounded-lg border border-amber-100">
             <p class="text-[9px] font-medium text-amber-500 uppercase tracking-widest mb-1">Student Proposed</p>
             <p v-if="(selectedOrder.proposedDeliveryFee || selectedOrder.deliveryFee) > 0" class="text-xl font-bold text-amber-700 tracking-tight">₦{{ (selectedOrder.proposedDeliveryFee || selectedOrder.deliveryFee).toLocaleString() }}</p>
             <p v-else class="text-lg font-bold text-amber-700 tracking-tight">Open to Offers</p>
           </div>
-          <div v-else class="p-4 bg-gray-50 rounded-2xl">
+          <div v-else class="p-4 bg-gray-50 rounded-lg">
             <p class="text-[9px] font-medium text-gray-400 uppercase tracking-widest mb-1">You Earn</p>
             <p class="text-xl font-medium text-emerald-600 tracking-tight">₦{{ selectedOrder.status === 'interception_pending' ? ((selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee) * 0.4).toLocaleString() : (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee).toLocaleString() }}</p>
           </div>
-          <div class="p-4 bg-gray-50 rounded-2xl">
+          <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-[9px] font-medium text-gray-400 uppercase tracking-widest mb-1">Prep Time</p>
             <p class="text-xl font-medium text-gray-900 tracking-tight">~15 Mins</p>
           </div>
         </div>
 
         <!-- Outside Campus / Negotiation Banner -->
-        <div v-if="selectedOrder.status === 'negotiating' || selectedOrder.locationType === 'outside_campus' || selectedOrder.locationType === 'campus_environs'" class="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-2">
+        <div v-if="selectedOrder.status === 'negotiating' || selectedOrder.locationType === 'outside_campus' || selectedOrder.locationType === 'campus_environs'" class="p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-2">
           <div class="flex items-center gap-2">
             <span class="text-lg">📍</span>
             <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wide">{{ selectedOrder.locationType === 'campus_environs' ? 'Campus Environs Delivery' : 'Outside Campus Delivery' }}</h4>
@@ -301,7 +301,7 @@
             <span v-else>The student is open to offers.</span>
             You can accept their offer or counter with your own price.
           </p>
-          <div v-if="selectedOrder.outsideCampusAddress" class="mt-2 p-3 bg-white/80 rounded-lg border border-amber-100">
+          <div v-if="selectedOrder.outsideCampusAddress" class="mt-2 p-3  rounded-lg border border-amber-100">
             <p class="text-[9px] font-medium text-amber-500 uppercase tracking-widest mb-1">Delivery Location</p>
             <p class="text-sm font-bold text-gray-900">{{ selectedOrder.outsideCampusAddress }}</p>
           </div>
@@ -346,7 +346,7 @@
             
             <div v-if="selectedOrder.customDetails?.attachedVoiceNote" class="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-2">
               <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">Attached Voice Note</span>
-              <audio :src="selectedOrder.customDetails.attachedVoiceNote" controls class="w-full h-10 bg-white rounded-full shadow-sm" preload="metadata" />
+              <audio :src="selectedOrder.customDetails.attachedVoiceNote" controls class="w-full h-10 bg-white rounded-full " preload="metadata" />
             </div>
 
             <div v-if="selectedOrder.customDetails?.attachedImages?.length > 0 || selectedOrder.customDetails?.attachedImage" class="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-2">
@@ -357,7 +357,7 @@
                    :href="img" 
                    target="_blank" 
                    class="relative inline-block hover:opacity-80 transition-opacity">
-                  <img :src="img" class="h-20 w-20 object-cover rounded-xl border border-gray-200 shadow-sm" />
+                  <img :src="img" class="h-20 w-20 object-cover rounded-xl border border-gray-200 " />
                 </a>
               </div>
             </div>
@@ -382,7 +382,7 @@
         </div>
 
         <!-- Customer Note -->
-        <div v-if="selectedOrder.recipientName" class="p-5 bg-[#FF5C1A]/[0.02] border border-[#FF5C1A]/10 rounded-[2rem] space-y-2">
+        <div v-if="selectedOrder.recipientName" class="p-5 bg-[#FF5C1A]/[0.02] border border-[#FF5C1A]/10 rounded-lg space-y-2">
           <div class="flex items-center gap-2">
             <User class="w-3.5 h-3.5 text-parentPrimary" />
             <h4 class="text-[10px] font-medium text-parentPrimary uppercase tracking-widest">Customer Details</h4>
@@ -392,7 +392,7 @@
         </div>
 
         <!-- Item Cost Bank Transfer Notice -->
-        <div v-if="selectedOrder.status !== 'interception_pending' && selectedOrder.type === 'custom_errand' && selectedOrder.customDetails?.estimatedItemCost > 0" class="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-2">
+        <div v-if="selectedOrder.status !== 'interception_pending' && selectedOrder.type === 'custom_errand' && selectedOrder.customDetails?.estimatedItemCost > 0" class="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
           <div class="flex items-center gap-2">
             <Banknote class="w-4 h-4 text-blue-600" />
             <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wide">Money for Items</h4>
@@ -404,13 +404,13 @@
         </div>
 
         <!-- Awaiting Payment Block -->
-        <div v-if="selectedOrder.status === 'awaiting_payment'" class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex flex-col items-center text-center mt-4 space-y-3">
-           <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm border border-gray-100 shadow-emerald-500/30">
+        <div v-if="selectedOrder.status === 'awaiting_payment'" class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex flex-col items-center text-center mt-4 space-y-3">
+           <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center border border-gray-200 shadow-emerald-500/30">
               <Check class="w-6 h-6" />
            </div>
            <h3 class="text-xl font-black text-emerald-900 tracking-tight">Offer Accepted!</h3>
            <p class="text-sm font-medium text-emerald-700 leading-relaxed">The student has accepted your offer of ₦{{ selectedOrder.deliveryFee?.toLocaleString() }}. The system is now waiting for them to make a secure payment.</p>
-           <div class="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-emerald-100 shadow-sm">
+           <div class="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-white rounded-lg border border-emerald-100 ">
              <span class="relative flex h-2.5 w-2.5">
                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -423,7 +423,7 @@
         <div v-if="selectedOrder.status !== 'awaiting_payment'" class="space-y-3">
           <!-- NEGOTIATING orders: Bid-only mode -->
           <div v-if="selectedOrder.status === 'negotiating'" class="space-y-4">
-            <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl space-y-3">
+            <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg space-y-3">
               <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wide">Submit Your Delivery Bid</h4>
               <p class="text-xs text-amber-600">Enter how much you want to charge for this delivery. The student will see your offer in real-time.</p>
               <div class="flex gap-2">
@@ -434,7 +434,7 @@
                 <button 
                   @click="placeBid(selectedOrder._id)"
                   :disabled="!bidAmount || biddingId === selectedOrder._id"
-                  class="bg-amber-500 text-white text-sm font-bold px-5 py-3 rounded-lg disabled:opacity-50 hover:bg-amber-600 transition-colors shrink-0 shadow-sm shadow-amber-200 flex items-center justify-center gap-2"
+                  class="bg-amber-500 text-white text-sm font-bold px-5 py-3 rounded-lg disabled:opacity-50 hover:bg-amber-600 transition-colors shrink-0  shadow-amber-200 flex items-center justify-center gap-2"
                 >
                   <Loader2 v-if="biddingId === selectedOrder._id" class="w-4 h-4 animate-spin" />
                   <span>{{ biddingId === selectedOrder._id ? 'Sending...' : '🚀 Send Bid' }}</span>

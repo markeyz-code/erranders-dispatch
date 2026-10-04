@@ -4,14 +4,16 @@
  <aside class="hidden lg:flex flex-col bg-white border-r border-gray-100 min-h-screen fixed left-0 top-0 z-50 transition-all duration-300" :class="isSidebarMinimized ? 'w-20' : 'w-64'">
  <!-- Logo -->
  <div class="p-4 pb-8 flex items-center gap-3 relative" :class="isSidebarMinimized ? 'justify-center px-0' : ''">
-  <img src="@/assets/img/logo-light.png" class="h-10 w-auto" />
- <!-- <div class="w-10 h-10 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 shrink-0">
- E
- </div> -->
+  <!-- <img src="@/assets/img/logo-light.png" class="h-10 w-auto" /> -->
+
  <div v-if="!isSidebarMinimized" class="flex flex-col">
   <img src="@/assets/img/logo-light.png" class="h-10 w-auto" />
  <!-- <span class="text-lg font-bold text-gray-900 tracking-tight leading-none">Errandr</span>
  <span class="text-[10px] font-semibold text-[#FF5C1A] tracking-wide leading-none mt-0.5">Rider Portal</span> -->
+ </div>
+  <div v-if="isSidebarMinimized" class="w-10 h-10 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 shrink-0">
+ <!-- erranders-icon-2048.png -->
+   <img src="@/assets/img/erranders-icon-2048.png" class="h-10 w-auto" />
  </div>
 
  <!-- Toggle Button -->
