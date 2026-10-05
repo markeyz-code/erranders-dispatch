@@ -931,14 +931,31 @@ const orderError = ref('');
 const { showToast } = useCustomToast();
 
 const isPinging = ref<string | null>(null);
+const lastPingTime = ref(0);
+const PING_COOLDOWN_MS = 5000; // 5 second local cooldown
+
 const pingParticipant = async (orderId: string, target: 'customer' | 'vendor') => {
   if (isPinging.value) return;
+  
+  // Local cooldown to prevent double-firing
+  const now = Date.now();
+  if (now - lastPingTime.value < PING_COOLDOWN_MS) {
+    showToast({
+      title: 'Hold on',
+      message: 'Please wait a moment before pinging again.',
+      toastType: 'error',
+      duration: 3000
+    });
+    return;
+  }
+  
   isPinging.value = target;
   try {
     const res = await api.post(`/orders/${orderId}/ping`, {
       target,
       message: 'Please check the app for an update regarding your order.'
     });
+    lastPingTime.value = Date.now();
     showToast({
       title: 'Success',
       message: `Successfully pinged the ${target}!`,
@@ -954,7 +971,10 @@ const pingParticipant = async (orderId: string, target: 'customer' | 'vendor') =
       duration: 3000
     });
   } finally {
-    isPinging.value = null;
+    // Keep the button disabled for the cooldown period
+    setTimeout(() => {
+      isPinging.value = null;
+    }, PING_COOLDOWN_MS);
   }
 };
 const verificationCode = ref('');
