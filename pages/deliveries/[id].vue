@@ -1139,7 +1139,6 @@ const openChat = (receiverId: any, name: string, avatar?: string) => {
  isChatOpen.value = true;
 };
 
-const { showToast } = useCustomToast();
 
 // Custom Errand State
 const showTopupModal = ref(false);
