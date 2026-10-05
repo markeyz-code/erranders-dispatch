@@ -4,7 +4,7 @@
     <button
       v-if="!showControls"
       @click="showControls = true"
-      class="group relative w-8 h-8 rounded-full bg-parentPrimary shadow-sm border border-gray-100 hover:shadow-sm border border-gray-100 transition-all duration-300 flex items-center justify-center transform hover:scale-110"
+      class="group relative w-8 h-8 rounded-full bg-parentPrimary shadow-sm border border-gray-50 hover:shadow-sm border border-gray-50 transition-all duration-300 flex items-center justify-center transform hover:scale-110"
       title="Music controls"
     >
       <Music class="w-4 h-4 text-white" />
@@ -19,7 +19,7 @@
     <!-- Expanded Controls Panel -->
     <div
       v-else
-      class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 min-w-[280px] animate-slideIn"
+      class="bg-white rounded-2xl shadow-sm border border-gray-50 p-4 min-w-[280px] animate-slideIn"
     >
       <!-- Header with Close Button -->
       <div class="flex items-center justify-between mb-4">
@@ -47,7 +47,7 @@
       <div class="flex items-center justify-center mb-4">
         <button
           @click="togglePlay"
-          class="w-14 h-14 rounded-full bg-parentPrimary shadow-sm border border-gray-100 hover:shadow-sm border border-gray-100 transition-all duration-300 flex items-center justify-center transform hover:scale-105"
+          class="w-14 h-14 rounded-full bg-parentPrimary shadow-sm border border-gray-50 hover:shadow-sm border border-gray-50 transition-all duration-300 flex items-center justify-center transform hover:scale-105"
         >
           <Play v-if="!isPlaying" class="w-6 h-6 text-white ml-0.5" fill="currentColor" />
           <Pause v-else class="w-6 h-6 text-white" fill="currentColor" />

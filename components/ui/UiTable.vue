@@ -1,5 +1,5 @@
 <template>
- <div class="bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden flex flex-col min-h-[400px] border border-gray-50/50">
+ <div class="bg-white rounded-[2rem] overflow-hidden flex flex-col min-h-[400px] border border-gray-100">
  <!-- Table Body -->
  <div class="overflow-x-auto hide-scrollbar">
  <table class="w-full text-left border-collapse">
@@ -26,7 +26,7 @@
  <tr v-else-if="items.length === 0">
  <td :colspan="hasActions ? columns.length + 1 : columns.length" class="px-5 py-32 text-center">
  <div class="flex flex-col items-center justify-center max-w-xs mx-auto text-center">
- <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 border border-gray-100/50">
+ <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 border border-gray-100">
  <component :is="emptyIcon || 'Inbox'" class="w-8 h-8 text-gray-200" />
  </div>
  <h4 class="font-medium text-gray-900 text-lg tracking-tight ">{{ emptyTitle || 'No items found' }}</h4>

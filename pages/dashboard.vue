@@ -34,7 +34,7 @@
       <div class="lg:col-span-2 space-y-6">
 
         <!-- Active Deliveries Section -->
-        <div class="  rounded-lg  overflow-hidden border border-gray-200">
+        <div class="  rounded-lg  overflow-hidden border border-gray-25">
           <div class="px-4 py-4 border-b border-gray-50 flex items-center justify-between">
             <h3 class="text-base font-bold text-gray-900">Active Deliveries</h3>
             <div v-if="batchStatus?.isActive" class="flex items-center gap-2 px-3 py-1 bg-parentPrimary/10 border border-parentPrimary/20 rounded-full animate-pulse">
@@ -48,7 +48,7 @@
             <div class="h-20 bg-gray-50 rounded-xl animate-pulse"></div>
           </div>
           <div v-else-if="activeOrders.length > 0" class="divide-y space-y-3.5 p-3 divide-gray-50">
-            <div v-for="order in activeOrders" :key="order._id" class="p-4   rounded-lg   hover:border border-gray-200 transition-all transform hover:-translate-y-0.5">
+            <div v-for="order in activeOrders" :key="order._id" class="p-4   rounded-lg   hover:border border-gray-25 transition-all transform hover:-translate-y-0.5">
               <div class="flex flex-col md:flex-row gap-6 items-start">
                 <div class="w-14 h-14 rounded-lg bg-blue-50 flex items-center justify-center text-2xl flex-shrink-0">
                   {{ statusEmoji(order.status) }}
@@ -78,7 +78,7 @@
                   </div>
                 </div>
                 
-                <NuxtLink :to="`/deliveries/${order._id}`" class="px-4 py-3 bg-gray-900 text-white rounded-xl font-semibold text-sm border border-gray-200 hover:bg-black hover:border border-gray-200 transition-all flex-shrink-0">
+                <NuxtLink :to="`/deliveries/${order._id}`" class="px-4 py-3 bg-gray-900 text-white rounded-xl font-semibold text-sm border border-gray-25 hover:bg-black hover:border border-gray-25 transition-all flex-shrink-0">
                   Manage Dispatch
                 </NuxtLink>
               </div>
@@ -89,7 +89,7 @@
             <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">🚲</div>
             <h4 class="text-base font-bold text-gray-900 mb-1">No active deliveries</h4>
             <p class="text-sm text-gray-400 mb-6">You don't have any deliveries in progress right now.</p>
-            <NuxtLink to="/deliveries" class="inline-block px-4 py-3 bg-[#FF5C1A] text-white rounded-xl font-semibold text-sm border border-gray-200 shadow-[#FF5C1A]/20 hover:brightness-110 transition-all">
+            <NuxtLink to="/deliveries" class="inline-block px-4 py-3 bg-[#FF5C1A] text-white rounded-xl font-semibold text-sm border border-gray-25 shadow-[#FF5C1A]/20 hover:brightness-110 transition-all">
               View Available Errands
             </NuxtLink>
           </div>
@@ -144,7 +144,7 @@
         </div>
 
         <!-- Recent Deliveries -->
-        <div class="  rounded-lg  overflow-hidden border border-gray-200">
+        <div class="  rounded-lg  overflow-hidden border border-gray-25">
           <div class="px-4 py-4 border-b border-gray-50 flex items-center justify-between">
             <h3 class="text-base font-bold text-gray-900">Recent Deliveries</h3>
             <NuxtLink to="/deliveries" class="text-xs font-semibold text-[#FF5C1A] hover:underline">View All →</NuxtLink>
@@ -162,7 +162,7 @@
               v-for="order in recentOrders" 
               :key="order._id" 
               :to="`/deliveries/${order._id}`"
-              class="px-4 py-4   rounded-xl  hover:border border-gray-200 transition-all flex items-center gap-4 group cursor-pointer"
+              class="px-4 py-4   rounded-xl  hover:border border-gray-25 transition-all flex items-center gap-4 group cursor-pointer"
             >
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-gray-50 group-hover:scale-105 transition-transform">
                 {{ statusEmoji(order.status) }}
@@ -224,15 +224,15 @@
         </div>
 
         <!-- Quick Help -->
-        <div class="  rounded-lg  p-4 ">
+        <!-- <div class="  rounded-lg  p-4 ">
           <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2 mb-2">
             Need Help?
           </h3>
           <p class="text-xs text-gray-500 mb-4">Get in touch with our support team for any delivery issues.</p>
-          <button class="w-full py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-all">
+          <button class="w-full py-3 bg-gray-50 border border-gray-50 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-all">
             Contact Support
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -268,11 +268,11 @@ const stats = computed(() => [
   { label: 'Deliveries Done', value: earningsData.value.totalDeliveries || orders.value.filter(o => o.status === 'delivered').length || '0', emoji: '🏁', bgClass: 'bg-emerald-50' },
   { label: 'Total Earned', value: `₦${(earningsData.value.totalEarnings || 0).toLocaleString()}`, emoji: '💰', bgClass: 'bg-amber-50' },
   { label: 'Avg. Rating', value: (earningsData.value.rating || errandrProfile.value?.rating || 0).toFixed(1), emoji: '⭐', bgClass: 'bg-purple-50' },
-  { label: 'Active Orders', value: orders.value.filter(o => !['delivered', 'cancelled'].includes(o.status)).length || '0', emoji: '📦', bgClass: 'bg-blue-50' },
+  { label: 'Active Orders', value: orders.value.filter(o => ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit'].includes(o.status)).length || '0', emoji: '📦', bgClass: 'bg-blue-50' },
 ])
 
 const activeOrders = computed(() => {
-  return orders.value.filter(o => !['delivered', 'cancelled'].includes(o.status))
+  return orders.value.filter(o => ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit'].includes(o.status))
 })
 
 const batchStatus = ref<any>(null)

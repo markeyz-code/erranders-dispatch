@@ -9,7 +9,7 @@
       leave-from-class="transform scale-100 opacity-100 translate-y-0"
       leave-to-class="transform scale-95 opacity-0 translate-y-2"
     >
-      <div v-if="isOpen" class="mb-4 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 w-64 origin-bottom-left">
+      <div v-if="isOpen" class="mb-4 bg-white rounded-2xl shadow-xl border border-gray-50 p-4 w-64 origin-bottom-left">
         <div class="flex items-center justify-between mb-3">
           <h3 class="font-bold text-gray-900 text-sm">Support Team</h3>
           <button @click="isOpen = false" class="text-gray-400 hover:text-gray-600 transition-colors">

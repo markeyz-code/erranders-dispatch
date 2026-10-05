@@ -115,13 +115,15 @@
             
             <!-- Filters -->
             <div class="flex items-center gap-2 flex-wrap">
-              <select v-model="filterType" class="px-3 py-1.5 text-xs border border-gray-25 rounded-lg bg-white text-gray-700 font-medium focus:outline-none focus:ring-1 focus:ring-gray-300">
-                <option value="all">All Types</option>
-                <option value="credit">Credits Only</option>
-                <option value="debit">Debits Only</option>
-              </select>
-              <input v-model="filterDateFrom" type="date" class="px-3 py-1.5 text-xs border border-gray-25 rounded-lg bg-white text-gray-700 font-medium focus:outline-none focus:ring-1 focus:ring-gray-300" placeholder="From" />
-              <input v-model="filterDateTo" type="date" class="px-3 py-1.5 text-xs border border-gray-25 rounded-lg bg-white text-gray-700 font-medium focus:outline-none focus:ring-1 focus:ring-gray-300" placeholder="To" />
+              <div class="w-32 relative">
+                <UiSelectInput v-model="filterType" :options="[{label: 'All Types', value: 'all'}, {label: 'Credits Only', value: 'credit'}, {label: 'Debits Only', value: 'debit'}]" class="w-full h-8 !min-h-[32px] text-xs !px-2 rounded-lg bg-white focus:ring-1 focus:ring-gray-300" />
+              </div>
+              <div class="w-32">
+                <UiDatePicker v-model="filterDateFrom" placeholder="From" />
+              </div>
+              <div class="w-32">
+                <UiDatePicker v-model="filterDateTo" placeholder="To" />
+              </div>
               <button v-if="filterType !== 'all' || filterDateFrom || filterDateTo" @click="clearFilters" class="px-2 py-1.5 text-xs text-gray-500 hover:text-gray-700 font-medium">
                 Clear
               </button>
@@ -197,11 +199,11 @@
           <div class="space-y-3">
             <div>
               <label class="text-xs font-medium text-gray-500 mb-1 block">From</label>
-              <input v-model="statementFrom" type="date" class="w-full px-3 py-2 text-sm border border-gray-25 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300" />
+              <UiDatePicker v-model="statementFrom" class="w-full" />
             </div>
             <div>
               <label class="text-xs font-medium text-gray-500 mb-1 block">To</label>
-              <input v-model="statementTo" type="date" class="w-full px-3 py-2 text-sm border border-gray-25 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300" />
+              <UiDatePicker v-model="statementTo" class="w-full" />
             </div>
           </div>
           <div class="flex gap-3">
@@ -224,10 +226,7 @@
       <div class="space-y-4">
         <div>
           <label class="text-xs font-medium text-gray-500 mb-1 block">Select Bank</label>
-          <select v-model="bankForm.bankCode" @change="onBankChange" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-25 rounded-lg text-sm font-medium focus:ring-1 focus:ring-gray-300 focus:bg-white transition-all appearance-none cursor-pointer">
-            <option value="" disabled>Choose your bank</option>
-            <option v-for="bank in banks" :key="bank.code" :value="bank.code">{{ bank.name }}</option>
-          </select>
+          <UiSelectInput v-model="bankForm.bankCode" :options="banks" class="w-full" @update:modelValue="onBankChange" />
         </div>
         <div>
           <label class="text-xs font-medium text-gray-500 mb-1 block">Account Number</label>

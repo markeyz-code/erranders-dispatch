@@ -53,7 +53,7 @@
           <Transition name="slide-fade">
             <div
               v-if="showDropdown"
-              class="absolute z-50 mt-2 bg-white shadow-sm border border-gray-100 rounded-2xl border-[0.5px] border-gray-100 overflow-hidden left-0"
+              class="absolute z-50 mt-2 bg-white shadow-sm border border-gray-50 rounded-2xl border-[0.5px] border-gray-100 overflow-hidden left-0"
             >
               <!-- Search Input -->
               <div class="p-4 border-b-[0.5px] border-gray-100 bg-gray-50">

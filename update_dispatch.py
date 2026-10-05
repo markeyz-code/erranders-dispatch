@@ -14,7 +14,7 @@ ui_replace = """<div v-else-if="substituteOptions.length === 0" class="text-cent
             v-for="opt in substituteOptions" 
             :key="opt._id"
             @click="toggleSubstituteSelection(opt._id)"
-            class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl transition-all text-left"
+            class="w-full flex items-center justify-between p-4 bg-white border border-gray-25 rounded-xl transition-all text-left"
             :class="selectedSubstituteIds.includes(opt._id) ? 'border-[#FF5C1A] bg-orange-50 ring-2 ring-orange-200' : 'hover:border-gray-300'"
           >
             <div>

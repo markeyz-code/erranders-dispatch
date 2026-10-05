@@ -5,7 +5,7 @@
         <div
           v-if="isOpen"
           :class="[
-            'bg-white shadow-sm border border-gray-100 overflow-hidden flex flex-col transition-all duration-300',
+            'bg-white shadow-sm border border-gray-50 overflow-hidden flex flex-col transition-all duration-300',
             // Mobile (default)
             'fixed inset-0 w-full h-[100dvh] rounded-none z-[999999]',
             // Desktop (sm and up)
@@ -86,7 +86,7 @@
                       <Lock v-if="isLoggedIn" class="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-white/50" />
                     </div>
                   </div>
-                  <button v-if="!isLoggedIn && needsGuestInfo" @click="startChat" class="w-full rounded-xl bg-white text-[#FF5C1A] hover:bg-gray-50 py-3 text-sm font-bold shadow-sm border border-gray-100 transition-transform active:scale-[0.98]">
+                  <button v-if="!isLoggedIn && needsGuestInfo" @click="startChat" class="w-full rounded-xl bg-white text-[#FF5C1A] hover:bg-gray-50 py-3 text-sm font-bold shadow-sm border border-gray-50 transition-transform active:scale-[0.98]">
                     Submit Details
                   </button>
                 </div>
@@ -105,7 +105,7 @@
                 }"
               >
                 <div
-                  class="max-w-[85%] rounded-[1.5rem] px-5 py-3.5 shadow-sm border border-gray-100 backdrop-blur-md"
+                  class="max-w-[85%] rounded-[1.5rem] px-5 py-3.5 shadow-sm border border-gray-50 backdrop-blur-md"
                   :class="getBubbleStyle(message)"
                 >
                   <p class="text-[11px] font-bold uppercase tracking-wider mb-1" :class="getBubbleLabelStyle(message)" v-if="showSenderLabel(message)">
@@ -140,7 +140,7 @@
                   v-for="faq in faqs.slice(0, 8)"
                   :key="faq._id"
                   @click="handleFaqClick(faq)"
-                  class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-[13px] font-semibold transition-colors border border-gray-200/50 whitespace-nowrap"
+                  class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-[13px] font-semibold transition-colors border border-gray-25/50 whitespace-nowrap"
                 >
                   {{ faq.question }}
                 </button>
@@ -167,7 +167,7 @@
                 v-if="newMessage.trim()"
                 @click="handleSend"
                 :disabled="sending || !newMessage.trim() || (isGuest && needsGuestInfo)"
-                class="w-10 h-10 rounded-full bg-[#FF5C1A] hover:bg-[#E54D12] text-white flex items-center justify-center disabled:opacity-50 transition-all shadow-sm border border-gray-100 shadow-orange-500/20 animate-in zoom-in"
+                class="w-10 h-10 rounded-full bg-[#FF5C1A] hover:bg-[#E54D12] text-white flex items-center justify-center disabled:opacity-50 transition-all shadow-sm border border-gray-50 shadow-orange-500/20 animate-in zoom-in"
               >
                 <ArrowRight class="w-5 h-5" />
               </button>
@@ -179,7 +179,7 @@
       <!-- Floating Button -->
       <button
         @click="toggleChat"
-        class="group relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#FF6B35] to-[#FF5C1A] text-white shadow-sm border border-gray-100 shadow-[#FF5C1A]/40 flex items-center justify-center hover:scale-105 hover:-translate-y-1 transition-all duration-300"
+        class="group relative w-16 h-16 rounded-full bg-gradient-to-tr from-[#FF6B35] to-[#FF5C1A] text-white shadow-sm border border-gray-50 shadow-[#FF5C1A]/40 flex items-center justify-center hover:scale-105 hover:-translate-y-1 transition-all duration-300"
         aria-label="Open chat"
       >
         <div class="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
@@ -249,7 +249,7 @@ function getBubblePosition(message: ChatMessage) {
 
 function getBubbleStyle(message: ChatMessage) {
   if (message.senderType === 'customer' || message.senderType === 'guest' || message.senderType === 'vendor') {
-    return 'bg-white text-gray-900 rounded-br-sm shadow-sm border border-gray-100 shadow-black/5';
+    return 'bg-white text-gray-900 rounded-br-sm shadow-sm border border-gray-50 shadow-black/5';
   }
   return 'bg-white/20 text-white rounded-bl-sm border border-white/20';
 }

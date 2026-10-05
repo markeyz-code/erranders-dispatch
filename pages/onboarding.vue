@@ -16,7 +16,7 @@
       </div>
 
       <!-- Step Content -->
-      <div class="bg-white/5  p-10 rounded-[2.5rem] border border-white/10 relative overflow-hidden border border-gray-200">
+      <div class="bg-white/5  p-10 rounded-[2.5rem] border border-white/10 relative overflow-hidden border border-gray-25">
         
         <!-- Step 1: Rider Profile -->
         <div v-if="step === 1" class="space-y-6 animate-fade-in">
@@ -59,7 +59,7 @@
           <div class="grid grid-cols-1 gap-4">
             <div v-for="mode in deliveryModes" :key="mode.id" 
               class="flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer group"
-              :class="form.deliveryMode === mode.id ? 'bg-[#FF5C1A] border-[#FF5C1A] border border-gray-200' : 'bg-white/5 border-white/10 hover:border-white/30'"
+              :class="form.deliveryMode === mode.id ? 'bg-[#FF5C1A] border-[#FF5C1A] border border-gray-25' : 'bg-white/5 border-white/10 hover:border-white/30'"
               @click="form.deliveryMode = mode.id"
             >
               <div class="flex items-center gap-5">
@@ -71,7 +71,7 @@
                   <p class="text-[10px] font-medium" :class="form.deliveryMode === mode.id ? 'text-white/70' : 'text-gray-500'">{{ mode.desc }}</p>
                 </div>
               </div>
-              <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all" :class="form.deliveryMode === mode.id ? 'border-white bg-white' : 'border-white/20'">
+              <div class="w-6 h-6 rounded-full border flex items-center justify-center transition-all" :class="form.deliveryMode === mode.id ? 'border-white bg-white' : 'border-white/20'">
                 <Check v-if="form.deliveryMode === mode.id" class="w-4 h-4 text-[#FF5C1A]" />
               </div>
             </div>
@@ -90,7 +90,7 @@
 
           <div class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
-              <div class="p-5 border-2 border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
+              <div class="p-5 border border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
                 <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Upload class="w-6 h-6 text-gray-400" />
                 </div>
@@ -98,7 +98,7 @@
                 <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest leading-tight">Required</p>
               </div>
               
-              <div class="p-5 border-2 border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
+              <div class="p-5 border border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
                 <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Upload class="w-6 h-6 text-gray-400" />
                 </div>
@@ -117,7 +117,7 @@
         <!-- Nav Buttons -->
         <div class="flex gap-4 mt-12 pt-6 border-t border-white/10">
           <button v-if="step > 1" @click="step--" class="flex-1 py-5 bg-white/5 text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:bg-white/10 transition-all">Back</button>
-          <button @click="nextStep" class="flex-[2] py-5 bg-[#FF5C1A] text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:brightness-110 transition-all border border-gray-200 shadow-[#FF5C1A]/20">
+          <button @click="nextStep" class="flex-[2] py-5 bg-[#FF5C1A] text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:brightness-110 transition-all border border-gray-25 shadow-[#FF5C1A]/20">
             {{ step === 3 ? 'Start My Journey' : 'Continue' }}
           </button>
         </div>

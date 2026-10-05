@@ -1,6 +1,6 @@
 <template>
  <Transition name="modal">
- <div v-if="isOpen" class="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 drop-shadow-sm border border-gray-100" role="dialog" aria-modal="true">
+ <div v-if="isOpen" class="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 drop-shadow-sm border border-gray-50" role="dialog" aria-modal="true">
  <!-- Backdrop -->
  <div 
  class="fixed inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity" 
@@ -9,7 +9,7 @@
 
  <!-- Modal panel -->
  <div 
- class="relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transform transition-all duration-300 ease-out"
+ class="relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl shadow-sm border border-gray-50 overflow-hidden flex flex-col transform transition-all duration-300 ease-out"
  :class="[
  size === 'sm' ? 'sm:max-w-md' : 
  size === 'md' ? 'sm:max-w-2xl' : 

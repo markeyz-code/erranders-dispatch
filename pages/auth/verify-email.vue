@@ -24,7 +24,7 @@
             <p v-if="error" class="text-red-500 text-sm font-medium">{{ error }}</p>
 
             <button type="submit" :disabled="loading || otp.length < 6"
-              class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 active:scale-95">
+              class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 active:scale-95">
               <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
               {{ loading ? 'Verifying...' : 'Verify Email' }}
             </button>
@@ -48,11 +48,11 @@
         </div>
 
         <!-- Success Modal from register.vue -->
-        <div v-else class="w-full flex flex-col items-center justify-center text-center space-y-6 min-h-[400px] bg-white rounded-[2rem] relative z-20 border border-gray-100 shadow-[0_20px_60px_-15px_rgba(255,92,26,0.1)] p-5">
+        <div v-else class="w-full flex flex-col items-center justify-center text-center space-y-6 min-h-[400px] bg-white rounded-[2rem] relative z-20 border border-gray-50 shadow-[0_20px_60px_-15px_rgba(255,92,26,0.1)] p-5">
           <div class="relative w-28 h-28 flex items-center justify-center mb-4">
             <div class="absolute inset-0 bg-[#FF5C1A]/10 rounded-full animate-ping" style="animation-duration: 2s;"></div>
             <div class="absolute inset-2 bg-[#FF5C1A]/20 rounded-full animate-ping" style="animation-duration: 2s; animation-delay: 0.5s;"></div>
-            <div class="w-24 h-24 bg-gradient-to-br from-[#FF5C1A] to-[#FFA785] rounded-full flex items-center justify-center text-white shadow-sm border border-gray-100 shadow-[#FF5C1A]/40 relative z-10 animate-bounce">
+            <div class="w-24 h-24 bg-gradient-to-br from-[#FF5C1A] to-[#FFA785] rounded-full flex items-center justify-center text-white shadow-sm border border-gray-50 shadow-[#FF5C1A]/40 relative z-10 animate-bounce">
               <Check class="w-12 h-9" stroke-width="3" />
             </div>
           </div>
@@ -67,7 +67,7 @@
           </div>
 
           <div class="w-full pt-8 mt-auto">
-            <button @click="proceedToDashboard" class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-[17px] transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/25 active:scale-[0.98] group">
+            <button @click="proceedToDashboard" class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-[17px] transition-all flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/25 active:scale-[0.98] group">
               Proceed to Dashboard <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>

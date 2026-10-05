@@ -7,14 +7,14 @@
  </div>
 
  <div v-if="loading" class="space-y-4">
- <div v-for="i in 3" :key="i" class="h-24 bg-white rounded-lg border border-gray-100 animate-pulse"></div>
+ <div v-for="i in 3" :key="i" class="h-24 bg-white rounded-lg border border-gray-50 animate-pulse"></div>
  </div>
 
  <div v-else class="space-y-6">
  <!-- Avatar & Name -->
- <div class="bg-white rounded-lg border border-gray-100 p-4">
+ <div class="bg-white rounded-lg border border-gray-50 p-4">
  <div class="flex items-center gap-5">
- <div class="w-20 h-20 rounded-lg bg-[#FF5C1A] text-white flex items-center justify-center font-bold text-2xl border border-gray-200 shadow-[#FF5C1A]/20 flex-shrink-0">
+ <div class="w-20 h-20 rounded-lg bg-[#FF5C1A] text-white flex items-center justify-center font-bold text-2xl border border-gray-25 shadow-[#FF5C1A]/20 flex-shrink-0">
  {{ userInitials }}
  </div>
  <div class="flex-1 min-w-0">
@@ -24,14 +24,14 @@
  <span v-if="errandrProfile?.isVerified" class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">Verified Rider</span>
  <span v-if="errandrProfile?.rating >= 4.5" class="text-[10px] font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-100">⭐ Top Rated</span>
  <span v-if="isOnline" class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">🟢 Online</span>
- <span v-else class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100">Offline</span>
+ <span v-else class="text-[10px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-50">Offline</span>
  </div>
  </div>
  </div>
  </div>
 
  <!-- Personal Information -->
- <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50 flex items-center justify-between">
  <h3 class="text-base font-bold text-gray-900">Personal Information</h3>
  <button v-if="!isEditing" @click="startEdit" class="text-xs font-semibold text-[#FF5C1A] hover:underline">Edit</button>
@@ -50,7 +50,7 @@
  <input 
  v-model="form.firstName"
  :disabled="!isEditing"
- class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:ring-2 focus:ring-[#FF5C1A]/20 focus:bg-white focus:border-[#FF5C1A]/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+ class="w-full px-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:ring-2 focus:ring-[#FF5C1A]/20 focus:bg-white focus:border-[#FF5C1A]/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
  />
  </div>
  <div>
@@ -58,7 +58,7 @@
  <input 
  v-model="form.lastName"
  :disabled="!isEditing"
- class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:ring-2 focus:ring-[#FF5C1A]/20 focus:bg-white focus:border-[#FF5C1A]/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+ class="w-full px-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:ring-2 focus:ring-[#FF5C1A]/20 focus:bg-white focus:border-[#FF5C1A]/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
  />
  </div>
  </div>
@@ -67,7 +67,7 @@
  <input 
  :value="user?.email"
  disabled
- class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium opacity-60 cursor-not-allowed"
+ class="w-full px-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium opacity-60 cursor-not-allowed"
  />
  </div>
  <div>
@@ -75,7 +75,7 @@
  <input 
  v-model="form.phone"
  :disabled="!isEditing"
- class="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:ring-2 focus:ring-[#FF5C1A]/20 focus:bg-white focus:border-[#FF5C1A]/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+ class="w-full px-4 py-2.5 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:ring-2 focus:ring-[#FF5C1A]/20 focus:bg-white focus:border-[#FF5C1A]/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
  placeholder="Enter your phone number"
  />
  </div>
@@ -83,7 +83,7 @@
  </div>
 
  <!-- Account Stats -->
- <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
  <h3 class="text-base font-bold text-gray-900">Account Overview</h3>
  </div>
@@ -110,7 +110,7 @@
  </div>
 
  <!-- Availability Toggle -->
- <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
  <h3 class="text-base font-bold text-gray-900">Availability</h3>
  </div>
@@ -128,7 +128,7 @@
  >
  <span 
  :class="isOnline ? 'translate-x-6' : 'translate-x-1'"
- class="inline-block h-5 w-5 transform rounded-full bg-white border border-gray-200 transition-transform"
+ class="inline-block h-5 w-5 transform rounded-full bg-white border border-gray-25 transition-transform"
  />
  </button>
  </div>
@@ -136,7 +136,7 @@
  </div>
 
  <!-- Security -->
- <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+ <div class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
  <h3 class="text-base font-bold text-gray-900">Security</h3>
  </div>

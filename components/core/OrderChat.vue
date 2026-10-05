@@ -5,7 +5,7 @@
  <div @click="$emit('close')" class="absolute inset-0 bg-black/20 backdrop-blur-[2px] transition-opacity" />
  
  <!-- Chat Panel -->
- <div class="relative w-full max-w-md bg-gray-50 h-full shadow-sm border border-gray-100 flex flex-col animate-slide-left overflow-hidden">
+ <div class="relative w-full max-w-md bg-gray-50 h-full shadow-sm border border-gray-50 flex flex-col animate-slide-left overflow-hidden">
  <!-- Header -->
  <div class="px-4 py-3 bg-[#FF5C1A] text-white flex items-center gap-3 sticky top-0 z-20 shadow-sm border border-[#FF5C1A]/10">
  <button @click="$emit('close')" class="p-1 hover:bg-white/10 rounded-full transition-colors mr-1">
@@ -39,7 +39,7 @@
  </div>
 
  <div v-if="loading" class="flex flex-col items-center justify-center h-40 space-y-4">
- <div class="w-8 h-8 border-2 border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin" />
+ <div class="w-8 h-8 border border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin" />
  </div>
  
  <div v-else-if="messages.length === 0" class="flex flex-col items-center justify-center p-10 text-center space-y-3 mt-10">
@@ -107,14 +107,14 @@
  </div>
  
  <div v-if="isTyping" class="flex items-center ml-2 transition-all">
- <div class="bg-white px-3 py-2 rounded-lg shadow-sm text-[12px] text-[#FF5C1A] font-bold italic animate-pulse">
+ <div class="bg-white px-3 py-2 rounded-lg shadow-sm text-[12px] text-[#FF5C1A] font-bold  animate-pulse">
  {{ receiverName || 'User' }} is typing...
  </div>
  </div>
 
  <!-- Media Preview if uploading -->
  <div v-if="uploadingMedia" class="flex flex-col items-center justify-center p-4 bg-white/50 backdrop-blur-sm rounded-2xl mx-10 animate-pulse border border-emerald-100">
- <div class="w-8 h-8 border-2 border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin mb-2" />
+ <div class="w-8 h-8 border border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin mb-2" />
  <p class="text-[10px] font-bold text-emerald-600 tracking-widest">Sending media...</p>
  </div>
  </div>
@@ -156,7 +156,7 @@
  <button 
  @click="isRecording ? stopRecording() : (newMsgText.trim() ? handleSend() : startRecording())"
  :class="[
- 'w-12 h-12 text-white rounded-full flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-sm border border-gray-100 shrink-0',
+ 'w-12 h-12 text-white rounded-full flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-sm border border-gray-50 shrink-0',
  isRecording ? 'bg-red-500' : 'bg-[#FF5C1A]'
  ]"
  >

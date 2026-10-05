@@ -25,7 +25,7 @@
             </p>
             
             <div class="flex flex-row items-center gap-4 w-full sm:w-auto">
-              <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/register'" class="px-4 py-3 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-extrabold text-sm shadow-sm border border-gray-100 shadow-parentPrimary/10 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+              <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/register'" class="px-4 py-3 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-extrabold text-sm shadow-sm border border-gray-50 shadow-parentPrimary/10 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
                 {{ isLoggedIn ? 'Enter Dashboard' : 'Start Earning Now' }}
                 <Rocket class="w-4 h-4 text-white" />
               </NuxtLink>
@@ -93,7 +93,7 @@
               </div>
 
               <!-- Decorative Floating Widgets -->
-              <div class="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-100 flex items-center gap-2 animate-bounce [animation-duration:4s]">
+              <div class="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-50 flex items-center gap-2 animate-bounce [animation-duration:4s]">
                 <div class="w-7 h-7 rounded-lg bg-yellow-50 text-yellow-500 flex items-center justify-center font-medium text-xs">⭐</div>
                 <div>
                   <p class="text-[11px] font-medium text-slate-900">Top Rated</p>
@@ -101,7 +101,7 @@
                 </div>
               </div>
 
-              <div class="absolute -bottom-4 -left-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-100 flex items-center gap-2.5 animate-bounce [animation-duration:5s]">
+              <div class="absolute -bottom-4 -left-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-50 flex items-center gap-2.5 animate-bounce [animation-duration:5s]">
                 <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center font-medium text-xs">⚡</div>
                 <div>
                   <p class="text-[11px] font-medium text-slate-900">Instant Cash</p>
@@ -114,7 +114,7 @@
       </div>
 
       <!-- Marquee Row 1 -->
-      <div class="mt-24 relative bg-slate-900 overflow-hidden py-3 transform -rotate-1 shadow-sm border border-gray-100 border-y border-slate-800 z-10">
+      <div class="mt-24 relative bg-slate-900 overflow-hidden py-3 transform -rotate-1 shadow-sm border border-gray-50 border-y border-slate-800 z-10">
         <div class="flex animate-marquee-fast w-max items-center">
           <div class="flex items-center gap-12 px-4" v-for="i in 6" :key="i">
             <span class="text-2xl font-medium text-white tracking-tight">Flexible Hours</span>
@@ -224,7 +224,7 @@
         <p class="text-slate-500 font-medium text-lg mb-10 max-w-xl">
           Join thousands of successful student riders on Errander today.
         </p>
-        <NuxtLink to="/auth/register" class="inline-flex items-center justify-center gap-2 px-4 py-3 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-bold shadow-sm border border-gray-100 shadow-parentPrimary/10 transition-all text-sm group cursor-pointer active:scale-95">
+        <NuxtLink to="/auth/register" class="inline-flex items-center justify-center gap-2 px-4 py-3 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-bold shadow-sm border border-gray-50 shadow-parentPrimary/10 transition-all text-sm group cursor-pointer active:scale-95">
           Join the Fleet <ArrowRight class="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform"/>
         </NuxtLink>
       </div>

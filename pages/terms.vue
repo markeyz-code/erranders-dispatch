@@ -10,7 +10,7 @@
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-10 relative z-10 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-100 text-sm font-medium tracking-[0.2em] text-gray-400 mb-8 shadow-sm hover:scale-105 transition-transform">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-50 text-sm font-medium tracking-[0.2em] text-gray-400 mb-8 shadow-sm hover:scale-105 transition-transform">
           <FileText class="w-4 h-4 text-parentPrimary" />
           Legal Framework
         </div>
@@ -25,9 +25,9 @@
     <section class="py-24 bg-white relative">
       <div class="max-w-4xl mx-auto px-4 sm:px-10 relative z-10">
         <div class="space-y-20">
-          <div v-for="(section, index) in termsSections" :key="index" class="group bg-gray-50/30 p-8 md:p-12 rounded-[3rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-gray-200/20 transition-all duration-500">
+          <div v-for="(section, index) in termsSections" :key="index" class="group bg-gray-50/30 p-8 md:p-12 rounded-[3rem] border border-gray-50 hover:bg-white hover:shadow-xl hover:shadow-gray-200/20 transition-all duration-500">
             <div class="flex flex-col md:flex-row gap-6 md:gap-10">
-              <div class="w-16 h-16 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:border-parentPrimary/30 group-hover:text-parentPrimary transition-all duration-500">
+              <div class="w-16 h-16 rounded-2xl bg-white shadow-sm border border-gray-50 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:border-parentPrimary/30 group-hover:text-parentPrimary transition-all duration-500">
                 <span class="text-2xl font-bold text-gray-300 group-hover:text-parentPrimary transition-colors tabular-nums">
                   {{ (index + 1).toString().padStart(2, '0') }}
                 </span>

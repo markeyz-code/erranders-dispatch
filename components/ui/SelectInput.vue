@@ -44,7 +44,7 @@
         <!-- Dropdown -->
         <div
           v-if="showDropdown"
-          class="absolute z-20 mt-1 w-full bg-white shadow-sm border border-gray-100 rounded-md overflow-hidden"
+          class="absolute z-20 mt-1 w-full bg-white shadow-sm border border-gray-50 rounded-md overflow-hidden"
         >
           <!-- Search Input -->
           <div class="p-2 border-b-[0.5px] border-gray-50 sticky top-0 bg-white">

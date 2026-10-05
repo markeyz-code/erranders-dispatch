@@ -16,13 +16,13 @@
 
   <div class="max-w-4xl w-full mx-auto space-y-4 md:space-y-6 md:space-y-10 pb-32 animate-fade-in mt-6" v-else-if="order">
  <!-- Stunning Header -->
- <div class="relative p-4 md:p-5 rounded-xl md:rounded-lg overflow-hidden border border-gray-100 bg-white  group">
+ <div class="relative p-4 md:p-5 rounded-xl md:rounded-lg overflow-hidden border border-gray-50 bg-white  group">
  <!-- Animated Background Effects -->
  <div class="absolute -right-20 -top-20 w-64 h-64 bg-[#FF5C1A]/10 rounded-full blur-[80px] group-hover:scale-150 group-hover:opacity-70 transition-all duration-1000 ease-in-out" />
  
  <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6 mb-10 relative z-10">
  <div class="space-y-2">
- <div class="inline-flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full border border-gray-100 ">
+ <div class="inline-flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full border border-gray-50 ">
  <span class="w-2 h-2 rounded-full bg-[#FF5C1A] animate-pulse"></span>
  <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Live Delivery Tracking</p>
  </div>
@@ -31,12 +31,12 @@
    <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold tracking-widest text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
  </div>
  </div>
- <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-100 ">
+ <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-50 ">
  <StatusBadge :status="order.status" class="scale-110 " />
  </div>
  </div>
 
- <div class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-100 ">
+ <div class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-50 ">
  <div class="flex items-center justify-between">
  <span class="text-xs font-bold text-gray-500 tracking-wide uppercase">Delivery Progress</span>
  <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-full border border-[#FF5C1A]/20">Step {{ currentStep + 1 }} of 4</span>
@@ -53,7 +53,7 @@
  <!-- Delivery Info & Content -->
  <div class="lg:col-span-3 space-y-4 md:space-y-6">
  <!-- Delivery Points -->
- <div class="bg-white p-4 md:p-4 rounded-lg border border-gray-100 space-y-5 md:space-y-8 relative group">
+ <div class="bg-white p-4 md:p-4 rounded-lg border border-gray-50 space-y-5 md:space-y-8 relative group">
  <div class="flex items-start gap-3 md:gap-6 relative">
  <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm border border-amber-100/20 flex-shrink-0 group-hover:scale-105 transition-transform">🏪</div>
  <div class="min-w-0 pt-0.5 w-full">
@@ -80,6 +80,12 @@
    class="w-full px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg text-[11px] font-bold hover:bg-amber-100 transition-all transform active:scale-95 border border-amber-100 flex items-center justify-center gap-1.5"
    >
    <MessageSquare class="w-3 h-3" /> In-App Message Store
+   </button>
+   <button 
+   @click.stop.prevent="pingParticipant(order._id, 'vendor')"
+   class="w-full mt-2 px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg text-[11px] font-bold hover:bg-yellow-100 transition-all transform active:scale-95 border border-yellow-100 flex items-center justify-center gap-1.5"
+   >
+   <Bell class="w-3 h-3" /> Ping Store
    </button>
  </div>
  </div>
@@ -113,13 +119,19 @@
         >
           <MessageSquare class="w-3 h-3" /> In-App Message Customer
         </button>
+        <button 
+        @click.stop.prevent="pingParticipant(order._id, 'customer')"
+        class="w-full mt-2 px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg text-[11px] font-bold hover:bg-yellow-100 transition-all transform active:scale-95 border border-yellow-100 flex items-center justify-center gap-1.5"
+        >
+        <Bell class="w-3 h-3" /> Ping Customer
+        </button>
       </div>
     </div>
   </div>
   </div>
 
  <!-- Order Items / Custom Description -->
- <div class="bg-white p-4 md:p-5 rounded-lg border border-gray-100 relative overflow-hidden group ">
+ <div class="bg-white p-4 md:p-5 rounded-lg border border-gray-50 relative overflow-hidden group ">
  <h3 class="text-sm font-bold text-gray-900 tracking-wider mb-6 flex items-center gap-3 uppercase">
  <div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]" /> 
  {{ order.type === 'custom_errand' ? 'Request Details' : (order.packs?.length > 0 ? `Order Content (${order.packs.length} packs)` : `Order Content (${order.items?.length || 0} items)`) }}
@@ -127,7 +139,7 @@
  
  
   <div v-if="order.type === 'custom_errand'" class="space-y-4">
-    <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 text-xs text-gray-700 leading-relaxed font-bold">
+    <div class="p-4 bg-gray-50 rounded-xl border border-gray-50 text-xs text-gray-700 leading-relaxed font-bold">
       {{ order.customDetails?.description }}
     </div>
     
@@ -167,7 +179,7 @@
     <div v-for="pack in order.packs" :key="pack.name" class="mb-6">
       <h4 class="text-[11px] font-bold text-[#FF5C1A] uppercase tracking-widest mb-3 pl-1">{{ pack.name || 'Pack' }}</h4>
       <div class="space-y-3">
-        <div v-for="item in pack.items" :key="item.name" class="flex flex-col p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-[#FF5C1A]/30 transition-colors">
+        <div v-for="item in pack.items" :key="item.name" class="flex flex-col p-4 bg-gray-50 rounded-xl border border-gray-50 hover:border-[#FF5C1A]/30 transition-colors">
          <div class="flex items-start justify-between">
          <div>
          <span class="text-sm font-bold text-gray-900 tracking-tight">{{ item.name }}</span>
@@ -221,7 +233,7 @@
 
   <!-- Fallback Legacy Items Rendering -->
   <template v-else>
-   <div v-for="item in order.items" :key="item._id" class="flex flex-col p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-[#FF5C1A]/30 transition-colors">
+   <div v-for="item in order.items" :key="item._id" class="flex flex-col p-4 bg-gray-50 rounded-xl border border-gray-50 hover:border-[#FF5C1A]/30 transition-colors">
    <div class="flex items-start justify-between">
    <div>
    <span class="text-sm font-bold text-gray-900 tracking-tight">{{ item.name }}</span>
@@ -274,7 +286,7 @@
  </div>
 
  <!-- Delivery Location (Interactive) -->
- <div class="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden relative group h-[300px]">
+ <div class="bg-gray-50 rounded-lg border border-gray-50 overflow-hidden relative group h-[300px]">
   <MapboxMap 
     v-if="mapboxToken" 
     :order="order" :mapbox-token="mapboxToken" 
@@ -290,7 +302,7 @@
  <!-- Sidebar: Actions & Customer -->
  <div class="lg:col-span-2 space-y-4 md:space-y-6"> 
  <!-- Customer Details Card -->
- <div class="bg-gradient-to-b from-gray-50 to-white p-4 md:p-5 rounded-xl md:rounded-lg border border-gray-100 flex flex-col items-center text-center group hover:-translate-y-1 hover: transition-all duration-500 relative overflow-hidden">
+ <div class="bg-gradient-to-b from-gray-50 to-white p-4 md:p-5 rounded-xl md:rounded-lg border border-gray-50 flex flex-col items-center text-center group hover:-translate-y-1 hover: transition-all duration-500 relative overflow-hidden">
  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-blue-500"></div>
  
  <div class="w-20 h-20 bg-gray-900 rounded-lg flex items-center justify-center text-white text-2xl font-black mb-4 group-hover:rotate-6 transition-transform border-4 border-white relative overflow-hidden">
@@ -300,7 +312,7 @@
  
  <p class="text-[9px] font-black text-teal-600 uppercase tracking-[0.2em] mb-2 bg-teal-50 px-3 py-1 rounded-full border border-teal-100 ">Primary Contact</p>
  <h4 class="text-lg font-black text-gray-900 mb-2 truncate w-full tracking-tight">{{ order.customer?.firstName }} {{ order.customer?.lastName }}</h4>
- <div v-if="order.customer?.gender" class="text-xs font-bold text-gray-500 mb-6 bg-gray-100 px-3 py-1 rounded-full border border-gray-200 inline-flex items-center">
+ <div v-if="order.customer?.gender" class="text-xs font-bold text-gray-500 mb-6 bg-gray-100 px-3 py-1 rounded-full border border-gray-25 inline-flex items-center">
    {{ order.customer.gender === 'Male' ? '🙋🏽‍♂️ MALE' : (order.customer.gender === 'Female' ? '🙋🏽‍♀️ FEMALE' : '👤 ' + order.customer.gender.toUpperCase()) }}
  </div>
  <div v-else class="mb-6"></div>
@@ -357,7 +369,7 @@
  </div>
 
   <!-- Vendor Payment Section -->
-  <div v-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'pending' && (order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up')" class="bg-white border-2 border-[#FF5C1A] rounded-lg p-4 md:p-5 flex flex-col items-center mt-6  relative overflow-hidden">
+  <div v-if="order.type === 'custom_errand' && order.itemCostDisbursementStatus === 'pending' && (order.status === 'confirmed' || order.status === 'ready_for_pickup' || order.status === 'picked_up')" class="bg-white border border-[#FF5C1A] rounded-lg p-4 md:p-5 flex flex-col items-center mt-6  relative overflow-hidden">
     <div class="absolute top-0 right-0 w-16 h-16 bg-[#FF5C1A]/10 rounded-bl-full flex items-center justify-center">
       <span class="text-2xl ml-4 mb-4">💳</span>
     </div>
@@ -371,12 +383,12 @@
     <!-- Photo Upload Section -->
     <div class="w-full mb-4">
       <label class="block text-xs font-bold text-gray-700 mb-1">1. Take a photo of the purchased items</label>
-      <button v-if="!itemsPhotoUrl" @click="cameraTarget = 'items'; isCameraModalOpen = true" :disabled="uploadingItemsPhoto" class="w-full py-4 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 transition-colors">
+      <button v-if="!itemsPhotoUrl" @click="cameraTarget = 'items'; isCameraModalOpen = true" :disabled="uploadingItemsPhoto" class="w-full py-4 border border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 transition-colors">
         <Loader2 v-if="uploadingItemsPhoto" class="w-6 h-6 animate-spin text-[#FF5C1A]" />
         <Camera v-else class="w-6 h-6 text-[#FF5C1A]" />
         <span class="text-sm font-semibold">{{ uploadingItemsPhoto ? 'Uploading...' : 'Tap to snap photo' }}</span>
       </button>
-      <div v-else class="relative w-full rounded-xl overflow-hidden border border-gray-200 group">
+      <div v-else class="relative w-full rounded-xl overflow-hidden border border-gray-25 group">
         <img :src="itemsPhotoUrl" class="w-full h-32 object-cover" />
         <button @click="itemsPhotoUrl = ''" class="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600">
           <X class="w-4 h-4" />
@@ -386,16 +398,13 @@
 
     <div class="w-full mb-4">
       <label class="block text-xs font-bold text-gray-700 mb-1">2. Vendor Bank</label>
-      <select v-model="vendorBankForm.bankCode" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none">
-        <option value="" disabled>Select Bank...</option>
-        <option v-for="bank in vendorBanks" :key="bank.code" :value="bank.code">{{ bank.name }}</option>
-      </select>
+      <UiSelectInput v-model="vendorBankForm.bankCode" :options="vendorBanks.map(b => ({ label: b.name, value: b.code }))" class="w-full" />
     </div>
     
     <div class="w-full mb-4">
       <label class="block text-xs font-bold text-gray-700 mb-1">3. Account Number</label>
       <div class="relative">
-        <input v-model="vendorBankForm.accountNumber" @input="resolveVendorAccount" type="text" maxlength="10" placeholder="0123456789" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none font-mono" />
+        <input v-model="vendorBankForm.accountNumber" @input="resolveVendorAccount" type="text" maxlength="10" placeholder="0123456789" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none font-mono" />
         <Loader2 v-if="resolvingVendorAccount" class="absolute right-3 top-3 w-5 h-5 text-[#FF5C1A] animate-spin" />
       </div>
     </div>
@@ -416,7 +425,7 @@
           e.target.value = vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : '';
         }"
         placeholder="Enter exact amount" 
-        class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" 
+        class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" 
       />
       <p class="text-[10px] text-gray-500 mt-1">Maximum allowed: ₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</p>
       <p v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="text-[11px] text-amber-600 mt-1 font-semibold bg-amber-50 p-2 rounded border border-amber-100">
@@ -553,7 +562,7 @@
   </div>
 
  <!-- Premium Verification Interface -->
- <div v-if="(order.status === 'in_transit' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 ">
+ <div v-if="(order.status === 'in_transit' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-50 ">
  <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
  
  <div class="text-center space-y-2 relative z-10">
@@ -574,7 +583,7 @@
       inputmode="text"
       maxlength="1"
       placeholder="•"
-      class="w-16 h-20 text-center text-4xl font-black text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 focus:bg-white focus:outline-none transition-all placeholder:text-gray-300 uppercase "
+      class="w-16 h-20 text-center text-4xl font-black text-gray-900 bg-gray-50 border border-gray-25 rounded-lg focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 focus:bg-white focus:outline-none transition-all placeholder:text-gray-300 uppercase "
     />
   </div>
  
@@ -590,7 +599,7 @@
  
  <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
  <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Customer unavailable?</p>
- <label class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-200 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95">
+ <label class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-25 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95">
  
  <div class="flex items-center justify-center gap-2">
  <Loader2 v-if="uploadingDropoff" class="w-4 h-4 animate-spin text-[#FF5C1A]" />
@@ -734,11 +743,11 @@
       </div>
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-1">Interception Location</label>
-        <input v-model="handoffLocation" placeholder="E.g. Main Gate, Male Hostel B..." class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
+        <input v-model="handoffLocation" placeholder="E.g. Main Gate, Male Hostel B..." class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
       </div>
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-1">Additional Note (Optional)</label>
-        <textarea v-model="handoffNote" rows="2" placeholder="E.g. I am waiting near the security post" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"></textarea>
+        <textarea v-model="handoffNote" rows="2" placeholder="E.g. I am waiting near the security post" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"></textarea>
       </div>
     </div>
     <template #footer>
@@ -791,7 +800,7 @@
             v-for="opt in substituteOptions" 
             :key="opt._id"
             @click="toggleSubstituteSelection(opt._id)"
-            class="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl transition-all text-left"
+            class="w-full flex items-center justify-between p-4 bg-white border border-gray-25 rounded-xl transition-all text-left"
             :class="selectedSubstituteIds.includes(opt._id) ? 'border-[#FF5C1A] bg-orange-50 ring-2 ring-orange-200' : 'hover:border-gray-300'"
           >
             <div>
@@ -836,7 +845,7 @@
       </div>
       <div class="p-5">
         <p class="text-sm font-medium text-gray-700 mb-4">Are you sure <strong>{{ itemToMarkUnavailable?.name }}</strong> is unavailable?</p>
-        <p class="text-xs text-gray-500 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-100">This action will immediately refund the item's cost to the student and update their order.</p>
+        <p class="text-xs text-gray-500 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-50">This action will immediately refund the item's cost to the student and update their order.</p>
         
         <div class="flex gap-3">
           <button @click="cancelUnavailable" class="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
@@ -852,7 +861,7 @@
     <div class="relative w-full max-w-sm bg-white rounded-lg shadow-2xl p-6">
       <h3 class="text-lg font-black text-gray-900 mb-2">Request Extra Funds</h3>
       <p class="text-sm text-gray-500 mb-4">How much extra do you need to buy the item?</p>
-      <input type="number" v-model="topupAmount" placeholder="Amount (e.g. 1000)" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-blue-500" />
+      <input type="number" v-model="topupAmount" placeholder="Amount (e.g. 1000)" class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-blue-500" />
       <div class="flex gap-2">
         <button @click="showTopupModal = false" class="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm font-bold hover:bg-gray-200">Cancel</button>
         <button @click="requestTopup" :disabled="isRequestingTopup || !topupAmount" class="flex-1 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-50">Request</button>
@@ -867,12 +876,7 @@
     <div class="relative w-full max-w-sm bg-white rounded-lg shadow-2xl p-6">
       <h3 class="text-lg font-black text-gray-900 mb-2">Cancel Errand</h3>
       <p class="text-sm text-gray-500 mb-4">Why are you cancelling this errand?</p>
-      <select v-model="cancelReason" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 text-sm font-bold focus:outline-none focus:border-red-500">
-        <option value="">Select a reason</option>
-        <option value="Item completely unavailable">Item completely unavailable</option>
-        <option value="Student declined substitute">Student declined substitute</option>
-        <option value="Store is closed">Store is closed</option>
-      </select>
+      <UiSelectInput v-model="cancelReason" :options="['Item completely unavailable', 'Student declined substitute', 'Store is closed']" class="w-full mb-4" />
       
       <p class="text-sm text-gray-500 mb-2 font-bold">Provide Photo Proof</p>
       <div class="mb-4">
@@ -882,7 +886,7 @@
             <X class="w-4 h-4" />
           </button>
         </div>
-        <button v-else @click="cameraTarget = 'cancellation'; isCameraModalOpen = true" class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" :disabled="uploadingCancellationPhoto">
+        <button v-else @click="cameraTarget = 'cancellation'; isCameraModalOpen = true" class="flex flex-col items-center justify-center w-full h-24 border border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" :disabled="uploadingCancellationPhoto">
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
             <Loader2 v-if="uploadingCancellationPhoto" class="w-6 h-6 text-red-500 animate-spin mb-2" />
             <Camera v-else class="w-6 h-6 text-gray-400 mb-2" />
@@ -911,7 +915,7 @@ import OrderChat from '@/components/core/OrderChat.vue';
 import MapboxMap from '@/components/ui/MapboxMap.vue';
 import { useUser } from '@/composables/modules/auth/user';
 import { useCustomToast } from "@/composables/core/useCustomToast"
-import { Phone, MessageSquare, Loader2, Camera, X, Upload, Check, AlertCircle, ArrowRight } from 'lucide-vue-next';
+import { Phone, MessageSquare, Loader2, Camera, X, Upload, Check, AlertCircle, ArrowRight, Bell } from 'lucide-vue-next';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const { user } = useUser();
@@ -923,6 +927,36 @@ definePageMeta({
 const order = ref<any>(null);
 const loadingOrder = ref(true);
 const orderError = ref('');
+
+const { showToast } = useCustomToast();
+
+const isPinging = ref<string | null>(null);
+const pingParticipant = async (orderId: string, target: 'customer' | 'vendor') => {
+  if (isPinging.value) return;
+  isPinging.value = target;
+  try {
+    const res = await api.post(`/orders/${orderId}/ping`, {
+      target,
+      message: 'Please check the app for an update regarding your order.'
+    });
+    showToast({
+      title: 'Success',
+      message: `Successfully pinged the ${target}!`,
+      toastType: 'success',
+      duration: 3000
+    });
+  } catch (error: any) {
+    const msg = error.response?.data?.message || 'Failed to ping participant. They may have notifications disabled or you are pinging too fast.';
+    showToast({
+      title: 'Error',
+      message: msg,
+      toastType: 'error',
+      duration: 3000
+    });
+  } finally {
+    isPinging.value = null;
+  }
+};
 const verificationCode = ref('');
 const completing = ref(false);
 

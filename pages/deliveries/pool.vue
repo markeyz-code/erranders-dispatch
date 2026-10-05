@@ -22,19 +22,19 @@
     </div>
 
     <!-- Orders Table -->
-    <div v-if="loading" class="bg-white rounded-lg border border-gray-100 overflow-hidden animate-pulse">
+    <div v-if="loading" class="bg-white rounded-lg border border-gray-50 overflow-hidden animate-pulse">
       <div class="p-5 space-y-4">
         <div v-for="i in 4" :key="i" class="h-24 bg-gray-50 rounded-xl w-full"></div>
       </div>
     </div>
 
-    <div v-else-if="availableOrders.length === 0" class="bg-white rounded-lg border border-gray-100 py-32 text-center">
+    <div v-else-if="availableOrders.length === 0" class="bg-white rounded-lg border border-gray-50 py-32 text-center">
       <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 scale-110">🚲</div>
       <h3 class="text-xl font-medium text-gray-900 mb-2">The pool is currently empty</h3>
       <p class="text-xs text-gray-400 max-w-xs mx-auto mb-8 font-medium">All orders have been claimed. New orders will appear here automatically.</p>
     </div>
 
-    <div v-else class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+    <div v-else class="bg-white rounded-lg border border-gray-50 overflow-hidden">
       <!-- Mobile Card Layout (visible on small screens only) -->
       <div class="md:hidden divide-y divide-gray-100">
         <div 
@@ -71,7 +71,7 @@
           </div>
 
           <!-- Card Body: Description / Items -->
-          <div class="p-2.5 bg-gray-50/70 rounded-lg border border-gray-100/50 mb-3">
+          <div class="p-2.5 bg-gray-50/70 rounded-lg border border-gray-50/50 mb-3">
             <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-xs text-gray-600 line-clamp-2 mb-1.5 whitespace-pre-line">
               {{ order.customDetails.description }}
             </p>
@@ -118,7 +118,7 @@
                 :disabled="acceptingId === order._id"
                 class="px-3 py-2 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-parentPrimary transition-all disabled:opacity-50"
               >
-                <span v-if="acceptingId === order._id" class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block"></span>
+                <span v-if="acceptingId === order._id" class="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin inline-block"></span>
                 <span v-else>Accept</span>
               </button>
             </div>
@@ -169,7 +169,7 @@
                         <Clock class="w-2.5 h-2.5" /> {{ formatTime(order.createdAt) }}
                       </span>
                     </div>
-                    <div class="mt-2 p-2 bg-gray-50/70 rounded-lg border border-gray-100/50">
+                    <div class="mt-2 p-2 bg-gray-50/70 rounded-lg border border-gray-50/50">
                       <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-xs text-gray-600 line-clamp-2 max-w-md mb-1.5 whitespace-pre-line">
                         {{ order.customDetails.description }}
                       </p>
@@ -242,9 +242,9 @@
                   <button 
                     @click.stop="order.status === 'interception_pending' ? acceptInterception(order._id) : acceptOrder(order._id)"
                     :disabled="acceptingId === order._id"
-                    class="px-4 py-2 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-parentPrimary hover:border border-gray-200 hover:shadow-parentPrimary/20 transition-all disabled:opacity-50 min-w-[90px]"
+                    class="px-4 py-2 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-parentPrimary hover:border border-gray-25 hover:shadow-parentPrimary/20 transition-all disabled:opacity-50 min-w-[90px]"
                   >
-                    <span v-if="acceptingId === order._id" class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    <span v-if="acceptingId === order._id" class="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin"></span>
                     <span v-else>Accept</span>
                   </button>
                 </div>
@@ -357,7 +357,7 @@
                    :href="img" 
                    target="_blank" 
                    class="relative inline-block hover:opacity-80 transition-opacity">
-                  <img :src="img" class="h-20 w-20 object-cover rounded-xl border border-gray-200 " />
+                  <img :src="img" class="h-20 w-20 object-cover rounded-xl border border-gray-25 " />
                 </a>
               </div>
             </div>
@@ -372,10 +372,10 @@
                 <h5 v-if="group.name !== 'Other Items' || groupedOrderItems.length > 1" class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">{{ group.name }}</h5>
                 <div v-for="item in group.items" :key="item.name || item._id" class="flex items-center justify-between p-3 bg-gray-50/50 rounded-xl">
                   <div class="flex items-center gap-3">
-                    <span class="w-6 h-6 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-[10px] font-medium text-gray-900">{{ item.qty || item.quantity }}x</span>
+                    <span class="w-6 h-6 bg-white border border-gray-50 rounded-lg flex items-center justify-center text-[10px] font-medium text-gray-900">{{ item.qty || item.quantity }}x</span>
                     <span class="text-sm font-bold text-gray-900 tracking-tight">{{ item.name }}</span>
                   </div>
-                  <span class="text-xs font-medium text-gray-400 italic">₦{{ (item.price || 0).toLocaleString() }}</span>
+                  <span class="text-xs font-medium text-gray-400 ">₦{{ (item.price || 0).toLocaleString() }}</span>
                 </div>
               </div>
             </div>
@@ -405,7 +405,7 @@
 
         <!-- Awaiting Payment Block -->
         <div v-if="selectedOrder.status === 'awaiting_payment'" class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex flex-col items-center text-center mt-4 space-y-3">
-           <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center border border-gray-200 shadow-emerald-500/30">
+           <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center border border-gray-25 shadow-emerald-500/30">
               <Check class="w-6 h-6" />
            </div>
            <h3 class="text-xl font-black text-emerald-900 tracking-tight">Offer Accepted!</h3>
@@ -469,7 +469,7 @@
             </div>
             <button 
               @click="rejectOrder(selectedOrder._id)"
-              class="w-full py-2.5 bg-gray-50 text-gray-400 border border-gray-100 rounded-lg text-sm font-medium hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all text-center"
+              class="w-full py-2.5 bg-gray-50 text-gray-400 border border-gray-50 rounded-lg text-sm font-medium hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all text-center"
             >
               Not Interested
             </button>
@@ -493,7 +493,7 @@
                 class="flex-[2] py-2.5 bg-gray-950 text-white rounded-lg text-sm font-bold hover:bg-parentPrimary transition-all flex items-center justify-center gap-2 active:scale-95"
               >
                 <Zap v-if="acceptingId !== selectedOrder._id" class="w-4 h-4 fill-current" />
-                <span v-else class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                <span v-else class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
                 {{ acceptingId === selectedOrder._id ? 'Accepting...' : 'Accept at ₦' + (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee).toLocaleString() }}
               </button>
             </div>
@@ -503,7 +503,7 @@
               <div class="flex gap-2">
                 <div class="relative flex-1">
                   <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₦</span>
-                  <input v-model="formattedBidAmount" type="text" placeholder="Your Price" class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-8 pr-4 py-2.5 outline-none focus:border-parentPrimary font-bold text-gray-900 text-base" />
+                  <input v-model="formattedBidAmount" type="text" placeholder="Your Price" class="w-full bg-gray-50 border border-gray-25 rounded-lg pl-8 pr-4 py-2.5 outline-none focus:border-parentPrimary font-bold text-gray-900 text-base" />
                 </div>
                 <button 
                   @click="placeBid(selectedOrder._id)"

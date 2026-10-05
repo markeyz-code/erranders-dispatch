@@ -94,14 +94,14 @@
             v-if="!isLoggedIn"
             to="/auth/login" 
             @click="isMobileMenuOpen = false"
-            class="w-full py-3 text-center text-sm font-bold text-gray-600 bg-gray-50 rounded-2xl border border-gray-100"
+            class="w-full py-3 text-center text-sm font-bold text-gray-600 bg-gray-50 rounded-2xl border border-gray-50"
           >
             Log In to Dashboard
           </NuxtLink>
           <NuxtLink 
             :to="isLoggedIn ? '/dashboard' : '/auth/register'" 
             @click="isMobileMenuOpen = false"
-            class="w-full py-3 text-center text-sm font-bold text-white bg-parentPrimary rounded-2xl shadow-sm border border-gray-100 shadow-parentPrimary/20 flex items-center justify-center gap-2"
+            class="w-full py-3 text-center text-sm font-bold text-white bg-parentPrimary rounded-2xl shadow-sm border border-gray-50 shadow-parentPrimary/20 flex items-center justify-center gap-2"
           >
             {{ isLoggedIn ? 'Go to Dashboard' : 'Apply Now' }} <ArrowRight class="w-5 h-5" />
           </NuxtLink>

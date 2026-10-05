@@ -11,7 +11,7 @@
  <!-- <span class="text-lg font-bold text-gray-900 tracking-tight leading-none">Errandr</span>
  <span class="text-[10px] font-semibold text-[#FF5C1A] tracking-wide leading-none mt-0.5">Rider Portal</span> -->
  </div>
-  <div v-if="isSidebarMinimized" class="w-10 h-10 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 shrink-0">
+  <div v-if="isSidebarMinimized" class="w-10 h-10 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 shrink-0">
  <!-- erranders-icon-2048.png -->
    <img src="@/assets/img/erranders-icon-2048.png" class="h-10 w-auto" />
  </div>
@@ -19,7 +19,7 @@
  <!-- Toggle Button -->
  <button 
   @click="isSidebarMinimized = !isSidebarMinimized"
-  class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-[#FF5C1A] hover:border-[#FF5C1A] z-50 transition-colors"
+  class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border border-gray-25 rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-[#FF5C1A] hover:border-[#FF5C1A] z-50 transition-colors"
  >
   <ChevronLeft v-if="!isSidebarMinimized" class="w-4 h-4" />
   <ChevronRight v-else class="w-4 h-4" />
@@ -35,7 +35,7 @@
       :to="item.path"
       class="flex items-center py-3 text-sm font-medium rounded-xl transition-all group"
       :class="[
-        isActive(item.path) ? 'bg-[#FF5C1A] text-white shadow-sm border border-gray-100 shadow-[#FF5C1A]/20' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
+        isActive(item.path) ? 'bg-[#FF5C1A] text-white shadow-sm border border-gray-50 shadow-[#FF5C1A]/20' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
         isSidebarMinimized ? 'justify-center px-0' : 'px-4'
       ]"
       :title="isSidebarMinimized ? item.label : ''"
@@ -77,7 +77,7 @@
  <header class="lg:hidden bg-white border-b border-gray-100 sticky top-0 z-40 px-5 py-3.5 flex items-center justify-between">
  <div class="flex items-center gap-2.5">
   <!-- <img src="@/assets/img/logo-light.png" class="h-10 w-auto" /> -->
- <!-- <div class="w-9 h-9 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm border border-gray-100 shadow-[#FF5C1A]/10">
+ <!-- <div class="w-9 h-9 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm border border-gray-50 shadow-[#FF5C1A]/10">
  E
  </div> -->
  <img src="@/assets/img/logo-light.png" class="h-10 w-auto" />
@@ -106,35 +106,33 @@
 
  <!-- Mobile Sidebar -->
  <Transition name="slide">
- <aside v-if="showMobileMenu" class="lg:hidden w-72 bg-white min-h-screen fixed left-0 top-0 z-50 shadow-sm border border-gray-100 flex flex-col">
- <div class="p-5 border-b border-gray-100 flex items-center justify-between">
- <div class="flex items-center gap-2.5">
-  <img src="@/assets/img/logo-light.png" class="h-10 w-auto" />
- <!-- <div class="w-9 h-9 bg-[#FF5C1A] rounded-lg flex items-center justify-center text-white font-bold text-sm">E</div>
- <span class="text-lg font-bold text-gray-900 tracking-tight">Errandr</span> -->
- </div>
- <button @click="showMobileMenu = false" class="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400"><X class="w-5 h-5" /></button>
+ <aside v-if="showMobileMenu" class="lg:hidden w-72 bg-white min-h-screen fixed left-0 top-0 z-50 flex flex-col border-r border-gray-100">
+ <!-- Header with close -->
+ <div class="px-4 py-3 flex items-center justify-between border-b border-gray-100">
+  <img src="@/assets/img/logo-light.png" class="h-8 w-auto" />
+  <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"><X class="w-4 h-4" /></button>
  </div>
 
- <div class="p-5 bg-gray-50 border-b border-gray-100">
- <div class="flex items-center gap-4">
- <div class="w-12 h-12 rounded-xl bg-[#FF5C1A] text-white flex items-center justify-center font-bold text-lg shadow-sm border border-gray-100 shadow-[#FF5C1A]/20">
- {{ userInitials }}
- </div>
- <div class="min-w-0">
- <h3 class="font-bold text-gray-900 text-base tracking-tight truncate">{{ userDisplayName }}</h3>
- <p class="text-xs text-gray-400 truncate">{{ user?.email }}</p>
- </div>
- </div>
- </div>
+ <!-- User Profile -->
+ <NuxtLink to="/profile" @click="showMobileMenu = false" class="mx-3 mt-3 p-3 rounded-lg bg-gray-50 flex items-center gap-3 hover:bg-gray-100 transition-colors group">
+  <div class="w-9 h-9 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold text-xs shrink-0">
+   {{ userInitials }}
+  </div>
+  <div class="min-w-0 flex-1">
+   <p class="text-sm font-semibold text-gray-900 truncate leading-tight">{{ userDisplayName }}</p>
+   <p class="text-[11px] text-gray-400 truncate leading-tight mt-0.5">{{ user?.email }}</p>
+  </div>
+  <ChevronRight class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 shrink-0 transition-colors" />
+ </NuxtLink>
  
- <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+ <!-- Navigation -->
+ <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
   <template v-for="item in navItems" :key="item.path">
     <NuxtLink
       v-if="!isRestricted(item.path)"
       :to="item.path"
-      class="flex items-center px-4 py-3.5 text-sm font-medium rounded-xl transition-all"
-      :class="isActive(item.path) ? 'bg-[#FF5C1A] text-white shadow-sm border border-gray-100 shadow-[#FF5C1A]/20' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'"
+      class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all"
+      :class="isActive(item.path) ? 'bg-[#FF5C1A] text-white' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
       @click="showMobileMenu = false"
     >
       <component :is="item.icon" class="w-[18px] h-[18px] mr-3" />
@@ -143,7 +141,7 @@
     <button
       v-else
       @click="handleNavClick($event, item.path)"
-      class="flex items-center w-full px-4 py-3.5 text-sm font-medium rounded-xl transition-all opacity-40 cursor-not-allowed text-gray-500 hover:bg-gray-50"
+      class="flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all opacity-40 cursor-not-allowed text-gray-500"
     >
       <component :is="item.icon" class="w-[18px] h-[18px] mr-3" />
       {{ item.label }}
@@ -151,10 +149,11 @@
   </template>
  </nav>
 
- <div class="p-5 border-t border-gray-100">
- <button @click="handleLogoutClick" class="flex items-center w-full px-4 py-3.5 text-sm font-medium text-rose-500 hover:bg-rose-50 rounded-xl transition-all">
- <LogOut class="w-[18px] h-[18px] mr-3" /> Log Out
- </button>
+ <!-- Logout -->
+ <div class="px-3 py-3 border-t border-gray-100">
+  <button @click="handleLogoutClick" class="flex items-center w-full px-3 py-2.5 text-sm font-medium text-rose-500 hover:bg-rose-50 rounded-lg transition-colors">
+   <LogOut class="w-[18px] h-[18px] mr-3" /> Log Out
+  </button>
  </div>
  </aside>
  </Transition>
@@ -170,7 +169,7 @@
  
  <div class="flex items-center gap-4">
  <NuxtLink to="/notifications" class="relative group">
- <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-white group-hover:shadow-sm border border-gray-100 group-hover:text-[#FF5C1A] transition-all border border-transparent group-hover:border-gray-100">
+ <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-white group-hover:shadow-sm border border-gray-50 group-hover:text-[#FF5C1A] transition-all border border-transparent group-hover:border-gray-100">
  <Bell class="w-[18px] h-[18px]" />
  </div>
  <div v-if="unreadCount > 0" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#FF5C1A] border border-white rounded-full flex items-center justify-center shadow-sm">
@@ -185,7 +184,7 @@
  <p class="text-sm font-semibold text-gray-900 leading-none mb-0.5">{{ userDisplayName }}</p>
  <p class="text-[10px] font-medium text-gray-400">Rider</p>
  </div>
- <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-sm font-bold shadow-sm border border-gray-100">
+ <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-sm font-bold shadow-sm border border-gray-50">
  {{ userInitials }}
  </div>
  </div>
@@ -193,12 +192,12 @@
  </header>
 
   <!-- Global Verification Banner -->
-  <div v-if="errandrProfile && (!errandrProfile.verificationLevel || errandrProfile.verificationLevel < 3) && route.path !== '/verification'" class="bg-gray-900 m-5 md:mx-8 md:mt-8 rounded-xl p-4 flex items-center justify-between gap-4 shadow-sm border border-gray-100 animate-fade-in z-20 flex-col sm:flex-row">
+  <div v-if="errandrProfile && (!errandrProfile.verificationLevel || errandrProfile.verificationLevel < 3) && route.path !== '/verification'" class="bg-gray-900 m-5 md:mx-8 md:mt-8 rounded-xl p-4 flex items-center justify-between gap-4 shadow-sm border border-gray-50 animate-fade-in z-20 flex-col sm:flex-row">
     
     <!-- Pending / Not Started / Upgrade -->
     <template v-if="!errandrProfile.verificationStatus || errandrProfile.verificationStatus === 'pending' || errandrProfile.verificationStatus === 'approved'">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-[#FF5C1A] rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm border border-gray-100">
+        <div class="w-10 h-10 bg-[#FF5C1A] rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm border border-gray-50">
           <ShieldAlert class="w-5 h-5" />
         </div>
         <div>
@@ -210,7 +209,7 @@
           </p>
         </div>
       </div>
-      <NuxtLink to="/verification" class="px-5 py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white text-xs font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-100 w-full sm:w-auto text-center">
+      <NuxtLink to="/verification" class="px-5 py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white text-xs font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center">
         {{ errandrProfile.verificationLevel === 2 ? 'Upgrade Now' : 'Verify Now' }}
       </NuxtLink>
     </template>
@@ -218,7 +217,7 @@
    <!-- Reviewing -->
    <template v-else-if="errandrProfile.verificationStatus === 'reviewing'">
      <div class="flex items-center gap-3">
-       <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm border border-gray-100">
+       <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm border border-gray-50">
          <Clock class="w-5 h-5" />
        </div>
        <div>
@@ -226,7 +225,7 @@
          <p class="text-gray-400 text-xs mt-0.5 max-w-sm">Your documents are being reviewed. We will notify you once approved.</p>
        </div>
      </div>
-     <button disabled class="px-5 py-2.5 bg-gray-800 text-gray-400 text-xs font-bold rounded-lg whitespace-nowrap shadow-sm border border-gray-100 w-full sm:w-auto text-center cursor-not-allowed border border-gray-700">
+     <button disabled class="px-5 py-2.5 bg-gray-800 text-gray-400 text-xs font-bold rounded-lg whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center cursor-not-allowed border border-gray-700">
        Pending Approval
      </button>
    </template>
@@ -234,7 +233,7 @@
    <!-- Rejected -->
    <template v-else-if="errandrProfile.verificationStatus === 'rejected'">
      <div class="flex items-center gap-3">
-       <div class="w-10 h-10 bg-rose-500 rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm border border-gray-100">
+       <div class="w-10 h-10 bg-rose-500 rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm border border-gray-50">
          <XCircle class="w-5 h-5" />
        </div>
        <div>
@@ -242,7 +241,7 @@
          <p class="text-gray-400 text-xs mt-0.5 max-w-sm">There was an issue with your documents. Please review and resubmit.</p>
        </div>
      </div>
-     <NuxtLink to="/verification" class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-100 w-full sm:w-auto text-center">
+     <NuxtLink to="/verification" class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center">
        Try Again
      </NuxtLink>
    </template>
@@ -268,7 +267,7 @@
  <!-- Logout Confirmation Modal -->
  <Transition name="fade">
  <div v-if="logoutModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm px-4" @click.self="logoutModalOpen = false">
- <div class="bg-white rounded-3xl shadow-sm border border-gray-100 max-w-sm w-full p-5 flex flex-col items-center text-center space-y-6 animate-scale-in">
+ <div class="bg-white rounded-3xl shadow-sm border border-gray-50 max-w-sm w-full p-5 flex flex-col items-center text-center space-y-6 animate-scale-in">
  <div class="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center border border-rose-100">
  <LogOut class="w-8 h-8 text-rose-500" />
  </div>
@@ -281,7 +280,7 @@
  </div>
 
  <div class="flex flex-col gap-2.5 w-full">
- <button @click="confirmLogout" class="w-full py-3.5 rounded-xl text-sm font-semibold text-white bg-rose-500 hover:bg-rose-600 shadow-sm border border-gray-100 shadow-rose-500/20 transition-all active:scale-[0.98]">
+ <button @click="confirmLogout" class="w-full py-3.5 rounded-xl text-sm font-semibold text-white bg-rose-500 hover:bg-rose-600 shadow-sm border border-gray-50 shadow-rose-500/20 transition-all active:scale-[0.98]">
  Yes, Log Out
  </button>
  <button @click="logoutModalOpen = false" class="w-full py-3.5 rounded-xl text-sm font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all">

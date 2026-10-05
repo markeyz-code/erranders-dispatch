@@ -16,7 +16,7 @@
  <div class="p-8 bg-gray-50/50 flex flex-col sm:flex-row gap-4 border-t border-gray-100">
  <button 
  type="button" 
- class="flex-1 py-2 px-6 bg-white border border-gray-100 text-gray-400 text-sm font-medium rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all active:scale-95"
+ class="flex-1 py-2 px-6 bg-white border border-gray-50 text-gray-400 text-sm font-medium rounded-md hover:bg-gray-100 hover:text-gray-900 transition-all active:scale-95"
  @click="$emit('cancel')"
  >
  Go Back

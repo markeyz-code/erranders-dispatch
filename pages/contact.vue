@@ -9,13 +9,13 @@
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-10 relative z-10 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-50 border border-gray-100 text-[10px] font-medium tracking-[0.2em] uppercase text-gray-400 mb-8">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-50 border border-gray-50 text-[10px] font-medium tracking-[0.2em] uppercase text-gray-400 mb-8">
           <span class="w-2 h-2 rounded-full bg-parentPrimary animate-ping"></span>
           Dispatch Support
         </div>
         <h1 class="text-5xl md:text-7xl font-medium tracking-tighter leading-[0.9] text-gray-900 mb-6 max-w-4xl mx-auto">
           We've got <br />
-          <span class="text-parentPrimary italic bg-parentPrimary/5 px-4 rounded-3xl">your back.</span>
+          <span class="text-parentPrimary  bg-parentPrimary/5 px-4 rounded-3xl">your back.</span>
         </h1>
         <p class="text-xl text-gray-500 font-bold max-w-2xl mx-auto leading-relaxed tracking-tight">
           Dedicated assistance for our rider community. From live order support to payout inquiries, we're with you every mile.
@@ -28,7 +28,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <!-- Help Desk -->
-          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-100 hover:bg-white hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-50 hover:bg-white hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-14 h-14 bg-parentPrimary/10 rounded-2xl flex items-center justify-center text-parentPrimary mb-8 group-hover:scale-110 transition-transform">
               <Mail class="w-7 h-7" />
             </div>
@@ -38,7 +38,7 @@
           </div>
 
           <!-- Emergency -->
-          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-100 hover:bg-white hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-50 hover:bg-white hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 mb-8 group-hover:scale-110 transition-transform">
               <AlertTriangle class="w-7 h-7" />
             </div>
@@ -48,7 +48,7 @@
           </div>
 
           <!-- Payouts -->
-          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-100 hover:bg-white hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-50 hover:bg-white hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 mb-8 group-hover:scale-110 transition-transform">
               <Wallet class="w-7 h-7" />
             </div>
@@ -58,7 +58,7 @@
           </div>
 
           <!-- Ambassadors -->
-          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-100 hover:bg-white hover:shadow-sm border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+          <div class="bg-gray-50/50 p-5 rounded-[2.5rem] border border-gray-50 hover:bg-white hover:shadow-sm border border-gray-50 hover:-translate-y-2 transition-all duration-500 group">
             <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 mb-8 group-hover:scale-110 transition-transform">
               <Users class="w-7 h-7" />
             </div>

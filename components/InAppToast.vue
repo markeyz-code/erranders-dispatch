@@ -5,7 +5,7 @@
         <div
           v-for="toast in activeToasts"
           :key="toast.id"
-          class="pointer-events-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-slide-in"
+          class="pointer-events-auto bg-white rounded-2xl shadow-sm border border-gray-50 overflow-hidden animate-slide-in"
           @mouseenter="pauseDismiss(toast.id)"
           @mouseleave="resumeDismiss(toast.id)"
         >
@@ -68,7 +68,7 @@
               <button
                 @click="acceptOrder(toast)"
                 :disabled="toast.accepting"
-                class="flex-1 py-2.5 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 disabled:opacity-50"
+                class="flex-1 py-2.5 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 disabled:opacity-50"
               >
                 {{ toast.accepting ? 'Accepting...' : '✅ Accept Order' }}
               </button>

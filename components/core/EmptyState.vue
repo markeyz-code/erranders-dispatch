@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center py-20 px-4 text-center animate-fade-in w-full max-w-lg mx-auto">
-    <div class="w-20 h-20 mb-6 rounded-full bg-gray-50 flex items-center justify-center text-4xl shadow-sm border border-gray-100">
+    <div class="w-20 h-20 mb-6 rounded-full bg-gray-50 flex items-center justify-center text-4xl shadow-sm border border-gray-50">
       <slot name="icon">
         <span v-if="!$slots.icon" class="text-xl">📋</span>
       </slot>

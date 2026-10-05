@@ -30,7 +30,7 @@
             <UiAnimatedInput v-model="form.password" type="password" label="Password" required minlength="6" />
 
             <button type="submit" :disabled="loading"
-              class="w-full py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-100 shadow-[#FF5C1A]/20 mt-4">
+              class="w-full py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 mt-4">
               <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
               {{ loading ? 'Creating account...' : 'Create Account' }}
             </button>

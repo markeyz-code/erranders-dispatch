@@ -10,7 +10,7 @@
         ></div>
 
         <!-- Drawer panel -->
-        <div class="relative w-full max-w-md h-full bg-white shadow-sm border border-gray-100 flex flex-col pointer-events-auto transform transition-transform duration-500 ease-in-out" style="padding-top: env(safe-area-inset-top, 0px)">
+        <div class="relative w-full max-w-md h-full bg-white shadow-sm border border-gray-50 flex flex-col pointer-events-auto transform transition-transform duration-500 ease-in-out" style="padding-top: env(safe-area-inset-top, 0px)">
           
           <!-- Header area for Close Button -->
           <div class="absolute right-0 flex items-center z-10" style="top: calc(env(safe-area-inset-top, 0px) + 1.5rem); padding-right: 1.5rem;">

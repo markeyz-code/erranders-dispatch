@@ -17,7 +17,7 @@
  v-model="searchQuery"
  type="text" 
  placeholder="Search by order ID or store name..." 
- class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]/30 transition-all"
+ class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-25 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]/30 transition-all"
  />
  </div>
  
@@ -27,7 +27,7 @@
  :key="status.key" 
  @click="activeFilter = status.key"
  class="px-4 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap"
- :class="activeFilter === status.key ? 'bg-[#FF5C1A] text-white ' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-200'"
+ :class="activeFilter === status.key ? 'bg-[#FF5C1A] text-white ' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-25'"
  >
  {{ status.label }}
  </button>
@@ -36,11 +36,11 @@
 
  <!-- Loading -->
  <div v-if="loading" class="space-y-3">
- <div v-for="i in 6" :key="i" class="h-16 bg-white rounded-xl border border-gray-100 animate-pulse"></div>
+ <div v-for="i in 6" :key="i" class="h-16 bg-white rounded-xl border border-gray-50 animate-pulse"></div>
  </div>
 
  <!-- Empty State -->
- <div v-else-if="filteredOrders.length === 0" class="bg-white rounded-lg border border-gray-100 py-20 text-center">
+ <div v-else-if="filteredOrders.length === 0" class="bg-white rounded-lg border border-gray-50 py-20 text-center">
  <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">📦</div>
  <h3 class="text-base font-bold text-gray-900 mb-1">{{ activeFilter === 'all' ? 'No deliveries yet' : `No ${activeFilter} deliveries` }}</h3>
  <p class="text-sm text-gray-400 mb-6">{{ activeFilter === 'all' ? 'Accept orders from the marketplace to get started!' : 'Check back later for updates.' }}</p>
@@ -50,7 +50,7 @@
  </div>
 
  <!-- Deliveries Table -->
- <div v-else class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+ <div v-else class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="overflow-x-auto">
  <table class="w-full text-left">
  <thead>
@@ -126,14 +126,14 @@
 
  <div class="py-4 space-y-4 md:space-y-6">
  <!-- Route Info -->
- <div class="bg-gray-50/50 rounded-lg p-5 border border-gray-100 space-y-4">
+ <div class="bg-gray-50/50 rounded-lg p-5 border border-gray-50 space-y-4">
  <p class="text-[10px] font-medium text-gray-400 tracking-widest mb-2">Delivery Intelligence</p>
  
  <div class="space-y-4 relative">
  <div class="absolute left-3 top-4 bottom-4 w-px border-l-2 border-dashed border-gray-200"></div>
  
  <div class="flex items-start gap-4 relative z-10">
- <div class="w-6 h-6 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-[10px] ">🏪</div>
+ <div class="w-6 h-6 rounded-lg bg-white border border-gray-25 flex items-center justify-center text-[10px] ">🏪</div>
  <div>
  <p class="text-[9px] text-gray-400 font-bold tracking-widest mb-0.5 whitespace-nowrap">Source: Prep Station</p>
  <p class="text-sm font-medium text-gray-900 tracking-tight">{{ selectedOrder.vendor?.storeName || 'Store' }}</p>
@@ -141,7 +141,7 @@
  </div>
  
  <div class="flex items-start gap-4 relative z-10">
- <div class="w-6 h-6 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-[10px] ">📍</div>
+ <div class="w-6 h-6 rounded-lg bg-white border border-gray-25 flex items-center justify-center text-[10px] ">📍</div>
  <div>
  <p class="text-[9px] text-gray-400 font-bold tracking-widest mb-0.5 whitespace-nowrap">Destination: Customer</p>
  <p class="text-sm font-medium text-[#FF5C1A] tracking-tight">{{ selectedOrder.deliveryAddress }}</p>
@@ -240,7 +240,7 @@ const getStatusClasses = (s: string) => {
  if (['pending', 'preparing', 'ready_for_pickup'].includes(s)) return 'bg-amber-50 text-amber-700 border border-amber-100';
  if (['interception_pending', 'interception_in_progress'].includes(s)) return 'bg-purple-50 text-purple-700 border border-purple-100';
  if (s === 'cancelled') return 'bg-rose-50 text-rose-700 border border-rose-100';
- return 'bg-gray-50 text-gray-500 border border-gray-100';
+ return 'bg-gray-50 text-gray-500 border border-gray-50';
 }
 
 const loadOrders = async () => {

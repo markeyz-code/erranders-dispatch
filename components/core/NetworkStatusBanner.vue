@@ -2,7 +2,7 @@
   <Transition name="slide-down">
     <div v-if="!isOnline || isSlowNetwork" class="fixed top-0 left-0 right-0 z-[999999] flex justify-center p-2 pointer-events-none">
       <div 
-        class="px-4 py-2 rounded-full shadow-sm border border-gray-100 text-sm font-bold flex items-center gap-2 animate-in slide-in-from-top-4 duration-300 pointer-events-auto"
+        class="px-4 py-2 rounded-full shadow-sm border border-gray-50 text-sm font-bold flex items-center gap-2 animate-in slide-in-from-top-4 duration-300 pointer-events-auto"
         :class="!isOnline ? 'bg-red-500 text-white' : 'bg-orange-500 text-white'"
       >
         <span v-if="!isOnline">

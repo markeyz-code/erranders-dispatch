@@ -19,6 +19,7 @@
     "@pinia/nuxt": "^0.11.3",
     "@types/mapbox-gl": "^3.4.1",
     "@vite-pwa/nuxt": "^1.1.1",
+    "@vuepic/vue-datepicker": "^14.0.0",
     "@vueuse/core": "^13.0.0",
     "axios": "^1.10.0",
     "canvas-confetti": "^1.9.4",
