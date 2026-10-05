@@ -20,30 +20,17 @@
           >
             <div class="flex-shrink-0">
               <div :class="[
-                'w-8 h-8 rounded-full flex items-center justify-center',
-                {
-                  'bg-white/20 text-white': toast.type === 'error',
-                  'bg-white/20 text-white': toast.type === 'success', 
-                  'bg-white/20 text-white': toast.type === 'warning',
-                  'bg-white/20 text-white': toast.type === 'info'
-                }
+                'w-8 h-8 rounded-full flex items-center justify-center bg-white/20 text-white'
               ]">
                 <CheckCircle v-if="toast.type === 'success'" :size="18" />
                 <AlertCircle v-else-if="toast.type === 'error'" :size="18" />
-
                 <AlertTriangle v-else-if="toast.type === 'warning'" :size="18" />
                 <Info v-else :size="18" />
               </div>
             </div>
             <div class="flex-1 min-w-0">
               <p :class="[
-                'font-medium text-sm leading-tight',
-                {
-                  'text-white': toast.type === 'error',
-                  'text-white': toast.type === 'success',
-                  'text-white': toast.type === 'warning', 
-                  'text-white': toast.type === 'info'
-                }
+                'font-medium text-sm leading-tight text-white'
               ]">
                 {{ toast.message }}
               </p>
