@@ -54,7 +54,7 @@
             </div>
             <h3 class="text-xl font-medium text-gray-900 tracking-tight mb-3 text-left">Earnings Support</h3>
             <p class="text-[13px] text-gray-500 font-bold leading-relaxed mb-6 text-left">Wallet help and payout discrepancies.</p>
-            <a href="mailto:payouts@errandr.shop" class="text-sm font-medium text-amber-600 hover:underline block text-left uppercase text-[10px] tracking-widest whitespace-nowrap">payouts@errandr.shop</a>
+            <a href="mailto:payouts@errandr.shop" class="text-sm font-medium text-amber-600 hover:underline block text-left uppercase text-[10px]  whitespace-nowrap">payouts@errandr.shop</a>
           </div>
 
           <!-- Ambassadors -->
@@ -64,7 +64,7 @@
             </div>
             <h3 class="text-xl font-medium text-gray-900 tracking-tight mb-3 text-left">Community</h3>
             <p class="text-[13px] text-gray-500 font-bold leading-relaxed mb-6 text-left">Lead the rider movement on your campus.</p>
-            <a href="mailto:ambassadors@errandr.shop" class="text-sm font-medium text-purple-600 hover:underline block text-left uppercase text-[10px] tracking-widest whitespace-nowrap">Join Ambassadors</a>
+            <a href="mailto:ambassadors@errandr.shop" class="text-sm font-medium text-purple-600 hover:underline block text-left uppercase text-[10px]  whitespace-nowrap">Join Ambassadors</a>
           </div>
         </div>
       </div>

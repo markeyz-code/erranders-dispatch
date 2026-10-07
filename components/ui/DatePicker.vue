@@ -76,7 +76,7 @@ const model = computed({
   padding-right: 0.75rem;
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
-  font-size: 0.75rem; /* text-xs */
+  font-size: 0.75rem; /* text-sm */
   line-height: 1rem;
   border-width: 1px;
   border-color: #f0f0f0; /* gray-25 or similar */

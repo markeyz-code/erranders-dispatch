@@ -23,7 +23,7 @@
             {{ stat.emoji }}
           </div>
         </div>
-        <p class="text-xs text-gray-400 font-medium mb-1">{{ stat.label }}</p>
+        <p class="text-sm text-gray-400 font-medium mb-1">{{ stat.label }}</p>
         <h3 class="text-2xl font-bold text-gray-900 tracking-tight">{{ stat.value }}</h3>
       </div>
     </div>
@@ -39,7 +39,7 @@
             <h3 class="text-base font-bold text-gray-900">Active Deliveries</h3>
             <div v-if="batchStatus?.isActive" class="flex items-center gap-2 px-3 py-1 bg-parentPrimary/10 border border-parentPrimary/20 rounded-full animate-pulse">
               <span class="w-1.5 h-1.5 rounded-full bg-parentPrimary"></span>
-              <span class="text-[10px] font-medium text-parentPrimary uppercase tracking-widest">Batch mode active</span>
+              <span class="text-[10px] font-medium text-parentPrimary uppercase ">Batch mode active</span>
             </div>
             <span v-else-if="activeOrders.length > 0" class="text-[10px] font-semibold text-[#FF5C1A] bg-[#FF5C1A]/5 px-3 py-1 rounded-full border border-[#FF5C1A]/10">In Progress</span>
           </div>
@@ -59,7 +59,7 @@
                     <h4 class="text-lg font-bold text-gray-900 tracking-tight mb-1">
                       {{ order.type === 'custom_errand' ? 'Custom Errand' : 'Order' }} #{{ order.orderNumber }}
                     </h4>
-                    <p class="text-xs text-gray-400">
+                    <p class="text-sm text-gray-400">
                       {{ order.type === 'custom_errand' ? order.customDetails?.pickupLocation : (order.vendor?.storeName || 'Store') }} 
                       → 
                       {{ order.type === 'custom_errand' ? order.customDetails?.dropoffLocation : (order.deliveryAddress || 'Delivery') }}
@@ -67,11 +67,11 @@
                   </div>
                   
                   <div class="flex flex-wrap gap-3">
-                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-600 line-clamp-1">
+                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-600 line-clamp-1">
                       <div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A] shrink-0" />
                       {{ order.type === 'custom_errand' ? order.customDetails?.pickupLocation : (order.vendor?.storeName || 'Pick-up') }}
                     </div>
-                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-600 line-clamp-1">
+                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-600 line-clamp-1">
                       <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
                       {{ order.type === 'custom_errand' ? order.customDetails?.dropoffLocation : (order.deliveryAddress || 'Drop-off') }}
                     </div>
@@ -102,7 +102,7 @@
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Available Errands
             </h3>
-            <NuxtLink to="/deliveries/pool" class="text-xs font-semibold text-emerald-600 hover:underline">View All →</NuxtLink>
+            <NuxtLink to="/deliveries/pool" class="text-sm font-semibold text-emerald-600 hover:underline">View All →</NuxtLink>
           </div>
           
           <div v-if="loadingOrders" class="p-4 space-y-3">
@@ -122,13 +122,13 @@
               <div class="flex items-center gap-4">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-gray-950 text-white overflow-hidden">
                   <img v-if="order.type !== 'custom_errand' && order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
-                  <span v-else class="text-xs font-bold">CUS</span>
+                  <span v-else class="text-sm font-bold">CUS</span>
                 </div>
                 <div>
                   <h4 class="font-semibold text-sm text-gray-900 truncate max-w-[200px]">
                     {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Order') }}
                   </h4>
-                  <p class="text-xs text-gray-400 line-clamp-1 max-w-[200px]">
+                  <p class="text-sm text-gray-400 line-clamp-1 max-w-[200px]">
                     {{ order.type === 'custom_errand' ? order.customDetails?.dropoffLocation : (order.deliveryAddress || 'Customer Location') }}
                   </p>
                 </div>
@@ -147,7 +147,7 @@
         <div class="  rounded-lg  overflow-hidden border border-gray-25">
           <div class="px-4 py-4 border-b border-gray-50 flex items-center justify-between">
             <h3 class="text-base font-bold text-gray-900">Recent Deliveries</h3>
-            <NuxtLink to="/deliveries" class="text-xs font-semibold text-[#FF5C1A] hover:underline">View All →</NuxtLink>
+            <NuxtLink to="/deliveries" class="text-sm font-semibold text-[#FF5C1A] hover:underline">View All →</NuxtLink>
           </div>
           
           <div v-if="loadingOrders" class="p-4 space-y-3">
@@ -171,7 +171,7 @@
                 <h4 class="font-semibold text-sm text-gray-900 truncate">
                   {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Order') }} #{{ order.orderNumber }}
                 </h4>
-                <p class="text-xs text-gray-400">{{ formatDate(order.createdAt) }}</p>
+                <p class="text-sm text-gray-400">{{ formatDate(order.createdAt) }}</p>
               </div>
               <div class="text-right flex-shrink-0">
                 <p class="font-bold text-sm text-emerald-600">+₦{{ (order.erranderPayout || order.deliveryFee || 0)?.toLocaleString() }}</p>
@@ -190,15 +190,15 @@
         <div class="bg-gray-900 rounded-lg p-4 text-white relative overflow-hidden">
           <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-[#FF5C1A]/20 rounded-full blur-[60px]" />
           <div class="relative z-10">
-            <p class="text-xs text-gray-400 font-medium mb-1">Total Earned</p>
+            <p class="text-sm text-gray-400 font-medium mb-1">Total Earned</p>
             <h3 class="text-2xl font-bold tracking-tight mb-4">₦{{ (earningsData.totalEarnings || 0).toLocaleString() }}</h3>
             
             <div class="space-y-2 mb-6">
-              <div class="flex justify-between text-xs font-medium">
+              <div class="flex justify-between text-sm font-medium">
                 <span class="text-gray-400">Rating</span>
                 <span class="text-white">{{ (earningsData.rating || 0).toFixed(1) }} ⭐</span>
               </div>
-              <div class="flex justify-between text-xs font-medium">
+              <div class="flex justify-between text-sm font-medium">
                 <span class="text-gray-400">Deliveries</span>
                 <span class="text-white">{{ earningsData.totalDeliveries || 0 }}</span>
               </div>
@@ -212,13 +212,13 @@
 
         <!-- Rating Card -->
         <div class="  rounded-lg  p-4 ">
-          <p class="text-xs text-gray-400 font-medium mb-3">Your Rating</p>
+          <p class="text-sm text-gray-400 font-medium mb-3">Your Rating</p>
           <div class="flex items-center gap-0.5 mb-2">
             <span v-for="i in 5" :key="i" class="text-xl" :class="i <= Math.round(errandrProfile?.rating || 0) ? 'text-amber-400' : 'text-gray-200'">★</span>
           </div>
           <div class="flex items-baseline gap-2">
             <h4 class="text-4xl font-bold text-gray-900 tracking-tight">{{ (errandrProfile?.rating || 0).toFixed(1) }}</h4>
-            <span class="text-xs text-gray-400 font-medium">/ 5.0</span>
+            <span class="text-sm text-gray-400 font-medium">/ 5.0</span>
           </div>
           <p v-if="errandrProfile?.rating >= 4.5" class="text-[11px] text-amber-600 font-semibold mt-3 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100 inline-block">⭐ Top Rated Rider</p>
         </div>
@@ -228,7 +228,7 @@
           <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2 mb-2">
             Need Help?
           </h3>
-          <p class="text-xs text-gray-500 mb-4">Get in touch with our support team for any delivery issues.</p>
+          <p class="text-sm text-gray-500 mb-4">Get in touch with our support team for any delivery issues.</p>
           <button class="w-full py-3 bg-gray-50 border border-gray-50 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-all">
             Contact Support
           </button>

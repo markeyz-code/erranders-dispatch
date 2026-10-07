@@ -8,12 +8,12 @@
  <th 
  v-for="col in columns" 
  :key="col.key" 
- class="px-5 py-5 text-[9px] font-medium text-gray-400 tracking-widest whitespace-nowrap"
+ class="px-5 py-5 text-[9px] font-medium text-gray-400  whitespace-nowrap"
  :class="col.class"
  >
  {{ col.label }}
  </th>
- <th v-if="hasActions" class="px-5 py-5 text-[9px] font-medium text-gray-400 tracking-widest text-right">Actions</th>
+ <th v-if="hasActions" class="px-5 py-5 text-[9px] font-medium text-gray-400  text-right">Actions</th>
  </tr>
  </thead>
  <tbody class="divide-y divide-gray-50">
@@ -30,7 +30,7 @@
  <component :is="emptyIcon || 'Inbox'" class="w-8 h-8 text-gray-200" />
  </div>
  <h4 class="font-medium text-gray-900 text-lg tracking-tight ">{{ emptyTitle || 'No items found' }}</h4>
- <p class="text-gray-400 text-[11px] mt-2 font-bold tracking-widest leading-relaxed">{{ emptySubtitle || 'Wait for data or try adjusting your filters.' }}</p>
+ <p class="text-gray-400 text-[11px] mt-2 font-bold  leading-relaxed">{{ emptySubtitle || 'Wait for data or try adjusting your filters.' }}</p>
  </div>
  </td>
  </tr>

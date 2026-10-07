@@ -18,7 +18,7 @@
         </button>
       </div>
     </div>
-    <p v-if="balance > 0 && balance < minimumPayout" class="text-xs text-rose-500 font-medium">Minimum withdrawal: ₦{{ minimumPayout.toLocaleString() }}</p>
+    <p v-if="balance > 0 && balance < minimumPayout" class="text-sm text-rose-500 font-medium">Minimum withdrawal: ₦{{ minimumPayout.toLocaleString() }}</p>
 
     <!-- Skeleton -->
     <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -32,7 +32,7 @@
         <!-- Available Balance -->
         <div class="p-5 rounded-lg bg-white border border-gray-25">
           <div class="flex items-center justify-between mb-3">
-            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Available for Payout</p>
+            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Available for Payout</p>
             <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
               <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
@@ -49,7 +49,7 @@
         <!-- Lifetime Earnings -->
         <div class="p-5 rounded-lg bg-white border border-gray-25">
           <div class="flex items-center justify-between mb-3">
-            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Lifetime Earnings</p>
+            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Lifetime Earnings</p>
             <div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
               <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
             </div>
@@ -57,7 +57,7 @@
           <p class="text-2xl font-bold text-gray-900">
             <span class="text-sm text-gray-400">₦</span>{{ wallet?.totalEarned?.toLocaleString() || '0' }}
           </p>
-          <p class="text-xs text-gray-400 mt-2">Total from all completed errands</p>
+          <p class="text-sm text-gray-400 mt-2">Total from all completed errands</p>
         </div>
       </div>
 
@@ -69,18 +69,18 @@
           </div>
           <div>
             <h3 class="text-sm font-bold text-gray-900">Payout Settings</h3>
-            <p class="text-xs text-gray-500">Configure your payout frequency and bank account.</p>
+            <p class="text-sm text-gray-500">Configure your payout frequency and bank account.</p>
           </div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Frequency -->
           <div class="space-y-3">
-            <label class="text-xs font-medium text-gray-500">Settlement Frequency</label>
+            <label class="text-sm font-medium text-gray-500">Settlement Frequency</label>
             <div class="flex gap-1 p-1 bg-gray-50 border border-gray-25 rounded-lg">
               <button v-for="p in ['manual', 'daily', 'weekly', 'monthly']" :key="p"
                 @click="handleUpdateFrequency(p)"
-                class="flex-1 py-2 rounded-md text-xs font-semibold transition-all capitalize"
+                class="flex-1 py-2 rounded-md text-sm font-semibold transition-all capitalize"
                 :class="wallet?.payoutPreference === p ? 'bg-white text-gray-900 border border-gray-25' : 'text-gray-500 hover:text-gray-700'"
               >
                 {{ p }}
@@ -91,13 +91,13 @@
 
           <!-- Bank Account -->
           <div class="space-y-3">
-            <label class="text-xs font-medium text-gray-500">Bank Account</label>
+            <label class="text-sm font-medium text-gray-500">Bank Account</label>
             <div class="p-4 rounded-lg bg-gray-50 border border-gray-25">
-              <p class="text-xs text-gray-500">{{ wallet?.bankDetails?.bankName || 'No Bank Linked' }}</p>
+              <p class="text-sm text-gray-500">{{ wallet?.bankDetails?.bankName || 'No Bank Linked' }}</p>
               <p class="text-base font-semibold text-gray-900 font-mono mt-1">{{ wallet?.bankDetails?.accountNumber || '•••• •••• ••••' }}</p>
-              <p class="text-xs font-medium text-gray-600 mt-1">{{ wallet?.bankDetails?.accountName || 'Not configured' }}</p>
+              <p class="text-sm font-medium text-gray-600 mt-1">{{ wallet?.bankDetails?.accountName || 'Not configured' }}</p>
             </div>
-            <button @click="showBankDrawer = true" class="w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold border border-gray-25 transition-colors">
+            <button @click="showBankDrawer = true" class="w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg text-sm font-semibold border border-gray-25 transition-colors">
               Update Bank Details
             </button>
           </div>
@@ -116,7 +116,7 @@
             <!-- Filters -->
             <div class="flex items-center gap-2 flex-wrap">
               <div class="w-32 relative">
-                <UiSelectInput v-model="filterType" :options="[{label: 'All Types', value: 'all'}, {label: 'Credits Only', value: 'credit'}, {label: 'Debits Only', value: 'debit'}]" class="w-full h-8 !min-h-[32px] text-xs !px-2 rounded-lg bg-white focus:ring-1 focus:ring-gray-300" />
+                <UiSelectInput v-model="filterType" :options="[{label: 'All Types', value: 'all'}, {label: 'Credits Only', value: 'credit'}, {label: 'Debits Only', value: 'debit'}]" class="w-full h-8 !min-h-[32px] text-sm !px-2 rounded-lg bg-white focus:ring-1 focus:ring-gray-300" />
               </div>
               <div class="w-32">
                 <UiDatePicker v-model="filterDateFrom" placeholder="From" />
@@ -124,7 +124,7 @@
               <div class="w-32">
                 <UiDatePicker v-model="filterDateTo" placeholder="To" />
               </div>
-              <button v-if="filterType !== 'all' || filterDateFrom || filterDateTo" @click="clearFilters" class="px-2 py-1.5 text-xs text-gray-500 hover:text-gray-700 font-medium">
+              <button v-if="filterType !== 'all' || filterDateFrom || filterDateTo" @click="clearFilters" class="px-2 py-1.5 text-sm text-gray-500 hover:text-gray-700 font-medium">
                 Clear
               </button>
             </div>
@@ -137,7 +137,7 @@
               <span class="text-2xl opacity-50">🍃</span>
             </div>
             <h4 class="text-sm font-bold text-gray-900 mb-1">{{ transactions.length === 0 ? 'No earnings yet' : 'No matching transactions' }}</h4>
-            <p class="text-gray-400 text-xs max-w-sm">{{ transactions.length === 0 ? 'Complete your first delivery to see your history.' : 'Try adjusting the filters above.' }}</p>
+            <p class="text-gray-400 text-sm max-w-sm">{{ transactions.length === 0 ? 'Complete your first delivery to see your history.' : 'Try adjusting the filters above.' }}</p>
           </div>
           
           <div v-else class="overflow-x-auto">
@@ -159,18 +159,18 @@
                         <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
                       </div>
                       <div>
-                        <p class="text-xs text-gray-900 font-semibold">{{ tx.description }}</p>
+                        <p class="text-sm text-gray-900 font-semibold">{{ tx.description }}</p>
                         <p v-if="tx.order" class="text-[10px] text-gray-400 font-mono mt-0.5">{{ tx.order.slice(-8) }}</p>
                       </div>
                     </div>
                   </td>
                   <td class="py-3 px-4 text-right">
-                    <p :class="tx.type === 'credit' ? 'text-emerald-600' : 'text-gray-900'" class="text-xs font-bold font-mono">
+                    <p :class="tx.type === 'credit' ? 'text-emerald-600' : 'text-gray-900'" class="text-sm font-bold font-mono">
                       {{ tx.type === 'credit' ? '+' : '-' }}₦{{ tx.amount.toLocaleString() }}
                     </p>
                   </td>
                   <td class="py-3 px-4 text-right">
-                    <p class="text-xs text-gray-700 font-medium">{{ new Date(tx.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) }}</p>
+                    <p class="text-sm text-gray-700 font-medium">{{ new Date(tx.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) }}</p>
                     <p class="text-[10px] text-gray-400 mt-0.5">{{ new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</p>
                   </td>
                   <td class="py-3 px-4 text-right">
@@ -194,15 +194,15 @@
         <div class="bg-white rounded-lg w-full max-w-md p-6 space-y-5">
           <div>
             <h3 class="text-base font-bold text-gray-900">Generate Statement</h3>
-            <p class="text-xs text-gray-500 mt-1">Select a date range to download your earnings statement as CSV.</p>
+            <p class="text-sm text-gray-500 mt-1">Select a date range to download your earnings statement as CSV.</p>
           </div>
           <div class="space-y-3">
             <div>
-              <label class="text-xs font-medium text-gray-500 mb-1 block">From</label>
+              <label class="text-sm font-medium text-gray-500 mb-1 block">From</label>
               <UiDatePicker v-model="statementFrom" class="w-full" />
             </div>
             <div>
-              <label class="text-xs font-medium text-gray-500 mb-1 block">To</label>
+              <label class="text-sm font-medium text-gray-500 mb-1 block">To</label>
               <UiDatePicker v-model="statementTo" class="w-full" />
             </div>
           </div>
@@ -225,17 +225,17 @@
 
       <div class="space-y-4">
         <div>
-          <label class="text-xs font-medium text-gray-500 mb-1 block">Select Bank</label>
+          <label class="text-sm font-medium text-gray-500 mb-1 block">Select Bank</label>
           <UiSelectInput v-model="bankForm.bankCode" :options="banks" class="w-full" @update:modelValue="onBankChange" />
         </div>
         <div>
-          <label class="text-xs font-medium text-gray-500 mb-1 block">Account Number</label>
+          <label class="text-sm font-medium text-gray-500 mb-1 block">Account Number</label>
           <div class="relative">
             <input v-model="bankForm.accountNumber" @input="isAccountVerified = false" type="text" maxlength="10" class="w-full pl-3 pr-20 py-2.5 bg-gray-50 border border-gray-25 rounded-lg text-sm font-medium focus:ring-1 focus:ring-gray-300 focus:bg-white transition-all" placeholder="10-digit NUBAN">
             <button 
               @click="resolveAccount" 
               :disabled="bankForm.accountNumber.length !== 10 || !bankForm.bankCode || resolving"
-              class="absolute right-1.5 top-1.5 bottom-1.5 px-3 rounded-md bg-gray-900 text-white text-xs font-semibold disabled:opacity-30 hover:bg-gray-800 transition-all"
+              class="absolute right-1.5 top-1.5 bottom-1.5 px-3 rounded-md bg-gray-900 text-white text-sm font-semibold disabled:opacity-30 hover:bg-gray-800 transition-all"
             >
               {{ resolving ? 'Wait...' : 'Verify' }}
             </button>
@@ -243,7 +243,7 @@
         </div>
         <Transition name="fade">
           <div v-if="bankForm.accountName" class="p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-            <p class="text-xs text-emerald-600 font-semibold">Verified Beneficiary</p>
+            <p class="text-sm text-emerald-600 font-semibold">Verified Beneficiary</p>
             <p class="text-sm text-emerald-900 font-bold">{{ bankForm.accountName }}</p>
           </div>
         </Transition>
@@ -261,7 +261,7 @@
       <div class="text-center border-b border-gray-100 pb-4">
         <div class="w-14 h-14 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">💸</div>
         <h3 class="text-lg font-bold text-gray-900">Request Payout</h3>
-        <p class="text-gray-500 text-xs">Withdraw to your linked bank account.</p>
+        <p class="text-gray-500 text-sm">Withdraw to your linked bank account.</p>
       </div>
 
       <div class="space-y-3">
@@ -269,14 +269,14 @@
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-base font-semibold text-gray-400">₦</span>
           <input v-model="formattedWithdrawAmount" type="text" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-25 rounded-lg text-xl font-bold text-center focus:ring-1 focus:ring-gray-300 focus:bg-white transition-all" placeholder="0">
         </div>
-        <p class="text-xs text-gray-400 text-center">Available: ₦{{ balance?.toLocaleString() }}</p>
+        <p class="text-sm text-gray-400 text-center">Available: ₦{{ balance?.toLocaleString() }}</p>
       </div>
 
       <div class="space-y-3">
         <!-- Instant Toggle -->
         <label class="flex items-center justify-between p-3 bg-gray-50 border border-gray-25 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
           <div>
-            <span class="text-xs font-semibold text-gray-900">Instant Withdrawal</span>
+            <span class="text-sm font-semibold text-gray-900">Instant Withdrawal</span>
             <span class="text-[10px] text-gray-500 block">Max ₦5,000</span>
           </div>
           <div class="relative inline-flex items-center cursor-pointer">

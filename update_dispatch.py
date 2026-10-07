@@ -20,7 +20,7 @@ ui_replace = """<div v-else-if="substituteOptions.length === 0" class="text-cent
             <div>
               <p class="text-sm font-bold text-gray-900">{{ opt.name }}</p>
               <div class="flex items-center gap-2 mt-0.5">
-                <p class="text-xs font-black text-gray-900 font-mono">₦{{ (opt.pricePerPortion ?? opt.price).toLocaleString() }}</p>
+                <p class="text-sm font-black text-gray-900 font-mono">₦{{ (opt.pricePerPortion ?? opt.price).toLocaleString() }}</p>
                 <span v-if="(opt.pricePerPortion ?? opt.price) > basePriceToMatch" class="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">Costs Extra</span>
                 <span v-else-if="(opt.pricePerPortion ?? opt.price) < basePriceToMatch" class="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">Cheaper</span>
               </div>

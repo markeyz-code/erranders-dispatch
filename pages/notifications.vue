@@ -9,7 +9,7 @@
       <button
         v-if="notifications.length > 0 && unreadCount > 0"
         @click="markAllAsRead"
-        class="text-xs font-semibold text-[#FF5C1A] hover:underline"
+        class="text-sm font-semibold text-[#FF5C1A] hover:underline"
       >
         Mark all as read
       </button>
@@ -59,11 +59,11 @@
                 <div v-if="!notif.read" class="w-2 h-2 rounded-full bg-[#FF5C1A] flex-shrink-0" />
               </div>
             </div>
-            <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">{{ notif.body }}</p>
+            <p class="text-sm text-gray-500 mt-0.5 leading-relaxed">{{ notif.body }}</p>
             
             <!-- Earnings badge for new orders -->
             <div v-if="notif.type === 'NEW_ORDER_AVAILABLE' && notif.data?.erranderShare" class="mt-2">
-              <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+              <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
                 💰 ₦{{ notif.data.erranderShare.toLocaleString() }}
               </span>
             </div>
@@ -73,13 +73,13 @@
               <button
                 @click.stop="acceptNotifOrder(notif)"
                 :disabled="notif.accepting"
-                class="px-4 py-2 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all  disabled:opacity-50"
+                class="px-4 py-2 text-sm font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all  disabled:opacity-50"
               >
                 {{ notif.accepting ? 'Accepting...' : 'Accept Order' }}
               </button>
               <button
                 @click.stop="dismissNotification(notif.id)"
-                class="px-4 py-2 text-xs font-semibold text-gray-500 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all"
+                class="px-4 py-2 text-sm font-semibold text-gray-500 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all"
               >
                 Dismiss
               </button>

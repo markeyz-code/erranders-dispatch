@@ -16,7 +16,7 @@
             <X class="w-4 h-4" />
           </button>
         </div>
-        <p class="text-xs text-gray-500 font-medium mb-4">Reply time: Usually within 5 mins.</p>
+        <p class="text-sm text-gray-500 font-medium mb-4">Reply time: Usually within 5 mins.</p>
         
         <div class="space-y-2">
           <a
@@ -27,7 +27,7 @@
             class="flex items-center gap-3 p-2 hover:bg-green-50 rounded-xl transition-colors group border border-transparent hover:border-green-100"
           >
             <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-              <span class="text-green-600 font-bold text-xs">{{ agent.initial }}</span>
+              <span class="text-green-600 font-bold text-sm">{{ agent.initial }}</span>
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-bold text-gray-900 group-hover:text-green-700 transition-colors">{{ agent.name }}</p>

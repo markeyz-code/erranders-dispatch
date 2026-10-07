@@ -34,12 +34,12 @@
  <div class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50 flex items-center justify-between">
  <h3 class="text-base font-bold text-gray-900">Personal Information</h3>
- <button v-if="!isEditing" @click="startEdit" class="text-xs font-semibold text-[#FF5C1A] hover:underline">Edit</button>
+ <button v-if="!isEditing" @click="startEdit" class="text-sm font-semibold text-[#FF5C1A] hover:underline">Edit</button>
  <div v-else class="flex gap-2">
- <button @click="saveProfile" :disabled="saving" class="text-xs font-semibold text-white bg-[#FF5C1A] px-4 py-1.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50">
+ <button @click="saveProfile" :disabled="saving" class="text-sm font-semibold text-white bg-[#FF5C1A] px-4 py-1.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50">
  {{ saving ? 'Saving...' : 'Save' }}
  </button>
- <button @click="cancelEdit" class="text-xs font-semibold text-gray-500 hover:text-gray-700">Cancel</button>
+ <button @click="cancelEdit" class="text-sm font-semibold text-gray-500 hover:text-gray-700">Cancel</button>
  </div>
  </div>
 
@@ -118,7 +118,7 @@
  <div class="flex items-center justify-between">
  <div>
  <p class="text-sm font-semibold text-gray-900">Accept New Deliveries</p>
- <p class="text-xs text-gray-400 mt-0.5">Toggle to go online or offline for new orders</p>
+ <p class="text-sm text-gray-400 mt-0.5">Toggle to go online or offline for new orders</p>
  </div>
  <button 
  @click="toggleAvailability" 

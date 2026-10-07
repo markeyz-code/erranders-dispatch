@@ -13,7 +13,7 @@
         </div>
         
         <div>
-          <h4 class="font-bold text-gray-900 mb-6 tracking-wider text-xs uppercase">Platform</h4>
+          <h4 class="font-bold text-gray-900 mb-6 tracking-wider text-sm uppercase">Platform</h4>
           <ul class="space-y-4 text-sm font-medium text-gray-500">
             <li><NuxtLink to="/about" class="hover:text-parentPrimary transition-colors">About Us</NuxtLink></li>
             <li><NuxtLink to="/contact" class="hover:text-parentPrimary transition-colors">Rider Support</NuxtLink></li>
@@ -22,7 +22,7 @@
         </div>
 
         <div>
-          <h4 class="font-bold text-gray-900 mb-6 tracking-wider text-xs uppercase">Legal</h4>
+          <h4 class="font-bold text-gray-900 mb-6 tracking-wider text-sm uppercase">Legal</h4>
           <ul class="space-y-4 text-sm font-medium text-gray-500">
             <li><NuxtLink to="/terms" class="hover:text-parentPrimary transition-colors">Rider Agreement</NuxtLink></li>
             <li><NuxtLink to="/terms" class="hover:text-parentPrimary transition-colors">Privacy Policy</NuxtLink></li>
@@ -30,7 +30,7 @@
         </div>
         
         <div>
-          <h4 class="font-bold text-gray-900 mb-6 tracking-wider text-xs uppercase">Errandr Network</h4>
+          <h4 class="font-bold text-gray-900 mb-6 tracking-wider text-sm uppercase">Errandr Network</h4>
           <ul class="space-y-4 text-sm font-medium text-gray-500">
             <li><a href="http://errandr.shop" class="hover:text-parentPrimary transition-colors flex items-center gap-2"><Utensils class="w-4 h-4" /> Order Food</a></li>
             <li><a href="http://vendor.errandr.shop" class="hover:text-parentPrimary transition-colors flex items-center gap-2"><Store class="w-4 h-4" /> Open a Store</a></li>

@@ -4,7 +4,7 @@
     <div class="px-4 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
       <div>
         <h1 class="text-xl font-bold text-gray-900 tracking-tight">Verify Your Account</h1>
-        <p class="text-xs text-gray-500 mt-1 max-w-sm">A quick identity check to secure your payouts.</p>
+        <p class="text-sm text-gray-500 mt-1 max-w-sm">A quick identity check to secure your payouts.</p>
       </div>
       <button @click="router.push('/dashboard')" class="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-900">
         <X class="w-5 h-5" />
@@ -35,7 +35,7 @@
             </div>
             <div>
               <h3 class="font-bold text-sm">Step 1: Student ID Card</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Take a clear picture of your physical student ID card.</p>
+              <p class="text-sm text-gray-500 mt-0.5">Take a clear picture of your physical student ID card.</p>
             </div>
           </div>
           
@@ -45,7 +45,7 @@
               📸 Capture
             </button>
             <button @click="stopCamera" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70">
-              <span class="text-xs font-bold">Cancel</span>
+              <span class="text-sm font-bold">Cancel</span>
             </button>
           </div>
           
@@ -62,7 +62,7 @@
               <div class="w-12 h-12 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mx-auto">
                 <Camera class="w-6 h-6" />
               </div>
-              <p class="font-bold text-gray-900 text-xs">Tap to open Camera</p>
+              <p class="font-bold text-gray-900 text-sm">Tap to open Camera</p>
               <p class="text-[10px] text-gray-400">Must be a live photo of your physical ID card.</p>
               <button @click.stop="$refs.idInput.click()" class="text-[10px] text-[#FF5C1A] font-bold hover:underline mt-1">Or upload a file (Fallback)</button>
             </div>
@@ -100,7 +100,7 @@
             </div>
             <div>
               <h3 class="font-bold text-sm">Step 2: Live Selfie</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Take a selfie right now to match with your ID card.</p>
+              <p class="text-sm text-gray-500 mt-0.5">Take a selfie right now to match with your ID card.</p>
             </div>
           </div>
           
@@ -110,7 +110,7 @@
               📸 Capture Selfie
             </button>
             <button @click="stopCamera" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70">
-              <span class="text-xs font-bold">Cancel</span>
+              <span class="text-sm font-bold">Cancel</span>
             </button>
           </div>
 
@@ -127,7 +127,7 @@
               <div class="w-12 h-12 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mx-auto">
                 <Camera class="w-6 h-6" />
               </div>
-              <p class="font-bold text-gray-900 text-xs">Tap to take Selfie</p>
+              <p class="font-bold text-gray-900 text-sm">Tap to take Selfie</p>
               <p class="text-[10px] text-gray-400">Please ensure good lighting.</p>
               <button @click.stop="$refs.selfieInput.click()" class="text-[10px] text-[#FF5C1A] font-bold hover:underline mt-1">Or upload a file (Fallback)</button>
             </div>
@@ -168,18 +168,18 @@
             </div>
             <div>
               <h3 class="font-bold text-sm">Step 3: NIN Verification</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Enter your 11-digit NIN or take a picture of your NIN slip.</p>
+              <p class="text-sm text-gray-500 mt-0.5">Enter your 11-digit NIN or take a picture of your NIN slip.</p>
             </div>
           </div>
           
           <div>
             <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
-              <button @click="ninMode = 'number'" :class="ninMode === 'number' ? 'bg-white  text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Enter NIN Number</button>
-              <button @click="ninMode = 'slip'" :class="ninMode === 'slip' ? 'bg-white  text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all">Upload NIN Slip</button>
+              <button @click="ninMode = 'number'" :class="ninMode === 'number' ? 'bg-white  text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all">Enter NIN Number</button>
+              <button @click="ninMode = 'slip'" :class="ninMode === 'slip' ? 'bg-white  text-gray-900' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all">Upload NIN Slip</button>
             </div>
             
             <div v-if="ninMode === 'number'">
-              <label class="block text-xs font-bold text-gray-700 mb-2">11-Digit NIN Number</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">11-Digit NIN Number</label>
               <input 
                 v-model="form.ninNumber" 
                 type="text" 
@@ -200,7 +200,7 @@
               📸 Capture
             </button>
             <button @click="stopCamera" class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70">
-              <span class="text-xs font-bold">Cancel</span>
+              <span class="text-sm font-bold">Cancel</span>
             </button>
           </div>
           
@@ -217,7 +217,7 @@
               <div class="w-12 h-12 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mx-auto">
                 <Camera class="w-6 h-6" />
               </div>
-              <p class="font-bold text-gray-900 text-xs">Tap to open Camera</p>
+              <p class="font-bold text-gray-900 text-sm">Tap to open Camera</p>
               <p class="text-[10px] text-gray-400">Must be a clear photo of your NIN slip.</p>
               <button @click.stop="$refs.ninInput.click()" class="text-[10px] text-[#FF5C1A] font-bold hover:underline mt-1">Or upload a file (Fallback)</button>
             </div>
@@ -259,13 +259,13 @@
             </div>
             <div>
               <h3 class="font-bold text-sm">Step 3: Final Details</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Provide your school, matric number, and WhatsApp number.</p>
+              <p class="text-sm text-gray-500 mt-0.5">Provide your school, matric number, and WhatsApp number.</p>
             </div>
           </div>
           
           <div class="space-y-4">
             <div class="relative">
-              <label class="block text-xs font-bold text-gray-700 mb-2">School</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">School</label>
               <div 
                 @click="isSchoolDropdownOpen = !isSchoolDropdownOpen" 
                 class="w-full px-4 py-2.5 bg-white border border-gray-25 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors "
@@ -285,7 +285,7 @@
                       v-model="schoolSearchQuery" 
                       type="text" 
                       placeholder="Search universities..." 
-                      class="w-full pl-9 pr-3 py-2 bg-gray-50 border-none rounded-md text-xs focus:ring-1 focus:ring-[#FF5C1A] outline-none"
+                      class="w-full pl-9 pr-3 py-2 bg-gray-50 border-none rounded-md text-sm focus:ring-1 focus:ring-[#FF5C1A] outline-none"
                       @click.stop
                     />
                   </div>
@@ -295,13 +295,13 @@
                     v-for="uni in filteredUniversities" 
                     :key="uni"
                     @click="selectSchool(uni)"
-                    class="px-4 py-3 text-xs cursor-pointer hover:bg-orange-50 hover:text-[#FF5C1A] transition-colors flex items-center justify-between"
+                    class="px-4 py-3 text-sm cursor-pointer hover:bg-orange-50 hover:text-[#FF5C1A] transition-colors flex items-center justify-between"
                     :class="{'bg-orange-50 text-[#FF5C1A] font-bold': form.school === uni, 'text-gray-700': form.school !== uni}"
                   >
                     {{ uni }}
                     <Check v-if="form.school === uni" class="w-4 h-4" />
                   </li>
-                  <li v-if="filteredUniversities.length === 0" class="px-4 py-4 text-xs text-gray-400 text-center">
+                  <li v-if="filteredUniversities.length === 0" class="px-4 py-4 text-sm text-gray-400 text-center">
                     No universities found
                   </li>
                 </ul>
@@ -312,12 +312,12 @@
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-2">Matric Number</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Matric Number</label>
               <input v-model="form.matricNumber" type="text" placeholder="e.g. 190801021" class="w-full px-4 py-2.5 bg-white border border-gray-25 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-2">WhatsApp Number</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">WhatsApp Number</label>
               <input v-model="form.whatsappNumber" type="tel" placeholder="e.g. 08012345678" class="w-full px-4 py-2.5 bg-white border border-gray-25 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
             </div>
           </div>
@@ -341,7 +341,7 @@
             <PartyPopper class="w-8 h-8" />
           </div>
           <h2 class="text-xl font-bold text-gray-900 tracking-tight">Verification Submitted</h2>
-          <p class="text-gray-500 text-xs max-w-xs mx-auto">
+          <p class="text-gray-500 text-sm max-w-xs mx-auto">
             Your identity documents have been submitted securely. Reviews typically take less than 24 hours.
           </p>
           <div class="pt-6">
@@ -361,21 +361,21 @@
               </div>
               <div>
                 <h3 class="font-bold text-sm">Tier 3: Guarantor Details</h3>
-                <p class="text-xs text-gray-500 mt-0.5">Provide details of a trusted guarantor.</p>
+                <p class="text-sm text-gray-500 mt-0.5">Provide details of a trusted guarantor.</p>
               </div>
             </div>
             
             <div class="space-y-4">
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-2">Guarantor Name</label>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Guarantor Name</label>
                 <input v-model="guarantorForm.name" type="text" placeholder="Full Name" class="w-full px-4 py-2.5 bg-white border border-gray-25 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-2">Guarantor Phone</label>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Guarantor Phone</label>
                 <input v-model="guarantorForm.phone" type="tel" placeholder="Phone Number" class="w-full px-4 py-2.5 bg-white border border-gray-25 rounded-lg text-base focus:ring-1 focus:ring-[#FF5C1A] focus:border-[#FF5C1A] outline-none transition-all ">
               </div>
               <div class="relative">
-                <label class="block text-xs font-bold text-gray-700 mb-2">Relationship</label>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Relationship</label>
                 <div 
                   @click="isRelationshipDropdownOpen = !isRelationshipDropdownOpen" 
                   class="w-full px-4 py-2 bg-white border border-gray-25 rounded-lg text-sm flex justify-between items-center cursor-pointer hover:border-[#FF5C1A] transition-colors "
@@ -393,7 +393,7 @@
                       v-for="rel in relationships" 
                       :key="rel"
                       @click="selectRelationship(rel)"
-                      class="px-4 py-3 text-xs cursor-pointer hover:bg-orange-50 hover:text-[#FF5C1A] transition-colors flex items-center justify-between"
+                      class="px-4 py-3 text-sm cursor-pointer hover:bg-orange-50 hover:text-[#FF5C1A] transition-colors flex items-center justify-between"
                       :class="{'bg-orange-50 text-[#FF5C1A] font-bold': guarantorForm.relationship === rel, 'text-gray-700': guarantorForm.relationship !== rel}"
                     >
                       {{ rel }}
@@ -423,7 +423,7 @@
               <PartyPopper class="w-8 h-8" />
             </div>
             <h2 class="text-xl font-bold text-gray-900 tracking-tight">Tier 3 Submitted</h2>
-            <p class="text-gray-500 text-xs max-w-xs mx-auto">
+            <p class="text-gray-500 text-sm max-w-xs mx-auto">
               Your guarantor details have been submitted securely. Reviews typically take less than 24 hours.
             </p>
             <div class="pt-6">
@@ -441,7 +441,7 @@
               <CheckCircle2 class="w-8 h-8" />
             </div>
             <h2 class="text-xl font-bold text-gray-900 tracking-tight">Fully Verified!</h2>
-            <p class="text-gray-500 text-xs mt-2 max-w-xs mx-auto">You are a Pro rider (Tier 3) with full access to all deliveries.</p>
+            <p class="text-gray-500 text-sm mt-2 max-w-xs mx-auto">You are a Pro rider (Tier 3) with full access to all deliveries.</p>
             <div class="pt-6">
               <NuxtLink to="/dashboard" class="inline-block px-5 py-3 text-sm bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all border border-gray-25">
                 Return to Dashboard

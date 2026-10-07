@@ -25,22 +25,22 @@
               <User class="w-10 h-10" />
             </div>
             <h2 class="text-3xl font-medium text-white tracking-tighter">Become a Rider</h2>
-            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Let's build your delivery profile</p>
+            <p class="text-gray-400 text-sm font-bold uppercase ">Let's build your delivery profile</p>
           </div>
 
           <div class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
               <div class="space-y-1.5">
-                <label class="block text-[10px] font-medium text-gray-500 uppercase tracking-widest ml-1">First Name</label>
+                <label class="block text-[10px] font-medium text-gray-500 uppercase  ml-1">First Name</label>
                 <input v-model="form.firstName" type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="John" />
               </div>
               <div class="space-y-1.5">
-                <label class="block text-[10px] font-medium text-gray-500 uppercase tracking-widest ml-1">Last Name</label>
+                <label class="block text-[10px] font-medium text-gray-500 uppercase  ml-1">Last Name</label>
                 <input v-model="form.lastName" type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="Doe" />
               </div>
             </div>
             <div class="space-y-1.5">
-              <label class="block text-[10px] font-medium text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
+              <label class="block text-[10px] font-medium text-gray-500 uppercase  ml-1">Phone Number</label>
               <input v-model="form.phone" type="tel" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 text-white font-bold focus:ring-4 focus:ring-[#FF5C1A]/20 outline-none transition-all" placeholder="0801 234 5678" />
             </div>
           </div>
@@ -53,7 +53,7 @@
               <Bike class="w-10 h-10" />
             </div>
             <h2 class="text-3xl font-medium text-white tracking-tighter">How do you deliver?</h2>
-            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Select your primary mode of transport</p>
+            <p class="text-gray-400 text-sm font-bold uppercase ">Select your primary mode of transport</p>
           </div>
 
           <div class="grid grid-cols-1 gap-4">
@@ -85,7 +85,7 @@
               <ShieldCheck class="w-10 h-10" />
             </div>
             <h2 class="text-3xl font-medium text-white tracking-tighter">Verification</h2>
-            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Ensure you are a verified student</p>
+            <p class="text-gray-400 text-sm font-bold uppercase ">Ensure you are a verified student</p>
           </div>
 
           <div class="space-y-6">
@@ -94,16 +94,16 @@
                 <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Upload class="w-6 h-6 text-gray-400" />
                 </div>
-                <p class="text-xs font-bold text-white mb-1">Student ID</p>
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest leading-tight">Required</p>
+                <p class="text-sm font-bold text-white mb-1">Student ID</p>
+                <p class="text-[9px] text-gray-500 font-bold uppercase  leading-tight">Required</p>
               </div>
               
               <div class="p-5 border border-dashed border-white/10 rounded-lg text-center hover:border-[#FF5C1A]/50 transition-all cursor-pointer group bg-white/5 flex flex-col items-center justify-center">
                 <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Upload class="w-6 h-6 text-gray-400" />
                 </div>
-                <p class="text-xs font-bold text-white mb-1">NIN Slip</p>
-                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest leading-tight">Required</p>
+                <p class="text-sm font-bold text-white mb-1">NIN Slip</p>
+                <p class="text-[9px] text-gray-500 font-bold uppercase  leading-tight">Required</p>
               </div>
             </div>
             
@@ -116,8 +116,8 @@
 
         <!-- Nav Buttons -->
         <div class="flex gap-4 mt-12 pt-6 border-t border-white/10">
-          <button v-if="step > 1" @click="step--" class="flex-1 py-5 bg-white/5 text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:bg-white/10 transition-all">Back</button>
-          <button @click="nextStep" class="flex-[2] py-5 bg-[#FF5C1A] text-white rounded-lg text-[10px] font-medium uppercase tracking-widest hover:brightness-110 transition-all border border-gray-25 shadow-[#FF5C1A]/20">
+          <button v-if="step > 1" @click="step--" class="flex-1 py-5 bg-white/5 text-white rounded-lg text-[10px] font-medium uppercase  hover:bg-white/10 transition-all">Back</button>
+          <button @click="nextStep" class="flex-[2] py-5 bg-[#FF5C1A] text-white rounded-lg text-[10px] font-medium uppercase  hover:brightness-110 transition-all border border-gray-25 shadow-[#FF5C1A]/20">
             {{ step === 3 ? 'Start My Journey' : 'Continue' }}
           </button>
         </div>

@@ -61,7 +61,7 @@
               <Transition name="fade-slide">
                 <div v-if="showDetails" class="mt-4 space-y-4">
                   <div>
-                    <label class="block text-white/90 text-sm font-medium mb-1">Name <span v-if="!isLoggedIn" class="text-white/60 font-normal text-xs">(Optional)</span></label>
+                    <label class="block text-white/90 text-sm font-medium mb-1">Name <span v-if="!isLoggedIn" class="text-white/60 font-normal text-sm">(Optional)</span></label>
                     <div class="relative">
                       <input 
                         v-model="guestProfile.name"
@@ -74,7 +74,7 @@
                     </div>
                   </div>
                   <div>
-                    <label class="block text-white/90 text-sm font-medium mb-1">Email <span v-if="!isLoggedIn" class="text-white/60 font-normal text-xs">(Required to chat)</span></label>
+                    <label class="block text-white/90 text-sm font-medium mb-1">Email <span v-if="!isLoggedIn" class="text-white/60 font-normal text-sm">(Required to chat)</span></label>
                     <div class="relative">
                       <input 
                         v-model="guestProfile.email"

@@ -38,11 +38,11 @@
               <!-- Content -->
               <div class="flex-1 min-w-0">
                 <h4 class="text-sm font-bold text-gray-900 mb-0.5">{{ toast.title }}</h4>
-                <p class="text-xs text-gray-500 leading-relaxed">{{ toast.body }}</p>
+                <p class="text-sm text-gray-500 leading-relaxed">{{ toast.body }}</p>
                 
                 <!-- Earnings for new orders -->
                 <div v-if="toast.type === 'NEW_ORDER_AVAILABLE' && toast.data?.erranderShare" class="mt-2 flex items-center gap-2">
-                  <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+                  <span class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
                     💰 Earn ₦{{ toast.data.erranderShare.toLocaleString() }}
                   </span>
                   <span class="text-[10px] text-gray-400">
@@ -61,14 +61,14 @@
             <div v-if="toast.type === 'NEW_ORDER_AVAILABLE'" class="flex items-center gap-2 mt-3">
               <button
                 @click="viewManifest(toast)"
-                class="flex-1 py-2.5 text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
+                class="flex-1 py-2.5 text-sm font-semibold text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
               >
                 View Details
               </button>
               <button
                 @click="acceptOrder(toast)"
                 :disabled="toast.accepting"
-                class="flex-1 py-2.5 text-xs font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 disabled:opacity-50"
+                class="flex-1 py-2.5 text-sm font-bold text-white bg-[#FF5C1A] rounded-xl hover:brightness-110 transition-all shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 disabled:opacity-50"
               >
                 {{ toast.accepting ? 'Accepting...' : '✅ Accept Order' }}
               </button>
@@ -79,7 +79,7 @@
               <NuxtLink
                 :to="`/deliveries/${toast.data.orderId}?openChat=${toast.data.senderId || 'true'}`"
                 @click="dismissToast(toast.id)"
-                class="block w-full py-2 text-xs font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
+                class="block w-full py-2 text-sm font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
               >
                 Reply to Chat 💬
               </NuxtLink>
@@ -90,7 +90,7 @@
               <NuxtLink
                 :to="`/deliveries/${toast.data.orderId}`"
                 @click="dismissToast(toast.id)"
-                class="block w-full py-2 text-xs font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
+                class="block w-full py-2 text-sm font-semibold text-center text-[#FF5C1A] bg-[#FF5C1A]/5 border border-[#FF5C1A]/10 rounded-xl hover:bg-[#FF5C1A]/10 transition-all"
               >
                 View Order →
               </NuxtLink>

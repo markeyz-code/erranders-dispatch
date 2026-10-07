@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
         <h1 class="text-xl md:text-2xl font-medium text-gray-900 tracking-tight mb-1">Available Errands</h1>
-        <p class="text-gray-400 text-xs md:text-sm font-medium">Claim available orders in real-time from the open orders list.</p>
+        <p class="text-gray-400 text-sm md:text-sm font-medium">Claim available orders in real-time from the open orders list.</p>
       </div>
       <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 rounded-full">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -31,7 +31,7 @@
     <div v-else-if="availableOrders.length === 0" class="bg-white rounded-lg border border-gray-50 py-32 text-center">
       <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 scale-110">🚲</div>
       <h3 class="text-xl font-medium text-gray-900 mb-2">The pool is currently empty</h3>
-      <p class="text-xs text-gray-400 max-w-xs mx-auto mb-8 font-medium">All orders have been claimed. New orders will appear here automatically.</p>
+      <p class="text-sm text-gray-400 max-w-xs mx-auto mb-8 font-medium">All orders have been claimed. New orders will appear here automatically.</p>
     </div>
 
     <div v-else class="bg-white rounded-lg border border-gray-50 overflow-hidden">
@@ -54,15 +54,15 @@
                 {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}
               </h3>
               <div class="flex items-center gap-1.5 mt-1 flex-wrap">
-                <span class="text-[8px] font-medium tracking-widest text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-1.5 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
-                <span v-if="order.isGroupOrder" class="text-[8px] font-bold tracking-widest text-emerald-700 uppercase bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">👥 GROUP</span>
-                <span v-if="order.customerGender" class="text-[8px] font-bold tracking-widest text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
+                <span class="text-[8px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-1.5 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
+                <span v-if="order.isGroupOrder" class="text-[8px] font-bold  text-emerald-700 uppercase bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">👥 GROUP</span>
+                <span v-if="order.customerGender" class="text-[8px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
                   {{ order.customerGender === 'Male' ? '🙋🏽‍♂️' : (order.customerGender === 'Female' ? '🙋🏽‍♀️' : '👤') }}
                 </span>
-                <span v-if="order.status === 'negotiating'" class="text-[8px] font-bold tracking-widest text-amber-700 uppercase bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
-                <span v-if="order.status === 'interception_pending'" class="text-[8px] font-bold tracking-widest text-purple-700 uppercase bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
-                <span v-if="order.locationType === 'outside_campus'" class="text-[8px] font-bold tracking-widest text-blue-700 uppercase bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">📍 Off-Campus</span>
-                <span v-if="order.locationType === 'campus_environs'" class="text-[8px] font-bold tracking-widest text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">📍 Environs</span>
+                <span v-if="order.status === 'negotiating'" class="text-[8px] font-bold  text-amber-700 uppercase bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
+                <span v-if="order.status === 'interception_pending'" class="text-[8px] font-bold  text-purple-700 uppercase bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
+                <span v-if="order.locationType === 'outside_campus'" class="text-[8px] font-bold  text-blue-700 uppercase bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">📍 Off-Campus</span>
+                <span v-if="order.locationType === 'campus_environs'" class="text-[8px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">📍 Environs</span>
                 <span class="text-[8px] font-bold text-gray-400 flex items-center gap-0.5">
                   <Clock class="w-2.5 h-2.5" /> {{ formatTime(order.createdAt) }}
                 </span>
@@ -72,10 +72,10 @@
 
           <!-- Card Body: Description / Items -->
           <div class="p-2.5 bg-gray-50/70 rounded-lg border border-gray-50/50 mb-3">
-            <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-xs text-gray-600 line-clamp-2 mb-1.5 whitespace-pre-line">
+            <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-sm text-gray-600 line-clamp-2 mb-1.5 whitespace-pre-line">
               {{ order.customDetails.description }}
             </p>
-            <p v-if="order.status === 'interception_pending'" class="text-xs text-purple-700 font-bold bg-purple-50 p-2 rounded-lg border border-purple-200 mb-1.5">
+            <p v-if="order.status === 'interception_pending'" class="text-sm text-purple-700 font-bold bg-purple-50 p-2 rounded-lg border border-purple-200 mb-1.5">
               📍 Pick up from: {{ order.interception?.point }}
             </p>
             <div v-if="order.type === 'custom_errand' && order.customDetails?.estimatedItemCost > 0" class="flex items-center gap-1.5 text-[10px] font-medium text-gray-500 mb-1">
@@ -149,31 +149,31 @@
                 <div class="flex items-center gap-4">
                   <div class="w-12 h-12 rounded-xl bg-gray-950 flex items-center justify-center text-xl overflow-hidden">
                     <img v-if="order.type !== 'custom_errand' && order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
-                    <span v-else class="text-white text-xs">CUS</span>
+                    <span v-else class="text-white text-sm">CUS</span>
                   </div>
                   <div>
                     <h3 class="text-sm font-medium text-gray-900 mb-1 line-clamp-1">
                       {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}
                     </h3>
                     <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span class="text-[9px] font-medium tracking-widest text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-2 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
-                      <span v-if="order.isGroupOrder" class="text-[9px] font-bold tracking-widest text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">👥 GROUP ORDER</span>
-                      <span v-if="order.customerGender" class="text-[9px] font-bold tracking-widest text-indigo-700 uppercase bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                      <span class="text-[9px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-2 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
+                      <span v-if="order.isGroupOrder" class="text-[9px] font-bold  text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">👥 GROUP ORDER</span>
+                      <span v-if="order.customerGender" class="text-[9px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
                         {{ order.customerGender === 'Male' ? '🙋🏽‍♂️ MALE' : (order.customerGender === 'Female' ? '🙋🏽‍♀️ FEMALE' : '👤 ' + order.customerGender) }}
                       </span>
-                      <span v-if="order.status === 'negotiating'" class="text-[9px] font-bold tracking-widest text-amber-700 uppercase bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
-                      <span v-if="order.status === 'interception_pending'" class="text-[9px] font-bold tracking-widest text-purple-700 uppercase bg-purple-50 px-2 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
-                      <span v-if="order.locationType === 'outside_campus'" class="text-[9px] font-bold tracking-widest text-blue-700 uppercase bg-blue-50 px-2 py-0.5 rounded border border-blue-200">📍 Far Off-Campus</span>
-                      <span v-if="order.locationType === 'campus_environs'" class="text-[9px] font-bold tracking-widest text-indigo-700 uppercase bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">📍 Campus Environs</span>
+                      <span v-if="order.status === 'negotiating'" class="text-[9px] font-bold  text-amber-700 uppercase bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
+                      <span v-if="order.status === 'interception_pending'" class="text-[9px] font-bold  text-purple-700 uppercase bg-purple-50 px-2 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
+                      <span v-if="order.locationType === 'outside_campus'" class="text-[9px] font-bold  text-blue-700 uppercase bg-blue-50 px-2 py-0.5 rounded border border-blue-200">📍 Far Off-Campus</span>
+                      <span v-if="order.locationType === 'campus_environs'" class="text-[9px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">📍 Campus Environs</span>
                       <span class="text-[9px] font-bold text-gray-400 flex items-center gap-1">
                         <Clock class="w-2.5 h-2.5" /> {{ formatTime(order.createdAt) }}
                       </span>
                     </div>
                     <div class="mt-2 p-2 bg-gray-50/70 rounded-lg border border-gray-50/50">
-                      <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-xs text-gray-600 line-clamp-2 max-w-md mb-1.5 whitespace-pre-line">
+                      <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-sm text-gray-600 line-clamp-2 max-w-md mb-1.5 whitespace-pre-line">
                         {{ order.customDetails.description }}
                       </p>
-                      <p v-if="order.status === 'interception_pending'" class="text-xs text-purple-700 font-bold bg-purple-50 p-2 rounded-lg border border-purple-200 mb-1.5">
+                      <p v-if="order.status === 'interception_pending'" class="text-sm text-purple-700 font-bold bg-purple-50 p-2 rounded-lg border border-purple-200 mb-1.5">
                          📍 Pick up from: {{ order.interception?.point }}
                       </p>
                       <div v-if="order.type === 'custom_errand' && order.customDetails?.estimatedItemCost > 0" class="flex items-center gap-1.5 text-[10px] font-medium text-gray-500 mb-1">
@@ -211,14 +211,14 @@
               <!-- Pay -->
               <td class="py-5 px-4 text-right">
                 <div v-if="order.status === 'negotiating'" class="flex flex-col items-end">
-                  <p class="text-xs font-medium text-amber-600 tracking-tight leading-none mb-1">Student proposed</p>
+                  <p class="text-sm font-medium text-amber-600 tracking-tight leading-none mb-1">Student proposed</p>
                   <p v-if="(order.proposedDeliveryFee || order.deliveryFee) > 0" class="text-lg font-bold text-amber-700 tracking-tight leading-none mb-1">₦{{ (order.proposedDeliveryFee || order.deliveryFee).toLocaleString() }}</p>
                   <p v-else class="text-sm font-bold text-amber-700 tracking-tight leading-none mb-1 mt-1 border-b border-amber-300 pb-0.5">Make an Offer</p>
-                  <p class="text-[8px] font-medium text-amber-500 uppercase tracking-widest mt-1">Bid to Earn</p>
+                  <p class="text-[8px] font-medium text-amber-500 uppercase  mt-1">Bid to Earn</p>
                 </div>
                 <div v-else class="flex flex-col items-end">
                   <p class="text-lg font-medium text-emerald-600 tracking-tight leading-none mb-1">₦{{ order.status === 'interception_pending' ? ((order.erranderPayout || order.erranderShare || order.deliveryFee || 150) * 0.4).toLocaleString() : (order.erranderPayout || order.erranderShare || order.deliveryFee || 150).toLocaleString() }}</p>
-                  <p class="text-[8px] font-medium text-gray-300 uppercase tracking-widest">Paid Immediately</p>
+                  <p class="text-[8px] font-medium text-gray-300 uppercase ">Paid Immediately</p>
                 </div>
               </td>
 
@@ -262,29 +262,29 @@
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-xl bg-gray-950 flex items-center justify-center text-3xl overflow-hidden">
             <img v-if="selectedOrder.type !== 'custom_errand' && selectedOrder.vendor?.logo" :src="selectedOrder.vendor.logo" class="w-full h-full object-cover" />
-            <span v-else class="text-white text-xs">CUS</span>
+            <span v-else class="text-white text-sm">CUS</span>
           </div>
           <div>
             <h2 class="text-xl font-medium text-gray-900 leading-tight">
               {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand' : selectedOrder.vendor?.storeName }}
             </h2>
-            <p class="text-xs font-bold text-gray-400 tracking-widest uppercase">#{{ selectedOrder.orderNumber }}</p>
+            <p class="text-sm font-bold text-gray-400  uppercase">#{{ selectedOrder.orderNumber }}</p>
           </div>
         </div>
 
         <!-- Info Grid -->
         <div class="grid grid-cols-2 gap-4">
           <div v-if="selectedOrder.status === 'negotiating'" class="p-4 bg-amber-50 rounded-lg border border-amber-100">
-            <p class="text-[9px] font-medium text-amber-500 uppercase tracking-widest mb-1">Student Proposed</p>
+            <p class="text-[9px] font-medium text-amber-500 uppercase  mb-1">Student Proposed</p>
             <p v-if="(selectedOrder.proposedDeliveryFee || selectedOrder.deliveryFee) > 0" class="text-xl font-bold text-amber-700 tracking-tight">₦{{ (selectedOrder.proposedDeliveryFee || selectedOrder.deliveryFee).toLocaleString() }}</p>
             <p v-else class="text-lg font-bold text-amber-700 tracking-tight">Open to Offers</p>
           </div>
           <div v-else class="p-4 bg-gray-50 rounded-lg">
-            <p class="text-[9px] font-medium text-gray-400 uppercase tracking-widest mb-1">You Earn</p>
+            <p class="text-[9px] font-medium text-gray-400 uppercase  mb-1">You Earn</p>
             <p class="text-xl font-medium text-emerald-600 tracking-tight">₦{{ selectedOrder.status === 'interception_pending' ? ((selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee) * 0.4).toLocaleString() : (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee).toLocaleString() }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
-            <p class="text-[9px] font-medium text-gray-400 uppercase tracking-widest mb-1">Prep Time</p>
+            <p class="text-[9px] font-medium text-gray-400 uppercase  mb-1">Prep Time</p>
             <p class="text-xl font-medium text-gray-900 tracking-tight">~15 Mins</p>
           </div>
         </div>
@@ -293,7 +293,7 @@
         <div v-if="selectedOrder.status === 'negotiating' || selectedOrder.locationType === 'outside_campus' || selectedOrder.locationType === 'campus_environs'" class="p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-2">
           <div class="flex items-center gap-2">
             <span class="text-lg">📍</span>
-            <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wide">{{ selectedOrder.locationType === 'campus_environs' ? 'Campus Environs Delivery' : 'Outside Campus Delivery' }}</h4>
+            <h4 class="text-sm font-bold text-amber-800 uppercase tracking-wide">{{ selectedOrder.locationType === 'campus_environs' ? 'Campus Environs Delivery' : 'Outside Campus Delivery' }}</h4>
           </div>
           <p class="text-sm font-medium text-amber-700 leading-relaxed">
             This order requires delivery <strong>{{ selectedOrder.locationType === 'campus_environs' ? 'to the campus environs' : 'outside campus' }}</strong>.
@@ -302,7 +302,7 @@
             You can accept their offer or counter with your own price.
           </p>
           <div v-if="selectedOrder.outsideCampusAddress" class="mt-2 p-3  rounded-lg border border-amber-100">
-            <p class="text-[9px] font-medium text-amber-500 uppercase tracking-widest mb-1">Delivery Location</p>
+            <p class="text-[9px] font-medium text-amber-500 uppercase  mb-1">Delivery Location</p>
             <p class="text-sm font-bold text-gray-900">{{ selectedOrder.outsideCampusAddress }}</p>
           </div>
           <div v-if="negotiationViewerCount > 0" class="flex items-center gap-2 mt-2">
@@ -310,7 +310,7 @@
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
             </span>
-            <span class="text-xs font-bold text-amber-700">{{ negotiationViewerCount }} rider{{ negotiationViewerCount === 1 ? '' : 's' }} viewing this request</span>
+            <span class="text-sm font-bold text-amber-700">{{ negotiationViewerCount }} rider{{ negotiationViewerCount === 1 ? '' : 's' }} viewing this request</span>
           </div>
         </div>
 
@@ -320,7 +320,7 @@
             <div class="absolute left-3 top-6 bottom-6 w-px border-l-2 border-dashed border-gray-100"></div>
             <div class="z-10 w-6 h-6 rounded-md bg-gray-950 flex items-center justify-center text-[10px] flex-shrink-0 text-white">S</div>
             <div>
-              <p class="text-[10px] font-medium text-gray-400 uppercase tracking-widest">Pickup Location</p>
+              <p class="text-[10px] font-medium text-gray-400 uppercase ">Pickup Location</p>
               <p class="text-sm font-bold text-gray-900">
                 {{ selectedOrder.status === 'interception_pending' ? selectedOrder.interception?.point : (selectedOrder.type === 'custom_errand' ? selectedOrder.customDetails?.pickupLocation : (selectedOrder.vendor?.address || 'Store Address')) }}
               </p>
@@ -329,28 +329,28 @@
           <div class="flex gap-4 pl-1">
             <div class="z-10 w-6 h-6 rounded-md bg-[#FF5C1A] flex items-center justify-center text-[10px] flex-shrink-0 text-white">D</div>
             <div>
-              <p class="text-[10px] font-medium text-gray-400 uppercase tracking-widest">Delivery Point</p>
+              <p class="text-[10px] font-medium text-gray-400 uppercase ">Delivery Point</p>
               <p class="text-sm font-bold text-gray-900">
                 {{ selectedOrder.type === 'custom_errand' ? selectedOrder.customDetails?.dropoffLocation : (selectedOrder.deliveryAddress || 'Customer Location') }}
               </p>
-              <p v-if="selectedOrder.specificAddress" class="text-xs font-medium text-gray-500 mt-1">Note: {{ selectedOrder.specificAddress }}</p>
+              <p v-if="selectedOrder.specificAddress" class="text-sm font-medium text-gray-500 mt-1">Note: {{ selectedOrder.specificAddress }}</p>
             </div>
           </div>
         </div>
 
         <!-- Order Items or Description -->
         <div class="space-y-4 pt-4 border-t border-gray-100">
-          <h4 class="text-xs font-medium text-gray-900 uppercase tracking-widest">{{ selectedOrder.type === 'custom_errand' ? 'Request Details' : 'Order Summary' }}</h4>
+          <h4 class="text-sm font-medium text-gray-900 uppercase ">{{ selectedOrder.type === 'custom_errand' ? 'Request Details' : 'Order Summary' }}</h4>
           <div v-if="selectedOrder.type === 'custom_errand'" class="p-4 bg-gray-50/50 rounded-xl text-sm text-gray-700 leading-relaxed whitespace-pre-line">
             {{ selectedOrder.customDetails?.description }}
             
             <div v-if="selectedOrder.customDetails?.attachedVoiceNote" class="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-2">
-              <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">Attached Voice Note</span>
+              <span class="text-sm font-medium text-gray-500 uppercase ">Attached Voice Note</span>
               <audio :src="selectedOrder.customDetails.attachedVoiceNote" controls class="w-full h-10 bg-white rounded-full " preload="metadata" />
             </div>
 
             <div v-if="selectedOrder.customDetails?.attachedImages?.length > 0 || selectedOrder.customDetails?.attachedImage" class="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-2">
-              <span class="text-xs font-medium text-gray-500 uppercase tracking-widest">Attached Images</span>
+              <span class="text-sm font-medium text-gray-500 uppercase ">Attached Images</span>
               <div class="flex flex-wrap gap-2">
                 <a v-for="(img, idx) in (selectedOrder.customDetails?.attachedImages?.length ? selectedOrder.customDetails.attachedImages : [selectedOrder.customDetails.attachedImage])" 
                    :key="idx" 
@@ -362,20 +362,20 @@
               </div>
             </div>
 
-            <div v-if="selectedOrder.status !== 'interception_pending' && selectedOrder.customDetails?.estimatedItemCost > 0" class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-xs">
+            <div v-if="selectedOrder.status !== 'interception_pending' && selectedOrder.customDetails?.estimatedItemCost > 0" class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center text-sm">
               <span class="font-medium text-gray-500">Estimated Item Cost</span>
               <span class="font-bold text-gray-900">₦{{ (selectedOrder.customDetails?.estimatedItemCost || 0).toLocaleString() }}</span>
             </div>
           </div>
             <div v-if="groupedOrderItems.length > 0" class="space-y-4">
               <div v-for="group in groupedOrderItems" :key="group.name" class="space-y-2">
-                <h5 v-if="group.name !== 'Other Items' || groupedOrderItems.length > 1" class="text-xs font-bold text-gray-500 uppercase tracking-widest pl-2">{{ group.name }}</h5>
+                <h5 v-if="group.name !== 'Other Items' || groupedOrderItems.length > 1" class="text-sm font-bold text-gray-500 uppercase  pl-2">{{ group.name }}</h5>
                 <div v-for="item in group.items" :key="item.name || item._id" class="flex items-center justify-between p-3 bg-gray-50/50 rounded-xl">
                   <div class="flex items-center gap-3">
                     <span class="w-6 h-6 bg-white border border-gray-50 rounded-lg flex items-center justify-center text-[10px] font-medium text-gray-900">{{ item.qty || item.quantity }}x</span>
                     <span class="text-sm font-bold text-gray-900 tracking-tight">{{ item.name }}</span>
                   </div>
-                  <span class="text-xs font-medium text-gray-400 ">₦{{ (item.price || 0).toLocaleString() }}</span>
+                  <span class="text-sm font-medium text-gray-400 ">₦{{ (item.price || 0).toLocaleString() }}</span>
                 </div>
               </div>
             </div>
@@ -385,17 +385,17 @@
         <div v-if="selectedOrder.recipientName" class="p-5 bg-[#FF5C1A]/[0.02] border border-[#FF5C1A]/10 rounded-lg space-y-2">
           <div class="flex items-center gap-2">
             <User class="w-3.5 h-3.5 text-parentPrimary" />
-            <h4 class="text-[10px] font-medium text-parentPrimary uppercase tracking-widest">Customer Details</h4>
+            <h4 class="text-[10px] font-medium text-parentPrimary uppercase ">Customer Details</h4>
           </div>
           <p class="text-sm font-medium text-gray-900 tracking-tight">For: {{ selectedOrder.recipientName }}</p>
-          <p class="text-xs font-medium text-gray-500">{{ selectedOrder.recipientPhone }}</p>
+          <p class="text-sm font-medium text-gray-500">{{ selectedOrder.recipientPhone }}</p>
         </div>
 
         <!-- Item Cost Bank Transfer Notice -->
         <div v-if="selectedOrder.status !== 'interception_pending' && selectedOrder.type === 'custom_errand' && selectedOrder.customDetails?.estimatedItemCost > 0" class="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
           <div class="flex items-center gap-2">
             <Banknote class="w-4 h-4 text-blue-600" />
-            <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wide">Money for Items</h4>
+            <h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Money for Items</h4>
           </div>
           <p class="text-sm font-medium text-blue-700 leading-relaxed">
             ₦{{ (selectedOrder.customDetails.estimatedItemCost).toLocaleString() }} will be transferred to your <strong>bank account</strong> immediately when you accept this order, so you can purchase the items.
@@ -415,7 +415,7 @@
                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
              </span>
-             <span class="text-xs font-bold text-emerald-800">Waiting for payment...</span>
+             <span class="text-sm font-bold text-emerald-800">Waiting for payment...</span>
            </div>
         </div>
 
@@ -424,8 +424,8 @@
           <!-- NEGOTIATING orders: Bid-only mode -->
           <div v-if="selectedOrder.status === 'negotiating'" class="space-y-4">
             <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg space-y-3">
-              <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wide">Submit Your Delivery Bid</h4>
-              <p class="text-xs text-amber-600">Enter how much you want to charge for this delivery. The student will see your offer in real-time.</p>
+              <h4 class="text-sm font-bold text-amber-800 uppercase tracking-wide">Submit Your Delivery Bid</h4>
+              <p class="text-sm text-amber-600">Enter how much you want to charge for this delivery. The student will see your offer in real-time.</p>
               <div class="flex gap-2">
                 <div class="relative flex-1">
                   <span class="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500 font-bold">₦</span>
@@ -441,12 +441,12 @@
                 </button>
               </div>
               <div v-if="hasPlacedBid(selectedOrder) && getBidStatus() === 'counter_offer' && getBidLastRole() === 'student'" class="mt-2 bg-amber-50 p-3 rounded-lg border border-amber-200">
-                <p class="text-xs font-bold text-amber-800 mb-2">Student Counter-Offered: ₦{{ getMyBid(selectedOrder)?.toLocaleString() }}</p>
+                <p class="text-sm font-bold text-amber-800 mb-2">Student Counter-Offered: ₦{{ getMyBid(selectedOrder)?.toLocaleString() }}</p>
                 <div class="flex gap-2">
                   <button 
                     @click="acceptCounter(selectedOrder._id)"
                     :disabled="acceptingId === selectedOrder._id"
-                    class="flex-1 bg-parentPrimary text-white text-xs font-bold py-2 rounded-lg hover:bg-parentPrimary/90 transition-all flex items-center justify-center gap-1"
+                    class="flex-1 bg-parentPrimary text-white text-sm font-bold py-2 rounded-lg hover:bg-parentPrimary/90 transition-all flex items-center justify-center gap-1"
                   >
                     <Loader2 v-if="acceptingId === selectedOrder._id" class="w-3 h-3 animate-spin" />
                     Accept
@@ -456,14 +456,14 @@
                     <button 
                       @click="placeBid(selectedOrder._id)"
                       :disabled="!bidAmount || biddingId === selectedOrder._id"
-                      class="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-lg hover:bg-amber-600 transition-colors"
+                      class="bg-amber-500 text-white text-sm font-bold px-3 py-1 rounded-lg hover:bg-amber-600 transition-colors"
                     >
                       Counter
                     </button>
                   </div>
                 </div>
               </div>
-              <p v-else-if="hasPlacedBid(selectedOrder)" class="text-xs font-bold text-green-600 mt-1 bg-green-50 p-2.5 rounded-lg text-center border border-green-100">
+              <p v-else-if="hasPlacedBid(selectedOrder)" class="text-sm font-bold text-green-600 mt-1 bg-green-50 p-2.5 rounded-lg text-center border border-green-100">
                 ✅ You offered ₦{{ getMyBid(selectedOrder)?.toLocaleString() }} — waiting for student's response
               </p>
             </div>
@@ -499,7 +499,7 @@
             </div>
 
             <div v-if="selectedOrder.type === 'custom_errand'" class="border-t border-gray-100 pt-4 mt-2">
-              <p class="text-xs font-bold text-gray-500 mb-2">Or offer a different price:</p>
+              <p class="text-sm font-bold text-gray-500 mb-2">Or offer a different price:</p>
               <div class="flex gap-2">
                 <div class="relative flex-1">
                   <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₦</span>
@@ -513,7 +513,7 @@
                   {{ biddingId === selectedOrder._id ? 'Sending...' : 'Send Offer' }}
                 </button>
               </div>
-              <p v-if="hasPlacedBid(selectedOrder)" class="text-xs font-bold text-green-600 mt-2 bg-green-50 p-2 rounded-lg text-center">
+              <p v-if="hasPlacedBid(selectedOrder)" class="text-sm font-bold text-green-600 mt-2 bg-green-50 p-2 rounded-lg text-center">
                 You offered ₦{{ getMyBid(selectedOrder) }}
               </p>
             </div>

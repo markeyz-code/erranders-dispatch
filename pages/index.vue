@@ -10,7 +10,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <!-- Left Column: Elegant, Balanced Content -->
           <div class="lg:col-span-7 text-left flex flex-col items-start space-y-6">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-bold tracking-wide shadow-sm">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-sm font-bold tracking-wide shadow-sm">
               <Sparkles class="w-3.5 h-3.5 text-parentPrimary" />
               Active at UNILAG, LASU & YABATECH
             </div>
@@ -73,7 +73,7 @@
                   <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center font-bold text-sm">📍</div>
                     <div>
-                      <p class="text-xs font-extrabold text-slate-900">New Request</p>
+                      <p class="text-sm font-extrabold text-slate-900">New Request</p>
                       <p class="text-[11px] text-slate-500">Pizza Hub → Jaja Hall</p>
                     </div>
                   </div>
@@ -84,7 +84,7 @@
                   <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-green-50 text-emerald-500 flex items-center justify-center font-bold text-sm">🛵</div>
                     <div>
-                      <p class="text-xs font-extrabold text-slate-900">In Transit</p>
+                      <p class="text-sm font-extrabold text-slate-900">In Transit</p>
                       <p class="text-[11px] text-slate-500">Smoothie Daddy → Moremi</p>
                     </div>
                   </div>
@@ -94,7 +94,7 @@
 
               <!-- Decorative Floating Widgets -->
               <div class="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-50 flex items-center gap-2 animate-bounce [animation-duration:4s]">
-                <div class="w-7 h-7 rounded-lg bg-yellow-50 text-yellow-500 flex items-center justify-center font-medium text-xs">⭐</div>
+                <div class="w-7 h-7 rounded-lg bg-yellow-50 text-yellow-500 flex items-center justify-center font-medium text-sm">⭐</div>
                 <div>
                   <p class="text-[11px] font-medium text-slate-900">Top Rated</p>
                   <p class="text-[9px] font-bold text-slate-400">4.9 Star Average</p>
@@ -102,7 +102,7 @@
               </div>
 
               <div class="absolute -bottom-4 -left-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-50 flex items-center gap-2.5 animate-bounce [animation-duration:5s]">
-                <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center font-medium text-xs">⚡</div>
+                <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center font-medium text-sm">⚡</div>
                 <div>
                   <p class="text-[11px] font-medium text-slate-900">Instant Cash</p>
                   <p class="text-[9px] font-bold text-slate-400">Payout settled instantly</p>
@@ -192,12 +192,12 @@
                  class="w-[340px] flex-shrink-0 bg-white/80 backdrop-blur-xl p-4 rounded-[2rem] border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:border-parentPrimary/30 transition-all duration-500 flex flex-col justify-between">
               <div>
                 <Quote class="w-7 h-7 text-parentPrimary/20 mb-4" />
-                <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">"{{ story.quote }}"</p>
+                <p class="text-sm sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">"{{ story.quote }}"</p>
               </div>
               <div class="flex items-center gap-3 mt-auto">
                 <img :src="story.image" class="w-10 h-10 rounded-full object-cover border border-slate-100 shadow-sm" alt="Student Rider" />
                 <div>
-                  <h4 class="text-xs font-extrabold text-slate-900">{{ story.name }}</h4>
+                  <h4 class="text-sm font-extrabold text-slate-900">{{ story.name }}</h4>
                   <p class="text-[11px] font-bold text-parentPrimary mt-0.5 flex items-center gap-1">
                     <Footprints class="w-3.5 h-3.5" /> {{ story.level }}
                   </p>

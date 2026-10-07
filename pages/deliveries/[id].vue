@@ -24,11 +24,11 @@
  <div class="space-y-2">
  <div class="inline-flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full border border-gray-50 ">
  <span class="w-2 h-2 rounded-full bg-[#FF5C1A] animate-pulse"></span>
- <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Live Delivery Tracking</p>
+ <p class="text-[10px] font-bold text-gray-500 uppercase ">Live Delivery Tracking</p>
  </div>
  <div class="flex flex-col gap-1 items-start">
    <h1 class="text-3xl font-black text-gray-900 tracking-tight">Order #{{ order.orderNumber }}</h1>
-   <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold tracking-widest text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
+   <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold  text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
  </div>
  </div>
  <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-50 ">
@@ -38,8 +38,8 @@
 
  <div class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-50 ">
  <div class="flex items-center justify-between">
- <span class="text-xs font-bold text-gray-500 tracking-wide uppercase">Delivery Progress</span>
- <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-full border border-[#FF5C1A]/20">Step {{ currentStep + 1 }} of 4</span>
+ <span class="text-sm font-bold text-gray-500 tracking-wide uppercase">Delivery Progress</span>
+ <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-full border border-[#FF5C1A]/20">Step {{ currentStep + 1 }} of 4</span>
  </div>
  <div class="flex items-center gap-3">
  <div v-for="(step, i) in steps" :key="step" class="flex-1 h-2.5 rounded-full transition-all duration-1000 relative overflow-hidden " :class="currentStep >= i ? 'bg-[#FF5C1A]' : 'bg-gray-200'">
@@ -61,7 +61,7 @@
  <p class="text-sm font-bold text-gray-900 leading-tight mb-1 truncate">
  {{ (order.interception?.status === 'accepted' && !isPrimaryErrander) ? order.interception.point : (order.type === 'custom_errand' ? (order.customDetails?.pickupLocation || 'Custom Pickup') : order.vendor?.storeName) }}
  </p>
- <p class="text-xs font-medium text-gray-500 mb-2">{{ (order.interception?.status === 'accepted' && !isPrimaryErrander) ? 'Meet the previous errander here' : (order.type === 'custom_errand' ? 'Special Request Pickup' : (order.vendor?.address || 'Vendor Address')) }}</p>
+ <p class="text-sm font-medium text-gray-500 mb-2">{{ (order.interception?.status === 'accepted' && !isPrimaryErrander) ? 'Meet the previous errander here' : (order.type === 'custom_errand' ? 'Special Request Pickup' : (order.vendor?.address || 'Vendor Address')) }}</p>
  
  <div v-if="order.type !== 'custom_errand' && order.vendor" class="flex flex-col gap-2 mt-2 w-full sm:w-auto">
    <div v-if="order.vendor?.phone" class="flex gap-2">
@@ -98,7 +98,7 @@
     <div class="min-w-0 pt-0.5 w-full">
       <p class="text-[10px] font-bold text-[#FF5C1A] tracking-wider mb-1 uppercase">Drop-off Point</p>
       <p class="text-sm font-bold text-gray-900 leading-tight mb-1 truncate">{{ order.customer?.firstName }} {{ order.customer?.lastName }}</p>
-      <p class="text-xs font-medium text-gray-500 line-clamp-2 mb-3">{{ order.deliveryAddress }} {{ order.type === 'custom_errand' ? `(${order.customDetails?.dropoffLocation})` : '' }}</p>
+      <p class="text-sm font-medium text-gray-500 line-clamp-2 mb-3">{{ order.deliveryAddress }} {{ order.type === 'custom_errand' ? `(${order.customDetails?.dropoffLocation})` : '' }}</p>
       
       <!-- Student Contact Options -->
       <div class="flex flex-col gap-2 mt-2">
@@ -139,34 +139,34 @@
  
  
   <div v-if="order.type === 'custom_errand'" class="space-y-4">
-    <div class="p-4 bg-gray-50 rounded-xl border border-gray-50 text-xs text-gray-700 leading-relaxed font-bold">
+    <div class="p-4 bg-gray-50 rounded-xl border border-gray-50 text-sm text-gray-700 leading-relaxed font-bold">
       {{ order.customDetails?.description }}
     </div>
     
     <div v-if="order.pendingTopupAmount > 0" class="p-4 bg-orange-50 border border-orange-200 rounded-xl flex items-center gap-3">
       <Loader2 class="w-5 h-5 text-orange-500 animate-spin" />
       <div>
-        <p class="text-xs font-bold text-orange-800">Waiting for Student...</p>
+        <p class="text-sm font-bold text-orange-800">Waiting for Student...</p>
         <p class="text-[10px] text-orange-600 font-medium mt-0.5">They need to authorize the extra ₦{{ order.pendingTopupAmount.toLocaleString() }} before you buy.</p>
       </div>
     </div>
     
     <div class="flex items-center justify-between p-4 bg-[#FF5C1A]/5 rounded-xl border border-[#FF5C1A]/10">
-      <span class="text-sm font-bold text-[#FF5C1A] uppercase tracking-widest">Est. Item Cost</span>
+      <span class="text-sm font-bold text-[#FF5C1A] uppercase ">Est. Item Cost</span>
       <span class="text-sm font-bold text-[#FF5C1A]">₦{{ order.customDetails?.estimatedItemCost?.toLocaleString() || 0 }}</span>
     </div>
     
     <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status)" class="flex gap-2">
       <button 
         @click="showCancelModal = true"
-        class="flex-1 py-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold hover:bg-red-100 border border-red-200 transition-all"
+        class="flex-1 py-3 bg-red-50 text-red-600 rounded-xl text-sm font-bold hover:bg-red-100 border border-red-200 transition-all"
       >
         Cancel Errand (Item Unavailable)
       </button>
       <button 
         @click="showTopupModal = true"
         :disabled="order.pendingTopupAmount > 0"
-        class="flex-1 py-3 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold hover:bg-blue-100 border border-blue-200 transition-all disabled:opacity-50"
+        class="flex-1 py-3 bg-blue-50 text-blue-600 rounded-xl text-sm font-bold hover:bg-blue-100 border border-blue-200 transition-all disabled:opacity-50"
       >
         Request Extra Funds
       </button>
@@ -177,7 +177,7 @@
   <!-- Packs Rendering -->
   <template v-if="order.packs && order.packs.length > 0">
     <div v-for="pack in order.packs" :key="pack.name" class="mb-6">
-      <h4 class="text-[11px] font-bold text-[#FF5C1A] uppercase tracking-widest mb-3 pl-1">{{ pack.name || 'Pack' }}</h4>
+      <h4 class="text-[11px] font-bold text-[#FF5C1A] uppercase  mb-3 pl-1">{{ pack.name || 'Pack' }}</h4>
       <div class="space-y-3">
         <div v-for="item in pack.items" :key="item.name" class="flex flex-col p-4 bg-gray-50 rounded-xl border border-gray-50 hover:border-[#FF5C1A]/30 transition-colors">
          <div class="flex items-start justify-between">
@@ -187,7 +187,7 @@
          </div>
          <div class="flex flex-col items-end gap-1">
          <span class="text-sm font-bold text-[#FF5C1A] px-2.5 py-1 bg-[#FF5C1A]/10 rounded-md border border-[#FF5C1A]/20">x{{ item.quantity || item.qty }}</span>
-         <span class="text-xs font-bold text-gray-700">₦{{ item.price?.toLocaleString() || 0 }}</span>
+         <span class="text-sm font-bold text-gray-700">₦{{ item.price?.toLocaleString() || 0 }}</span>
          </div>
          </div>
          
@@ -202,7 +202,7 @@
          </div>
          
          <div class="flex justify-end mt-2 pt-2 border-t border-gray-200">
-         <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
+         <span class="text-sm font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
          </div>
 
          <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
@@ -210,10 +210,10 @@
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
-           <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
+           <span class="text-sm font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
          </div>
          <div v-if="item.status === 'pending_substitute'" class="mt-3 pt-2 border-t border-amber-100">
-           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Negotiation request initiated, awaiting response/payment</span>
+           <span class="text-sm font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Negotiation request initiated, awaiting response/payment</span>
          </div>
          <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
            <div class="flex items-center gap-2 flex-wrap">
@@ -241,7 +241,7 @@
    </div>
    <div class="flex flex-col items-end gap-1">
    <span class="text-sm font-bold text-[#FF5C1A] px-2.5 py-1 bg-[#FF5C1A]/10 rounded-md border border-[#FF5C1A]/20">x{{ item.quantity || item.qty }}</span>
-   <span class="text-xs font-bold text-gray-700">₦{{ item.price?.toLocaleString() || 0 }}</span>
+   <span class="text-sm font-bold text-gray-700">₦{{ item.price?.toLocaleString() || 0 }}</span>
    </div>
    </div>
    
@@ -256,7 +256,7 @@
    </div>
    
    <div class="flex justify-end mt-2 pt-2 border-t border-gray-200">
-   <span class="text-xs font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
+   <span class="text-sm font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
    </div>
 
          <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
@@ -264,10 +264,10 @@
            <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
-           <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
+           <span class="text-sm font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
          </div>
          <div v-if="item.status === 'pending_substitute'" class="mt-3 pt-2 border-t border-amber-100">
-           <span class="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Negotiation request initiated, awaiting response/payment</span>
+           <span class="text-sm font-bold text-amber-500 bg-amber-50 px-2 py-1 rounded">⏳ Negotiation request initiated, awaiting response/payment</span>
          </div>
          <div v-if="item.status === 'substituted'" class="mt-3 pt-3 border-t border-blue-100 flex flex-col gap-2">
            <div class="flex items-center gap-2 flex-wrap">
@@ -312,7 +312,7 @@
  
  <p class="text-[9px] font-black text-teal-600 uppercase tracking-[0.2em] mb-2 bg-teal-50 px-3 py-1 rounded-full border border-teal-100 ">Primary Contact</p>
  <h4 class="text-lg font-black text-gray-900 mb-2 truncate w-full tracking-tight">{{ order.customer?.firstName }} {{ order.customer?.lastName }}</h4>
- <div v-if="order.customer?.gender" class="text-xs font-bold text-gray-500 mb-6 bg-gray-100 px-3 py-1 rounded-full border border-gray-25 inline-flex items-center">
+ <div v-if="order.customer?.gender" class="text-sm font-bold text-gray-500 mb-6 bg-gray-100 px-3 py-1 rounded-full border border-gray-25 inline-flex items-center">
    {{ order.customer.gender === 'Male' ? '🙋🏽‍♂️ MALE' : (order.customer.gender === 'Female' ? '🙋🏽‍♀️ FEMALE' : '👤 ' + order.customer.gender.toUpperCase()) }}
  </div>
  <div v-else class="mb-6"></div>
@@ -343,7 +343,7 @@
     <div class="w-full flex items-center justify-center p-3 bg-white/50 rounded-xl border border-emerald-100/50 mt-4">
       <div class="flex items-center gap-2">
         <Loader2 class="w-4 h-4 text-emerald-500 animate-spin" />
-        <span class="text-xs font-bold text-emerald-800">Waiting for payment...</span>
+        <span class="text-sm font-bold text-emerald-800">Waiting for payment...</span>
       </div>
     </div>
   </div>
@@ -357,7 +357,7 @@
    <p class="text-blue-700 text-sm mb-4">The student has indicated they have transferred <strong>₦{{ order.total?.toLocaleString() }}</strong> to your bank account. Please check your banking app.</p>
    
    <div v-if="order.customDetails?.proofOfPayment" class="w-full mb-4 bg-white rounded-xl overflow-hidden border border-blue-100 p-2">
-     <p class="text-xs font-bold text-blue-900 mb-2 text-left">Proof of Payment:</p>
+     <p class="text-sm font-bold text-blue-900 mb-2 text-left">Proof of Payment:</p>
      <img :src="order.customDetails.proofOfPayment" class="w-full h-auto rounded-lg" alt="Proof of payment" />
    </div>
    
@@ -382,7 +382,7 @@
 
     <!-- Photo Upload Section -->
     <div class="w-full mb-4">
-      <label class="block text-xs font-bold text-gray-700 mb-1">1. Take a photo of the purchased items</label>
+      <label class="block text-sm font-bold text-gray-700 mb-1">1. Take a photo of the purchased items</label>
       <button v-if="!itemsPhotoUrl" @click="cameraTarget = 'items'; isCameraModalOpen = true" :disabled="uploadingItemsPhoto" class="w-full py-4 border border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-500 hover:bg-gray-50 transition-colors">
         <Loader2 v-if="uploadingItemsPhoto" class="w-6 h-6 animate-spin text-[#FF5C1A]" />
         <Camera v-else class="w-6 h-6 text-[#FF5C1A]" />
@@ -397,12 +397,12 @@
     </div>
 
     <div class="w-full mb-4">
-      <label class="block text-xs font-bold text-gray-700 mb-1">2. Vendor Bank</label>
+      <label class="block text-sm font-bold text-gray-700 mb-1">2. Vendor Bank</label>
       <UiSelectInput v-model="vendorBankForm.bankCode" :options="vendorBanks.map(b => ({ label: b.name, value: b.code }))" class="w-full" />
     </div>
     
     <div class="w-full mb-4">
-      <label class="block text-xs font-bold text-gray-700 mb-1">3. Account Number</label>
+      <label class="block text-sm font-bold text-gray-700 mb-1">3. Account Number</label>
       <div class="relative">
         <input v-model="vendorBankForm.accountNumber" @input="resolveVendorAccount" type="text" maxlength="10" placeholder="0123456789" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none font-mono" />
         <Loader2 v-if="resolvingVendorAccount" class="absolute right-3 top-3 w-5 h-5 text-[#FF5C1A] animate-spin" />
@@ -410,12 +410,12 @@
     </div>
 
     <div v-if="vendorBankForm.accountName" class="w-full p-3 bg-green-50 border border-green-200 rounded-xl mb-4">
-      <p class="text-xs text-green-700 font-bold mb-1">Verified Account Name:</p>
+      <p class="text-sm text-green-700 font-bold mb-1">Verified Account Name:</p>
       <p class="text-sm text-green-900 font-black">{{ vendorBankForm.accountName }}</p>
     </div>
 
     <div v-if="vendorBankForm.accountName" class="w-full mb-4">
-      <label class="block text-xs font-bold text-gray-700 mb-1">4. Amount to Transfer (₦)</label>
+      <label class="block text-sm font-bold text-gray-700 mb-1">4. Amount to Transfer (₦)</label>
       <input 
         type="text" 
         :value="vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : ''" 
@@ -438,10 +438,10 @@
         <Loader2 class="w-6 h-6 animate-spin mx-auto" />
       </div>
       <h4 class="text-sm font-bold text-blue-900">Waiting for Customer</h4>
-      <p class="text-xs text-blue-700 mt-1 mb-3">Customer needs to approve ₦{{ vendorBankForm.amount?.toLocaleString() }}</p>
+      <p class="text-sm text-blue-700 mt-1 mb-3">Customer needs to approve ₦{{ vendorBankForm.amount?.toLocaleString() }}</p>
       
       <div class="flex items-center justify-center gap-2 mb-3">
-        <span class="text-xs font-bold px-3 py-1 rounded-full" :class="reconciliationTimeLeft > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'">
+        <span class="text-sm font-bold px-3 py-1 rounded-full" :class="reconciliationTimeLeft > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'">
           {{ reconciliationTimeLeft > 0 ? formattedReconciliationTime : 'TIMEOUT EXPIRED' }}
         </span>
       </div>
@@ -449,7 +449,7 @@
       <div class="flex gap-2">
         <a 
           :href="'tel:' + (order.customer?.phoneNumber || order.customer?.phone || '')"
-          class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-xs font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
+          class="flex-1 py-2.5 bg-white border border-blue-200 text-blue-700 rounded-lg text-sm font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5"
         >
           <Phone class="w-3.5 h-3.5" /> Call Customer
         </a>
@@ -482,7 +482,7 @@
     </div>
     <div>
       <p class="text-green-900 font-bold text-sm">Vendor has been paid!</p>
-      <p class="text-green-700 text-xs">₦{{ order.actualItemCost?.toLocaleString() || ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }} transferred successfully.</p>
+      <p class="text-green-700 text-sm">₦{{ order.actualItemCost?.toLocaleString() || ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }} transferred successfully.</p>
     </div>
   </div>
 
@@ -513,7 +513,7 @@
  <span v-else class="text-lg group-hover:scale-110 transition-transform">🚀</span> 
  {{ updatingStatus ? 'UPDATING...' : 'Start Delivery' }}
  </button>
- <p class="text-xs text-gray-400 text-center font-medium">Update status once you depart.</p>
+ <p class="text-sm text-gray-400 text-center font-medium">Update status once you depart.</p>
  </div>
  </div>
 
@@ -523,13 +523,13 @@
      <span class="text-lg">🤝</span> 
      Request Hand-off (Interception)
    </button>
-   <p class="text-xs text-gray-400 text-center font-medium mt-2 leading-tight">Need someone else to complete the delivery? You will split the earnings (60:40).</p>
+   <p class="text-sm text-gray-400 text-center font-medium mt-2 leading-tight">Need someone else to complete the delivery? You will split the earnings (60:40).</p>
  </div>
  
  <div v-if="order.interception?.status === 'pending' && isPrimaryErrander" class="mt-6 bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
    <div class="text-3xl mb-2 animate-bounce">⏳</div>
    <h3 class="text-purple-900 font-bold text-sm mb-1">Hand-off Requested</h3>
-   <p class="text-purple-700 text-xs mb-3">Waiting for another errander to accept the hand-off.</p>
+   <p class="text-purple-700 text-sm mb-3">Waiting for another errander to accept the hand-off.</p>
  </div>
 
  <div v-if="(order.interception?.status === 'accepted' || order.interception?.status === 'completed') && isPrimaryErrander" class="mt-6">
@@ -542,10 +542,10 @@
         <div>
           <h3 class="text-white font-medium text-2xl mb-3">Delivery Completed</h3>
           <p class="text-white/90 font-medium text-xl">+ ₦{{ myEarnings?.toLocaleString() }} Earned</p>
-          <p class="text-emerald-200 text-xs font-bold mt-1">(Your 60% share — Hand-off split)</p>
+          <p class="text-emerald-200 text-sm font-bold mt-1">(Your 60% share — Hand-off split)</p>
         </div>
         <div class="max-w-xs mx-auto">
-          <p class="text-emerald-100 text-xs font-medium mb-6">Funds have been added to your wallet.</p>
+          <p class="text-emerald-100 text-sm font-medium mb-6">Funds have been added to your wallet.</p>
           <NuxtLink to="/deliveries" class="block w-full py-3 bg-white text-emerald-600 rounded-lg font-bold text-sm hover:bg-emerald-50 active:scale-95 transition-all">Return to Deliveries</NuxtLink>
         </div>
       </div>
@@ -556,7 +556,7 @@
         <span class="text-xl">🤝</span>
       </div>
       <h3 class="text-emerald-900 font-bold text-sm mb-1">Hand-off Accepted!</h3>
-      <p class="text-emerald-700 text-xs mb-2">Another errander is on their way to complete the delivery.</p>
+      <p class="text-emerald-700 text-sm mb-2">Another errander is on their way to complete the delivery.</p>
       <p class="text-emerald-600 text-[10px] font-bold mt-3 bg-emerald-100 px-3 py-1.5 rounded-lg inline-block">You'll earn 60% (₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.6).toLocaleString() }}) when delivered</p>
     </div>
   </div>
@@ -567,7 +567,7 @@
  
  <div class="text-center space-y-2 relative z-10">
  <h3 class="text-[#FF5C1A] text-2xl font-black tracking-tight leading-none">Security PIN</h3>
- <p class="text-gray-500 text-xs font-bold tracking-[0.1em] uppercase">Request the 4-digit code from the user</p>
+ <p class="text-gray-500 text-sm font-bold tracking-[0.1em] uppercase">Request the 4-digit code from the user</p>
  </div>
  
  <div class="flex justify-center gap-3 relative z-10 px-4">
@@ -598,7 +598,7 @@
  </button>
  
  <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
- <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Customer unavailable?</p>
+ <p class="text-gray-500 text-[10px] font-bold uppercase ">Customer unavailable?</p>
  <label class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-25 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95">
  
  <div class="flex items-center justify-center gap-2">
@@ -620,13 +620,13 @@
  <div>
  <h3 class="text-white font-medium text-2xl mb-3">Delivery Completed</h3>
  <p v-if="order.type !== 'custom_errand'" class="text-white/90 font-medium text-xl">+ ₦{{ myEarnings?.toLocaleString() }} Earned</p>
- <p v-if="isInterceptionOrder && order.type !== 'custom_errand'" class="text-emerald-200 text-xs font-bold mt-1">(Your {{ isActiveErrander ? '40%' : '60%' }} share — Hand-off split)</p>
+ <p v-if="isInterceptionOrder && order.type !== 'custom_errand'" class="text-emerald-200 text-sm font-bold mt-1">(Your {{ isActiveErrander ? '40%' : '60%' }} share — Hand-off split)</p>
  <p v-if="order.type === 'custom_errand'" class="text-white/90 font-medium text-xl">Custom Errand Delivered ✅</p>
  </div>
  
  <div class="max-w-xs mx-auto">
- <p v-if="order.type !== 'custom_errand'" class="text-emerald-100 text-xs font-medium mb-6">Funds have been added to your wallet.</p>
- <p v-else class="text-emerald-100 text-xs font-medium mb-6">The student paid you directly for this errand. No wallet credit applied.</p>
+ <p v-if="order.type !== 'custom_errand'" class="text-emerald-100 text-sm font-medium mb-6">Funds have been added to your wallet.</p>
+ <p v-else class="text-emerald-100 text-sm font-medium mb-6">The student paid you directly for this errand. No wallet credit applied.</p>
  
  <NuxtLink to="/deliveries" class="block w-full py-3 bg-white text-emerald-600 rounded-lg font-bold text-sm hover:bg-emerald-50 active:scale-95 transition-all">
  Return to Deliveries
@@ -742,11 +742,11 @@
         <p>You will receive <strong>60%</strong> of the delivery fee, and the second errander will receive <strong>40%</strong>.</p>
       </div>
       <div>
-        <label class="block text-xs font-bold text-gray-700 mb-1">Interception Location</label>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Interception Location</label>
         <input v-model="handoffLocation" placeholder="E.g. Main Gate, Male Hostel B..." class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
       </div>
       <div>
-        <label class="block text-xs font-bold text-gray-700 mb-1">Additional Note (Optional)</label>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Additional Note (Optional)</label>
         <textarea v-model="handoffNote" rows="2" placeholder="E.g. I am waiting near the security post" class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none"></textarea>
       </div>
     </div>
@@ -779,16 +779,16 @@
       
       <div class="p-5 overflow-y-auto">
         <div class="mb-5 p-4 bg-orange-50 rounded-xl border border-orange-100">
-          <p class="text-xs font-bold text-orange-800 uppercase tracking-widest mb-1">Original Item</p>
+          <p class="text-sm font-bold text-orange-800 uppercase  mb-1">Original Item</p>
           <p class="text-sm font-black text-gray-900">{{ activeSubstituteItem?.name }}</p>
-          <p class="text-xs font-bold text-gray-500 mt-1">₦{{ activeSubstituteItem?.price?.toLocaleString() }}</p>
+          <p class="text-sm font-bold text-gray-500 mt-1">₦{{ activeSubstituteItem?.price?.toLocaleString() }}</p>
         </div>
         
-        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Available Same-Price Options</h4>
+        <h4 class="text-sm font-bold text-gray-400 uppercase  mb-3">Available Same-Price Options</h4>
         
         <div v-if="isLoadingSubstitutes" class="flex flex-col items-center justify-center py-8">
           <Loader2 class="w-8 h-8 animate-spin text-[#FF5C1A] mb-2" />
-          <p class="text-xs font-bold text-gray-500">Loading vendor menu...</p>
+          <p class="text-sm font-bold text-gray-500">Loading vendor menu...</p>
         </div>
         
         <div v-else-if="substituteOptions.length === 0" class="text-center py-8">
@@ -806,7 +806,7 @@
             <div>
               <p class="text-sm font-bold text-gray-900">{{ opt.name }}</p>
               <div class="flex items-center gap-2 mt-0.5">
-                <p class="text-xs font-black text-gray-900 font-mono">₦{{ (opt.pricePerPortion ?? opt.price).toLocaleString() }}</p>
+                <p class="text-sm font-black text-gray-900 font-mono">₦{{ (opt.pricePerPortion ?? opt.price).toLocaleString() }}</p>
                 <span v-if="(opt.pricePerPortion ?? opt.price) > basePriceToMatch" class="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">Costs Extra</span>
                 <span v-else-if="(opt.pricePerPortion ?? opt.price) < basePriceToMatch" class="text-[10px] font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">Cheaper</span>
               </div>
@@ -845,7 +845,7 @@
       </div>
       <div class="p-5">
         <p class="text-sm font-medium text-gray-700 mb-4">Are you sure <strong>{{ itemToMarkUnavailable?.name }}</strong> is unavailable?</p>
-        <p class="text-xs text-gray-500 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-50">This action will immediately refund the item's cost to the student and update their order.</p>
+        <p class="text-sm text-gray-500 mb-6 bg-gray-50 p-3 rounded-xl border border-gray-50">This action will immediately refund the item's cost to the student and update their order.</p>
         
         <div class="flex gap-3">
           <button @click="cancelUnavailable" class="flex-1 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
@@ -890,7 +890,7 @@
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
             <Loader2 v-if="uploadingCancellationPhoto" class="w-6 h-6 text-red-500 animate-spin mb-2" />
             <Camera v-else class="w-6 h-6 text-gray-400 mb-2" />
-            <p class="text-xs text-gray-500 font-semibold">{{ uploadingCancellationPhoto ? 'Uploading...' : 'Tap to snap photo' }}</p>
+            <p class="text-sm text-gray-500 font-semibold">{{ uploadingCancellationPhoto ? 'Uploading...' : 'Tap to snap photo' }}</p>
           </div>
           
         </button>

@@ -42,7 +42,7 @@
                 required 
               />
               <div class="flex justify-end">
-                <NuxtLink to="/auth/forgot-password" class="text-xs font-semibold text-[#FF5C1A] hover:underline">
+                <NuxtLink to="/auth/forgot-password" class="text-sm font-semibold text-[#FF5C1A] hover:underline">
                   Forgot password?
                 </NuxtLink>
               </div>
@@ -57,7 +57,7 @@
 
           <div class="flex items-center gap-3 my-4">
             <div class="flex-1 h-px bg-gray-100" />
-            <span class="text-xs text-gray-400 font-bold">or</span>
+            <span class="text-sm text-gray-400 font-bold">or</span>
             <div class="flex-1 h-px bg-gray-100" />
           </div>
 
@@ -73,7 +73,7 @@
             {{ firebaseLoading ? 'Connecting...' : 'Continue with Google' }}
           </button>
 
-          <p class="text-center text-gray-400 text-xs font-medium leading-relaxed">
+          <p class="text-center text-gray-400 text-sm font-medium leading-relaxed">
             By continuing, you agree to our
             <NuxtLink to="/terms" class="text-[#FF5C1A] hover:underline">Terms of Service</NuxtLink>
             and

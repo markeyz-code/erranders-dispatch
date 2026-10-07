@@ -26,7 +26,7 @@
  v-for="status in filters" 
  :key="status.key" 
  @click="activeFilter = status.key"
- class="px-4 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap"
+ class="px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap"
  :class="activeFilter === status.key ? 'bg-[#FF5C1A] text-white ' : 'text-gray-500 hover:bg-gray-100 bg-white border border-gray-25'"
  >
  {{ status.label }}
@@ -94,7 +94,7 @@
  <td class="py-3.5 px-5 text-right">
  <div class="flex flex-col items-end">
  <p class="text-sm font-medium text-emerald-600 tracking-tight">+₦{{ (order.erranderPayout || order.deliveryFee || 0)?.toLocaleString() }}</p>
- <p class="text-[9px] font-bold text-gray-400 tracking-widest mt-0.5 uppercase">Earnings</p>
+ <p class="text-[9px] font-bold text-gray-400  mt-0.5 uppercase">Earnings</p>
  </div>
  </td>
  <td class="py-3.5 px-5 text-right">
@@ -127,7 +127,7 @@
  <div class="py-4 space-y-4 md:space-y-6">
  <!-- Route Info -->
  <div class="bg-gray-50/50 rounded-lg p-5 border border-gray-50 space-y-4">
- <p class="text-[10px] font-medium text-gray-400 tracking-widest mb-2">Delivery Intelligence</p>
+ <p class="text-[10px] font-medium text-gray-400  mb-2">Delivery Intelligence</p>
  
  <div class="space-y-4 relative">
  <div class="absolute left-3 top-4 bottom-4 w-px border-l-2 border-dashed border-gray-200"></div>
@@ -135,7 +135,7 @@
  <div class="flex items-start gap-4 relative z-10">
  <div class="w-6 h-6 rounded-lg bg-white border border-gray-25 flex items-center justify-center text-[10px] ">🏪</div>
  <div>
- <p class="text-[9px] text-gray-400 font-bold tracking-widest mb-0.5 whitespace-nowrap">Source: Prep Station</p>
+ <p class="text-[9px] text-gray-400 font-bold  mb-0.5 whitespace-nowrap">Source: Prep Station</p>
  <p class="text-sm font-medium text-gray-900 tracking-tight">{{ selectedOrder.vendor?.storeName || 'Store' }}</p>
  </div>
  </div>
@@ -143,7 +143,7 @@
  <div class="flex items-start gap-4 relative z-10">
  <div class="w-6 h-6 rounded-lg bg-white border border-gray-25 flex items-center justify-center text-[10px] ">📍</div>
  <div>
- <p class="text-[9px] text-gray-400 font-bold tracking-widest mb-0.5 whitespace-nowrap">Destination: Customer</p>
+ <p class="text-[9px] text-gray-400 font-bold  mb-0.5 whitespace-nowrap">Destination: Customer</p>
  <p class="text-sm font-medium text-[#FF5C1A] tracking-tight">{{ selectedOrder.deliveryAddress }}</p>
  <p class="text-[11px] font-medium text-gray-400 mt-0.5">{{ selectedOrder.customer?.firstName }} {{ selectedOrder.customer?.lastName }}</p>
  </div>
@@ -151,12 +151,12 @@
  </div>
  
  <div class="pt-4 border-t border-gray-100 flex flex-col gap-2">
- <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 tracking-widest">
+ <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 ">
  <span>Customer Pays</span>
  <span class="text-gray-900">₦{{ selectedOrder.total?.toLocaleString() }}</span>
  </div>
   <div class="flex justify-between items-center">
-  <span class="text-xs text-gray-500 font-medium tracking-wider">Your Earnings</span>
+  <span class="text-sm text-gray-500 font-medium tracking-wider">Your Earnings</span>
   <span class="text-2xl font-medium text-emerald-600 tracking-tight">₦{{ (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
   </div>
   </div>

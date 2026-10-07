@@ -115,7 +115,7 @@
 
  <!-- User Profile -->
  <NuxtLink to="/profile" @click="showMobileMenu = false" class="mx-3 mt-3 p-3 rounded-lg bg-gray-50 flex items-center gap-3 hover:bg-gray-100 transition-colors group">
-  <div class="w-9 h-9 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold text-xs shrink-0">
+  <div class="w-9 h-9 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold text-sm shrink-0">
    {{ userInitials }}
   </div>
   <div class="min-w-0 flex-1">
@@ -164,7 +164,7 @@
  <header class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-30 px-5 py-5 hidden lg:flex items-center justify-between">
  <div>
  <h1 class="text-xl font-bold text-gray-900 tracking-tight leading-none">{{ pageTitle }}</h1>
- <p class="text-xs text-gray-400 font-medium mt-1">{{ pageDescription }}</p>
+ <p class="text-sm text-gray-400 font-medium mt-1">{{ pageDescription }}</p>
  </div>
  
  <div class="flex items-center gap-4">
@@ -204,12 +204,12 @@
           <h3 class="text-white font-bold text-sm tracking-tight">
             {{ errandrProfile.verificationLevel === 2 ? 'Action Required: Upgrade to Tier 3' : 'Action Required: Verify Account' }}
           </h3>
-          <p class="text-gray-400 text-xs mt-0.5 max-w-sm">
+          <p class="text-gray-400 text-sm mt-0.5 max-w-sm">
             {{ errandrProfile.verificationLevel === 2 ? 'Submit guarantor details to unlock Pro rider benefits.' : 'Please complete identity verification to start accepting deliveries.' }}
           </p>
         </div>
       </div>
-      <NuxtLink to="/verification" class="px-5 py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white text-xs font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center">
+      <NuxtLink to="/verification" class="px-5 py-2.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white text-sm font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center">
         {{ errandrProfile.verificationLevel === 2 ? 'Upgrade Now' : 'Verify Now' }}
       </NuxtLink>
     </template>
@@ -222,10 +222,10 @@
        </div>
        <div>
          <h3 class="text-white font-bold text-sm tracking-tight">Verification Under Review</h3>
-         <p class="text-gray-400 text-xs mt-0.5 max-w-sm">Your documents are being reviewed. We will notify you once approved.</p>
+         <p class="text-gray-400 text-sm mt-0.5 max-w-sm">Your documents are being reviewed. We will notify you once approved.</p>
        </div>
      </div>
-     <button disabled class="px-5 py-2.5 bg-gray-800 text-gray-400 text-xs font-bold rounded-lg whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center cursor-not-allowed border border-gray-700">
+     <button disabled class="px-5 py-2.5 bg-gray-800 text-gray-400 text-sm font-bold rounded-lg whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center cursor-not-allowed border border-gray-700">
        Pending Approval
      </button>
    </template>
@@ -238,10 +238,10 @@
        </div>
        <div>
          <h3 class="text-white font-bold text-sm tracking-tight">Verification Rejected</h3>
-         <p class="text-gray-400 text-xs mt-0.5 max-w-sm">There was an issue with your documents. Please review and resubmit.</p>
+         <p class="text-gray-400 text-sm mt-0.5 max-w-sm">There was an issue with your documents. Please review and resubmit.</p>
        </div>
      </div>
-     <NuxtLink to="/verification" class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center">
+     <NuxtLink to="/verification" class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-sm font-bold rounded-lg transition-all whitespace-nowrap shadow-sm border border-gray-50 w-full sm:w-auto text-center">
        Try Again
      </NuxtLink>
    </template>
@@ -254,12 +254,12 @@
  </div>
  <!-- Footer -->
  <!-- <footer class="px-5 py-5 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 mt-auto">
- <p class="text-xs text-gray-400 font-medium">© {{ new Date().getFullYear() }} Errandr Rider</p>
+ <p class="text-sm text-gray-400 font-medium">© {{ new Date().getFullYear() }} Errandr Rider</p>
  <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-5">
- <NuxtLink to="/terms" class="text-xs text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Terms</NuxtLink>
- <NuxtLink to="/privacy" class="text-xs text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Privacy</NuxtLink>
- <NuxtLink to="/refund" class="text-xs text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Refunds</NuxtLink>
- <NuxtLink to="/contact" class="text-xs text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Contact</NuxtLink>
+ <NuxtLink to="/terms" class="text-sm text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Terms</NuxtLink>
+ <NuxtLink to="/privacy" class="text-sm text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Privacy</NuxtLink>
+ <NuxtLink to="/refund" class="text-sm text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Refunds</NuxtLink>
+ <NuxtLink to="/contact" class="text-sm text-gray-400 hover:text-[#FF5C1A] font-medium transition-colors">Contact</NuxtLink>
  </div>
  </footer> -->
  </main>

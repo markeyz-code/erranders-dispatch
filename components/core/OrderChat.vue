@@ -115,7 +115,7 @@
  <!-- Media Preview if uploading -->
  <div v-if="uploadingMedia" class="flex flex-col items-center justify-center p-4 bg-white/50 backdrop-blur-sm rounded-2xl mx-10 animate-pulse border border-emerald-100">
  <div class="w-8 h-8 border border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin mb-2" />
- <p class="text-[10px] font-bold text-emerald-600 tracking-widest">Sending media...</p>
+ <p class="text-[10px] font-bold text-emerald-600 ">Sending media...</p>
  </div>
  </div>
 
@@ -130,7 +130,7 @@
  <div class="h-full bg-[#FF5C1A] animate-progress" />
  </div>
  </div>
- <button @click="cancelRecording" class="text-xs font-bold text-red-500 tracking-widest">Cancel</button>
+ <button @click="cancelRecording" class="text-sm font-bold text-red-500 ">Cancel</button>
  </div>
 
  <div class="flex items-center gap-2">

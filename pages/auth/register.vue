@@ -38,7 +38,7 @@
 
           <div class="flex items-center gap-3 my-4">
             <div class="flex-1 h-px bg-gray-100" />
-            <span class="text-xs text-gray-400 font-bold">or</span>
+            <span class="text-sm text-gray-400 font-bold">or</span>
             <div class="flex-1 h-px bg-gray-100" />
           </div>
 
@@ -54,7 +54,7 @@
             {{ firebaseLoading ? 'Creating your account...' : 'Sign up with Google' }}
           </button>
 
-          <p class="text-center text-gray-400 text-xs font-medium leading-relaxed">
+          <p class="text-center text-gray-400 text-sm font-medium leading-relaxed">
             By signing up, you agree to our
             <NuxtLink to="/terms" class="text-[#FF5C1A] hover:underline">Terms of Service</NuxtLink>
             and

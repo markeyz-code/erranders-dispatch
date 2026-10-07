@@ -29,7 +29,7 @@
           </div>
           <div>
             <h3 class="font-semibold text-gray-800 text-sm">Now Playing</h3>
-            <p class="text-xs text-gray-500">Background Music</p>
+            <p class="text-sm text-gray-500">Background Music</p>
           </div>
         </div>
         
@@ -65,12 +65,12 @@
           @input="updateVolume"
           class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
         />
-        <span class="text-xs text-gray-600 w-8">{{ volume }}%</span>
+        <span class="text-sm text-gray-600 w-8">{{ volume }}%</span>
       </div>
 
       <!-- Optional: Song Selection -->
       <div class="pt-3 border-t border-gray-100">
-        <button class="w-full text-xs text-gray-600 hover:text-purple-600 transition-colors flex items-center justify-center gap-1">
+        <button class="w-full text-sm text-gray-600 hover:text-purple-600 transition-colors flex items-center justify-center gap-1">
           <RotateCcw class="w-4 h-4" />
           Change Track
         </button>
