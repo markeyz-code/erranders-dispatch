@@ -40,7 +40,7 @@ const getPickupDropoff = () => {
   let pickup = null;
   let dropoff = null;
   
-  if (props.order.type === 'custom') {
+  if (props.order.type === 'custom_errand') {
     pickup = parseCoords(props.order.customDetails?.pickupLocationStr);
     dropoff = parseCoords(props.order.customDetails?.deliveryLocationStr);
   } else {

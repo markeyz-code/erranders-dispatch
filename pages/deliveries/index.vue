@@ -83,12 +83,12 @@
  </td>
  <td class="py-3.5 px-5">
  <p class="text-sm font-medium text-gray-700 truncate max-w-[140px]">
- {{ order.type === 'custom_errand' ? (order.customer?.firstName ? `${order.customer.firstName}'s Errand` : 'Custom Errand') : (order.vendor?.storeName || 'Unknown Store') }}
+ {{ order.type === 'custom_errand' ? (order.customDetails?.description?.includes('[Barter Tx ID:') ? 'Barter Delivery' : (order.customer?.firstName ? `${order.customer.firstName}'s Errand` : 'Custom Errand')) : (order.vendor?.storeName || 'Unknown Store') }}
  </p>
  </td>
  <td class="py-3.5 px-5 hidden md:table-cell">
  <p class="text-sm text-gray-500 truncate max-w-[180px]">
- {{ order.type === 'custom_errand' ? 'Dynamic Route' : (order.deliveryAddress || 'No Address Provided') }}
+ {{ order.type === 'custom_errand' ? (order.customDetails?.dropoffLocation || 'Dynamic Route') : (order.deliveryAddress || 'No Address Provided') }}
  </p>
  </td>
  <td class="py-3.5 px-5 text-right">
@@ -135,8 +135,8 @@
  <div class="flex items-start gap-4 relative z-10">
  <div class="w-6 h-6 rounded-lg bg-white border border-gray-25 flex items-center justify-center text-[10px] ">🏪</div>
  <div>
- <p class="text-[9px] text-gray-400 font-bold  mb-0.5 whitespace-nowrap">Source: Prep Station</p>
- <p class="text-sm font-medium text-gray-900 tracking-tight">{{ selectedOrder.vendor?.storeName || 'Store' }}</p>
+ <p class="text-[9px] text-gray-400 font-bold  mb-0.5 whitespace-nowrap">{{ selectedOrder.type === 'custom_errand' ? 'Pickup Location' : 'Source: Prep Station' }}</p>
+ <p class="text-sm font-medium text-gray-900 tracking-tight">{{ selectedOrder.type === 'custom_errand' ? (selectedOrder.customDetails?.pickupLocation || 'Unknown') : (selectedOrder.vendor?.storeName || 'Store') }}</p>
  </div>
  </div>
  
@@ -144,8 +144,8 @@
  <div class="w-6 h-6 rounded-lg bg-white border border-gray-25 flex items-center justify-center text-[10px] ">📍</div>
  <div>
  <p class="text-[9px] text-gray-400 font-bold  mb-0.5 whitespace-nowrap">Destination: Customer</p>
- <p class="text-sm font-medium text-[#FF5C1A] tracking-tight">{{ selectedOrder.deliveryAddress }}</p>
- <p class="text-[11px] font-medium text-gray-400 mt-0.5">{{ selectedOrder.customer?.firstName }} {{ selectedOrder.customer?.lastName }}</p>
+ <p class="text-sm font-medium text-[#FF5C1A] tracking-tight">{{ selectedOrder.type === 'custom_errand' ? (selectedOrder.customDetails?.dropoffLocation || 'Unknown') : (selectedOrder.deliveryAddress || 'No Address Provided') }}</p>
+ <p class="text-[11px] font-medium text-gray-400 mt-0.5" v-if="selectedOrder.type !== 'custom_errand'">{{ selectedOrder.customer?.firstName }} {{ selectedOrder.customer?.lastName }}</p>
  </div>
  </div>
  </div>
