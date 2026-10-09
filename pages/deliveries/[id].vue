@@ -455,12 +455,12 @@
         </a>
       </div>
     </div>
-    <div v-else class="flex gap-2">
+    <div v-else class="flex gap-2 w-full">
       <button 
         v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))"
         @click="requestPriceApproval"
         :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0 || submittingReconciliation"
-        class="w-full py-3.5 bg-amber-500 text-white rounded-xl text-sm font-bold  hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+        class="flex-1 w-full py-3.5 bg-amber-500 text-white rounded-xl text-sm font-bold  hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
       >
         <Loader2 v-if="submittingReconciliation" class="w-4 h-4 animate-spin" />
         Request Price Approval
@@ -469,7 +469,7 @@
         v-else
         @click="isConfirmVendorPaymentModalOpen = true" 
         :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0" 
-        class="w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold  hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+        class="flex-1 w-full py-3.5 bg-[#FF5C1A] text-white rounded-xl text-sm font-bold  hover:bg-[#E04D12] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
       >
         Pay Vendor Now
       </button>

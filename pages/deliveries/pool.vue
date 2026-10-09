@@ -47,11 +47,13 @@
           <div class="flex items-start gap-3 mb-3">
             <div class="w-10 h-10 rounded-xl bg-gray-950 flex items-center justify-center text-lg overflow-hidden flex-shrink-0">
               <img v-if="order.type !== 'custom_errand' && order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
+              <img v-else-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')" src="https://i.ibb.co/3WfK9mY/barter-logo-white.png" class="w-6 h-6 object-contain" />
               <span v-else class="text-white text-[9px] font-bold">CUS</span>
             </div>
             <div class="flex-1 min-w-0">
               <h3 class="text-sm font-semibold text-gray-900 truncate">
-                {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}
+                <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')">Barter Delivery</span>
+                <span v-else>{{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}</span>
               </h3>
               <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                 <span class="text-[8px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-1.5 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
@@ -60,6 +62,7 @@
                   {{ order.customerGender === 'Male' ? '🙋🏽‍♂️' : (order.customerGender === 'Female' ? '🙋🏽‍♀️' : '👤') }}
                 </span>
                 <span v-if="order.status === 'negotiating'" class="text-[8px] font-bold  text-amber-700 uppercase bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
+                <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')" class="text-[8px] font-bold text-orange-700 uppercase bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200 flex items-center gap-1">🔄 BARTER P2P</span>
                 <span v-if="order.status === 'interception_pending'" class="text-[8px] font-bold  text-purple-700 uppercase bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
                 <span v-if="order.locationType === 'outside_campus'" class="text-[8px] font-bold  text-blue-700 uppercase bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">📍 Off-Campus</span>
                 <span v-if="order.locationType === 'campus_environs'" class="text-[8px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">📍 Environs</span>
@@ -147,13 +150,15 @@
               <!-- Errand Info -->
               <td class="py-5 px-4">
                 <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 rounded-xl bg-gray-950 flex items-center justify-center text-xl overflow-hidden">
+                  <div class="w-12 h-12 rounded-xl bg-gray-950 flex items-center justify-center text-xl overflow-hidden shadow-sm border border-gray-900">
                     <img v-if="order.type !== 'custom_errand' && order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
+                    <img v-else-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')" src="https://i.ibb.co/3WfK9mY/barter-logo-white.png" class="w-7 h-7 object-contain" />
                     <span v-else class="text-white text-sm">CUS</span>
                   </div>
                   <div>
                     <h3 class="text-sm font-medium text-gray-900 mb-1 line-clamp-1">
-                      {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}
+                      <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')">Barter P2P Delivery</span>
+                      <span v-else>{{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}</span>
                     </h3>
                     <div class="flex items-center gap-2 mb-1.5 flex-wrap">
                       <span class="text-[9px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-2 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
@@ -162,6 +167,7 @@
                         {{ order.customerGender === 'Male' ? '🙋🏽‍♂️ MALE' : (order.customerGender === 'Female' ? '🙋🏽‍♀️ FEMALE' : '👤 ' + order.customerGender) }}
                       </span>
                       <span v-if="order.status === 'negotiating'" class="text-[9px] font-bold  text-amber-700 uppercase bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
+                      <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')" class="text-[9px] font-bold text-[#E74C3C] uppercase bg-[#E74C3C]/10 px-2 py-0.5 rounded border border-[#E74C3C]/20 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> BARTER</span>
                       <span v-if="order.status === 'interception_pending'" class="text-[9px] font-bold  text-purple-700 uppercase bg-purple-50 px-2 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
                       <span v-if="order.locationType === 'outside_campus'" class="text-[9px] font-bold  text-blue-700 uppercase bg-blue-50 px-2 py-0.5 rounded border border-blue-200">📍 Far Off-Campus</span>
                       <span v-if="order.locationType === 'campus_environs'" class="text-[9px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">📍 Campus Environs</span>
@@ -260,15 +266,22 @@
       <div v-if="selectedOrder" class="space-y-8 pb-10">
         <!-- Drawer Header -->
         <div class="flex items-center gap-4">
-          <div class="w-16 h-16 rounded-xl bg-gray-950 flex items-center justify-center text-3xl overflow-hidden">
+          <div class="w-16 h-16 rounded-xl bg-gray-950 flex items-center justify-center text-3xl overflow-hidden shadow-sm border border-gray-900">
             <img v-if="selectedOrder.type !== 'custom_errand' && selectedOrder.vendor?.logo" :src="selectedOrder.vendor.logo" class="w-full h-full object-cover" />
+            <img v-else-if="selectedOrder.type === 'custom_errand' && selectedOrder.customDetails?.description?.includes('Barter Tx ID')" src="https://i.ibb.co/3WfK9mY/barter-logo-white.png" class="w-10 h-10 object-contain" />
             <span v-else class="text-white text-sm">CUS</span>
           </div>
           <div>
             <h2 class="text-xl font-medium text-gray-900 leading-tight">
-              {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand' : selectedOrder.vendor?.storeName }}
+              <span v-if="selectedOrder.type === 'custom_errand' && selectedOrder.customDetails?.description?.includes('Barter Tx ID')">Barter P2P Delivery</span>
+              <span v-else>{{ selectedOrder.type === 'custom_errand' ? 'Custom Errand' : selectedOrder.vendor?.storeName }}</span>
             </h2>
-            <p class="text-sm font-bold text-gray-400  uppercase">#{{ selectedOrder.orderNumber }}</p>
+            <div class="flex items-center gap-2 mt-1">
+              <p class="text-[10px] font-bold text-gray-400 uppercase">#{{ selectedOrder.orderNumber }}</p>
+              <span v-if="selectedOrder.type === 'custom_errand' && selectedOrder.customDetails?.description?.includes('Barter Tx ID')" class="text-[9px] font-bold text-[#E74C3C] uppercase bg-[#E74C3C]/10 px-2 py-0.5 rounded border border-[#E74C3C]/20 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> BARTER
+              </span>
+            </div>
           </div>
         </div>
 
@@ -340,9 +353,26 @@
 
         <!-- Order Items or Description -->
         <div class="space-y-4 pt-4 border-t border-gray-100">
-          <h4 class="text-sm font-medium text-gray-900 uppercase ">{{ selectedOrder.type === 'custom_errand' ? 'Request Details' : 'Order Summary' }}</h4>
-          <div v-if="selectedOrder.type === 'custom_errand'" class="p-4 bg-gray-50/50 rounded-xl text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-            {{ selectedOrder.customDetails?.description }}
+          <h4 class="text-sm font-medium text-gray-900 uppercase ">{{ selectedOrder.type === 'custom_errand' ? (selectedOrder.customDetails?.description?.includes('Barter Tx ID') ? 'Barter Details' : 'Request Details') : 'Order Summary' }}</h4>
+          <div v-if="selectedOrder.type === 'custom_errand'" class="p-4 bg-gray-50/50 rounded-xl text-sm text-gray-700 leading-relaxed">
+            
+            <div v-if="selectedOrder.customDetails?.description?.includes('Barter Tx ID')" class="space-y-4">
+              <div class="p-3 bg-white border border-gray-100 rounded-lg">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Item to Deliver</p>
+                <p class="text-base font-bold text-gray-900">{{ selectedOrder.customDetails.description.split('\n')[0].replace('Barter Delivery: ', '') }}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="px-3 py-2 bg-white border border-gray-100 rounded-lg flex-1">
+                  <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Barter Transaction ID</p>
+                  <p class="text-xs font-mono font-medium text-gray-600">{{ selectedOrder.customDetails.description.match(/\[Barter Tx ID: (.+)\]/)?.[1] }}</p>
+                </div>
+              </div>
+              <p class="text-xs text-gray-500 font-medium bg-blue-50 text-blue-700 p-2 rounded-lg border border-blue-100">
+                This is a secure peer-to-peer barter transaction. You only need to deliver the item. The item cost has already been held in escrow by Barter.
+              </p>
+            </div>
+            
+            <span v-else class="whitespace-pre-line">{{ selectedOrder.customDetails?.description }}</span>
             
             <div v-if="selectedOrder.customDetails?.attachedVoiceNote" class="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-2">
               <span class="text-sm font-medium text-gray-500 uppercase ">Attached Voice Note</span>
@@ -419,8 +449,17 @@
            </div>
         </div>
 
+        <!-- Disputed Block -->
+        <div v-if="selectedOrder.status === 'disputed'" class="p-4 bg-red-50 border border-red-200 rounded-lg flex flex-col items-center text-center mt-4 space-y-3">
+           <div class="w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center border border-red-200 shadow-red-500/30">
+              <ShieldAlert class="w-6 h-6" />
+           </div>
+           <h3 class="text-xl font-black text-red-900 tracking-tight">Order Disputed</h3>
+           <p class="text-sm font-medium text-red-700 leading-relaxed">The Barter transaction for this order has been disputed by the student. Please hold off on delivery until the dispute is resolved.</p>
+        </div>
+
         <!-- Actions inside drawer -->
-        <div v-if="selectedOrder.status !== 'awaiting_payment'" class="space-y-3">
+        <div v-else-if="selectedOrder.status !== 'awaiting_payment'" class="space-y-3">
           <!-- NEGOTIATING orders: Bid-only mode -->
           <div v-if="selectedOrder.status === 'negotiating'" class="space-y-4">
             <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg space-y-3">
@@ -539,7 +578,7 @@ import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 import { useRealtimeSocket } from '@/composables/core/useRealtimeSocket'
 import { useUser } from '@/composables/modules/auth/user'
 import { useRouter } from 'vue-router'
-import { Clock, Zap, ChevronRight, Eye, User, X, Banknote, Check, Loader2 } from 'lucide-vue-next'
+import { Clock, Zap, ChevronRight, Eye, User, X, Banknote, Check, Loader2, ShieldAlert } from 'lucide-vue-next'
 import SideDrawer from '@/components/ui/SideDrawer.vue'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { io, Socket } from 'socket.io-client'
@@ -968,7 +1007,10 @@ const acceptCounter = async (id: string) => {
 
 const getMyBid = (order: any) => {
   if (localPlacedBid.value !== null) {
-    if (typeof localPlacedBid.value === 'object') return (localPlacedBid.value as any).bidAmount;
+    if (typeof localPlacedBid.value === 'object') {
+      const bid = localPlacedBid.value as any;
+      return bid.bidAmount || bid.amount;
+    }
     return localPlacedBid.value;
   }
   return bidAmount.value; 
