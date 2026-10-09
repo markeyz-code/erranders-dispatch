@@ -28,7 +28,10 @@
  </div>
  <div class="flex flex-col gap-1 items-start">
    <h1 class="text-3xl font-black text-gray-900 tracking-tight">Order #{{ order.orderNumber }}</h1>
-   <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold  text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
+   <div class="flex gap-2 flex-wrap items-center mt-1">
+     <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold  text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
+     <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('[Barter Tx ID:')" class="inline-block text-[10px] font-bold text-blue-600 uppercase bg-blue-50 px-2 py-1 rounded border border-blue-100">🤝 BARTER DELIVERY</span>
+   </div>
  </div>
  </div>
  <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-50 ">
