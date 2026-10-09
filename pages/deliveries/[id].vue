@@ -514,7 +514,12 @@
  <button @click="updateStatus('in_transit')" :disabled="updatingStatus" class="w-full py-3 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed transform active:scale-95 transition-all flex items-center justify-center gap-2 group">
  <Loader2 v-if="updatingStatus" class="w-4 h-4 animate-spin" />
  <span v-else class="text-lg group-hover:scale-110 transition-transform">🚀</span> 
- {{ updatingStatus ? 'UPDATING...' : 'Start Delivery' }}
+ <template v-if="order.type === 'custom_errand'">
+   {{ updatingStatus ? 'UPDATING...' : 'Mark as In Transit' }}
+ </template>
+ <template v-else>
+   {{ updatingStatus ? 'UPDATING...' : 'Start Delivery' }}
+ </template>
  </button>
  <p class="text-sm text-gray-400 text-center font-medium">Update status once you depart.</p>
  </div>
