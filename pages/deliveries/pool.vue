@@ -58,6 +58,8 @@
               <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                 <span class="text-[8px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-1.5 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
                 <span v-if="order.isGroupOrder" class="text-[8px] font-bold  text-emerald-700 uppercase bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">👥 GROUP</span>
+                <span v-if="order.isAutopilot" class="text-[8px] font-bold  text-blue-700 uppercase bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">🤖 AUTO-PILOT</span>
+                <span v-if="order.isPooledErrand" class="text-[8px] font-bold  text-teal-700 uppercase bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">🔄 POOLED</span>
                 <span v-if="order.customerGender" class="text-[8px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
                   {{ order.customerGender === 'Male' ? '🙋🏽‍♂️' : (order.customerGender === 'Female' ? '🙋🏽‍♀️' : '👤') }}
                 </span>
@@ -163,6 +165,8 @@
                     <div class="flex items-center gap-2 mb-1.5 flex-wrap">
                       <span class="text-[9px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-2 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
                       <span v-if="order.isGroupOrder" class="text-[9px] font-bold  text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">👥 GROUP ORDER</span>
+                      <span v-if="order.isAutopilot" class="text-[9px] font-bold  text-blue-700 uppercase bg-blue-50 px-2 py-0.5 rounded border border-blue-200">🤖 AUTO-PILOT</span>
+                      <span v-if="order.isPooledErrand" class="text-[9px] font-bold  text-teal-700 uppercase bg-teal-50 px-2 py-0.5 rounded border border-teal-200">🔄 POOLED ERRAND</span>
                       <span v-if="order.customerGender" class="text-[9px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
                         {{ order.customerGender === 'Male' ? '🙋🏽‍♂️ MALE' : (order.customerGender === 'Female' ? '🙋🏽‍♀️ FEMALE' : '👤 ' + order.customerGender) }}
                       </span>
