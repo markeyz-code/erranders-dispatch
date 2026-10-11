@@ -56,8 +56,9 @@
                 
                 <div class="flex-1 space-y-4">
                   <div>
-                    <h4 class="text-lg font-bold text-gray-900 tracking-tight mb-1">
-                      {{ order.type === 'custom_errand' ? 'Custom Errand' : 'Order' }} #{{ order.orderNumber }}
+                    <h4 class="text-lg font-bold text-gray-900 tracking-tight mb-1 flex items-center gap-2">
+                      Order #{{ order.orderNumber }}
+                      <span :class="getOrderTypeColor(order)" class="text-[10px] px-2 py-0.5 rounded uppercase border font-bold">{{ getOrderTypeLabel(order) }}</span>
                     </h4>
                     <p class="text-sm text-gray-400">
                       {{ order.type === 'custom_errand' ? order.customDetails?.pickupLocation : (order.vendor?.storeName || 'Store') }} 
@@ -125,8 +126,9 @@
                   <span v-else class="text-sm font-bold">CUS</span>
                 </div>
                 <div>
-                  <h4 class="font-semibold text-sm text-gray-900 truncate max-w-[200px]">
+                  <h4 class="font-semibold text-sm text-gray-900 truncate max-w-[200px] flex items-center gap-2">
                     {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Order') }}
+                    <span :class="getOrderTypeColor(order)" class="text-[9px] px-1.5 py-0.5 rounded uppercase border font-bold shrink-0">{{ getOrderTypeLabel(order) }}</span>
                   </h4>
                   <p class="text-sm text-gray-400 line-clamp-1 max-w-[200px]">
                     {{ order.type === 'custom_errand' ? order.customDetails?.dropoffLocation : (order.deliveryAddress || 'Customer Location') }}
@@ -168,8 +170,9 @@
                 {{ statusEmoji(order.status) }}
               </div>
               <div class="flex-1 min-w-0">
-                <h4 class="font-semibold text-sm text-gray-900 truncate">
+                <h4 class="font-semibold text-sm text-gray-900 truncate flex items-center gap-2">
                   {{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Order') }} #{{ order.orderNumber }}
+                  <span :class="getOrderTypeColor(order)" class="text-[9px] px-1.5 py-0.5 rounded uppercase border font-bold shrink-0">{{ getOrderTypeLabel(order) }}</span>
                 </h4>
                 <p class="text-sm text-gray-400">{{ formatDate(order.createdAt) }}</p>
               </div>
