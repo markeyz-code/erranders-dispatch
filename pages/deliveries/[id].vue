@@ -572,12 +572,24 @@
   </div>
 
  <!-- Premium Verification Interface -->
- <div v-if="(order.status === 'in_transit' || order.status === 'interception_in_progress') && isActiveErrander" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-50 ">
+ <div v-if="canVerifyDelivery" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-50 ">
  <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
  
  <div class="text-center space-y-2 relative z-10">
+ <div class="flex items-center justify-center gap-2 flex-wrap">
  <h3 class="text-[#FF5C1A] text-2xl font-black tracking-tight leading-none">Security PIN</h3>
+ <span v-if="order.status !== 'in_transit' && order.status !== 'interception_in_progress'" class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Fast Track Available</span>
+ </div>
  <p class="text-gray-500 text-sm font-bold tracking-[0.1em] uppercase">Request the 4-digit code from the user</p>
+ </div>
+
+ <!-- Helpful notice when vendor hasn't updated status yet -->
+ <div v-if="order.status !== 'in_transit' && order.status !== 'interception_in_progress'" class="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 relative z-10 flex items-start gap-2.5 text-left">
+ <span class="text-base leading-none">⚡</span>
+ <div class="space-y-0.5">
+ <p class="font-bold text-amber-950">Vendor hasn't updated status?</p>
+ <p class="text-amber-800 text-[11px] leading-relaxed">No problem! Errand Ninjas can enter the customer's PIN and finalize delivery directly without waiting for vendor compliance.</p>
+ </div>
  </div>
  
  <div class="flex justify-center gap-3 relative z-10 px-4">
@@ -609,14 +621,18 @@
  
  <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
  <p class="text-gray-500 text-[10px] font-bold uppercase ">Customer unavailable?</p>
- <label class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-25 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95">
- 
+ <button 
+ type="button"
+ @click="cameraTarget = 'dropoff'; isCameraModalOpen = true" 
+ :disabled="uploadingDropoff"
+ class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-25 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95"
+ >
  <div class="flex items-center justify-center gap-2">
  <Loader2 v-if="uploadingDropoff" class="w-4 h-4 animate-spin text-[#FF5C1A]" />
  <span v-else class="text-lg opacity-80">📸</span>
  <span :class="uploadingDropoff ? 'text-[#FF5C1A]' : ''">{{ uploadingDropoff ? 'UPLOADING PROOF...' : 'Contactless Drop-off' }}</span>
  </div>
- </label>
+ </button>
  </div>
  </div>
 
@@ -1046,6 +1062,11 @@ const isActiveErrander = computed(() => {
     return secondErranderId === user.value._id;
   }
   return isPrimaryErrander.value;
+});
+
+const canVerifyDelivery = computed(() => {
+  if (!order.value || !isActiveErrander.value) return false;
+  return ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.value.status);
 });
 
 const myEarnings = computed(() => {

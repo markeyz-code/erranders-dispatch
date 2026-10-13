@@ -20,10 +20,18 @@ export const useSocket = (namespace: string) => {
 
     const connectionId = user.value?._id;
 
+    // The /chat gateway now verifies a JWT, so the handshake must carry it.
+    // The token lives in the `errandr_token` cookie (see api_factory/axios.config.ts).
+    const authToken =
+      typeof document !== 'undefined'
+        ? (document.cookie.match(/(^| )errandr_token=([^;]+)/) || [])[2] || ''
+        : '';
+
     const s = io(`${config.public.wsBase}/${namespace}`, {
       query: {
         userId: connectionId,
       },
+      auth: { token: authToken },
       transports: ['polling'],
       reconnection: true,
       reconnectionAttempts: Infinity,
