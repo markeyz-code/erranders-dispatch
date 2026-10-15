@@ -527,6 +527,75 @@
  </div>
  </div>
 
+ <!-- Premium Verification Interface -->
+ <div v-if="canVerifyDelivery" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-100 shadow-sm mt-4">
+ <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
+ 
+ <div class="text-center space-y-2 relative z-10">
+ <div class="flex items-center justify-center gap-2 flex-wrap">
+ <h3 class="text-[#FF5C1A] text-2xl font-black tracking-tight leading-none">Security PIN</h3>
+ <span v-if="order.status !== 'in_transit' && order.status !== 'interception_in_progress' && order.status !== 'picked_up'" class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Fast Track Available</span>
+ <span v-else class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full">Ready for Delivery</span>
+ </div>
+ <p v-if="order.status === 'picked_up' || order.status === 'in_transit'" class="text-gray-600 text-xs font-semibold">
+   Enter the 4-digit code provided by the customer to finalize this delivery.
+ </p>
+ <p v-else class="text-gray-500 text-sm font-bold tracking-[0.1em] uppercase">Request the 4-digit code from the user</p>
+ </div>
+
+ <!-- Helpful notice when vendor hasn't updated status yet -->
+ <div v-if="order.status !== 'in_transit' && order.status !== 'interception_in_progress' && order.status !== 'picked_up'" class="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 relative z-10 flex items-start gap-2.5 text-left">
+ <span class="text-base leading-none">⚡</span>
+ <div class="space-y-0.5">
+ <p class="font-bold text-amber-950">Vendor hasn't updated status?</p>
+ <p class="text-amber-800 text-[11px] leading-relaxed">No problem! Errand Ninjas can enter the customer's PIN and finalize delivery directly without waiting for vendor compliance.</p>
+ </div>
+ </div>
+ 
+ <div class="flex justify-center gap-3 relative z-10 px-4">
+    <input
+      v-for="(digit, index) in 4"
+      :key="index"
+      :ref="(el) => { if (el) pinInputs[index] = el }"
+      v-model="pinArray[index]"
+      @input="onPinInput(index, $event)"
+      @keydown="onPinKeydown(index, $event)"
+      @paste="onPinPaste"
+      type="text"
+      inputmode="text"
+      maxlength="1"
+      placeholder="•"
+      class="w-16 h-20 text-center text-4xl font-black text-gray-900 bg-gray-50 border border-gray-25 rounded-lg focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 focus:bg-white focus:outline-none transition-all placeholder:text-gray-300 uppercase "
+    />
+  </div>
+ 
+ <button 
+ @click="completeOrder" 
+ :disabled="verificationCode.length !== 4 || completing"
+ class="w-full py-2 bg-[#FF5C1A] text-white rounded-xl text-sm font-black hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all relative z-10 group active:scale-95"
+ >
+ <Loader2 v-if="completing" class="w-5 h-5 animate-spin flex-shrink-0" />
+ <span v-else class="text-lg group-hover:scale-110 transition-transform">✅</span> 
+ {{ completing ? 'VERIFYING SECURE PIN...' : 'Finalize Secure Delivery' }}                                                       
+ </button>
+ 
+ <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
+ <p class="text-gray-500 text-[10px] font-bold uppercase ">Customer unavailable?</p>
+ <button 
+ type="button"
+ @click="cameraTarget = 'dropoff'; isCameraModalOpen = true" 
+ :disabled="uploadingDropoff"
+ class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-25 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95"
+ >
+ <div class="flex items-center justify-center gap-2">
+ <Loader2 v-if="uploadingDropoff" class="w-4 h-4 animate-spin text-[#FF5C1A]" />
+ <span v-else class="text-lg opacity-80">📸</span>
+ <span :class="uploadingDropoff ? 'text-[#FF5C1A]' : ''">{{ uploadingDropoff ? 'UPLOADING PROOF...' : 'Contactless Drop-off' }}</span>
+ </div>
+ </button>
+ </div>
+ </div>
+
  <!-- Request Hand-off Action -->
  <div v-if="(order.status === 'picked_up' || order.status === 'in_transit') && !order.interception && isPrimaryErrander" class="mt-6 border-t border-gray-100 pt-6">
    <button @click="isHandoffModalOpen = true" class="w-full py-3 bg-purple-50 text-purple-700 rounded-lg text-sm font-semibold hover:bg-purple-100 transform active:scale-95 transition-all flex items-center justify-center gap-2 border border-purple-200">
@@ -571,70 +640,6 @@
     </div>
   </div>
 
- <!-- Premium Verification Interface -->
- <div v-if="canVerifyDelivery" class="bg-white rounded-xl md:rounded-lg p-4 md:p-5 space-y-4 md:space-y-6 relative overflow-hidden group border border-gray-50 ">
- <div class="absolute -right-32 -top-32 w-64 h-64 bg-[#FF5C1A]/5 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
- 
- <div class="text-center space-y-2 relative z-10">
- <div class="flex items-center justify-center gap-2 flex-wrap">
- <h3 class="text-[#FF5C1A] text-2xl font-black tracking-tight leading-none">Security PIN</h3>
- <span v-if="order.status !== 'in_transit' && order.status !== 'interception_in_progress'" class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Fast Track Available</span>
- </div>
- <p class="text-gray-500 text-sm font-bold tracking-[0.1em] uppercase">Request the 4-digit code from the user</p>
- </div>
-
- <!-- Helpful notice when vendor hasn't updated status yet -->
- <div v-if="order.status !== 'in_transit' && order.status !== 'interception_in_progress'" class="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 relative z-10 flex items-start gap-2.5 text-left">
- <span class="text-base leading-none">⚡</span>
- <div class="space-y-0.5">
- <p class="font-bold text-amber-950">Vendor hasn't updated status?</p>
- <p class="text-amber-800 text-[11px] leading-relaxed">No problem! Errand Ninjas can enter the customer's PIN and finalize delivery directly without waiting for vendor compliance.</p>
- </div>
- </div>
- 
- <div class="flex justify-center gap-3 relative z-10 px-4">
-    <input
-      v-for="(digit, index) in 4"
-      :key="index"
-      :ref="(el) => { if (el) pinInputs[index] = el }"
-      v-model="pinArray[index]"
-      @input="onPinInput(index, $event)"
-      @keydown="onPinKeydown(index, $event)"
-      @paste="onPinPaste"
-      type="text"
-      inputmode="text"
-      maxlength="1"
-      placeholder="•"
-      class="w-16 h-20 text-center text-4xl font-black text-gray-900 bg-gray-50 border border-gray-25 rounded-lg focus:border-[#FF5C1A] focus:ring-4 focus:ring-[#FF5C1A]/10 focus:bg-white focus:outline-none transition-all placeholder:text-gray-300 uppercase "
-    />
-  </div>
- 
- <button 
- @click="completeOrder" 
- :disabled="verificationCode.length !== 4 || completing"
- class="w-full py-2 bg-[#FF5C1A] text-white rounded-xl text-sm font-black  hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all relative z-10 group active:scale-95"
- >
- <Loader2 v-if="completing" class="w-5 h-5 animate-spin flex-shrink-0" />
- <span v-else class="text-lg group-hover:scale-110 transition-transform">✅</span> 
- {{ completing ? 'VERIFYING SECURE PIN...' : 'Finalize Secure Delivery' }}                                                       
- </button>
- 
- <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
- <p class="text-gray-500 text-[10px] font-bold uppercase ">Customer unavailable?</p>
- <button 
- type="button"
- @click="cameraTarget = 'dropoff'; isCameraModalOpen = true" 
- :disabled="uploadingDropoff"
- class="block w-full cursor-pointer py-3.5 bg-gray-50 border border-gray-25 text-gray-700 rounded-xl text-sm font-bold hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 transition-all active:scale-95"
- >
- <div class="flex items-center justify-center gap-2">
- <Loader2 v-if="uploadingDropoff" class="w-4 h-4 animate-spin text-[#FF5C1A]" />
- <span v-else class="text-lg opacity-80">📸</span>
- <span :class="uploadingDropoff ? 'text-[#FF5C1A]' : ''">{{ uploadingDropoff ? 'UPLOADING PROOF...' : 'Contactless Drop-off' }}</span>
- </div>
- </button>
- </div>
- </div>
 
  <!-- Delivery Completed State -->
  <div v-if="order.status === 'delivered' && !isPrimaryErrander || (order.status === 'delivered' && isPrimaryErrander && !isInterceptionOrder)" class="bg-emerald-500 rounded-lg p-4 md:p-5 text-center space-y-4 md:space-y-6 relative overflow-hidden group border border-white/10">
@@ -1049,23 +1054,55 @@ const requestingHandoff = ref(false);
 const handoffLocation = ref('');
 const handoffNote = ref('');
 
+const currentUserId = computed(() => {
+  const fromUser = user.value?._id || (user.value as any)?.id;
+  if (fromUser) return String(fromUser);
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('user');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const parsedId = parsed._id || parsed.id;
+        if (parsedId) return String(parsedId);
+      }
+    } catch (e) {}
+  }
+  return '';
+});
+
+const getTargetId = (target: any): string => {
+  if (!target) return '';
+  if (typeof target === 'string') return target;
+  if (typeof target === 'object') {
+    return String(target._id || target.id || target.user || '');
+  }
+  return '';
+};
+
 const isPrimaryErrander = computed(() => {
-  if (!order.value || !user.value) return false;
-  const erranderId = order.value.errander?._id || order.value.errander;
-  return erranderId === user.value._id;
+  if (!order.value) return false;
+  const myId = currentUserId.value;
+  const erranderId = getTargetId(order.value.errander);
+  if (!erranderId) return false;
+  if (!myId) return true; // Fail-open for authenticated errander viewing assigned order
+  return erranderId === myId;
 });
 
 const isActiveErrander = computed(() => {
-  if (!order.value || !user.value) return false;
-  if (order.value.interception?.status === 'accepted' || order.value.interception?.status === 'completed') {
-    const secondErranderId = order.value.interception?.secondErrander?._id || order.value.interception?.secondErrander;
-    return secondErranderId === user.value._id;
+  if (!order.value) return false;
+  const myId = currentUserId.value;
+  const hasInterception = order.value.interception?.status === 'accepted' || order.value.interception?.status === 'completed';
+  if (hasInterception && order.value.interception?.secondErrander) {
+    const secondErranderId = getTargetId(order.value.interception.secondErrander);
+    if (!myId) return true;
+    return secondErranderId === myId;
   }
   return isPrimaryErrander.value;
 });
 
 const canVerifyDelivery = computed(() => {
-  if (!order.value || !isActiveErrander.value) return false;
+  if (!order.value) return false;
+  if (!isActiveErrander.value) return false;
   return ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.value.status);
 });
 
@@ -1149,9 +1186,9 @@ const startLocationTracking = () => {
         const { longitude, latitude } = position.coords;
         currentLocation.value = [longitude, latitude];
         
-        if (order.value?._id && user.value?._id) {
+        if (order.value?._id && currentUserId.value) {
           emitTracking('updateLocation', {
-            erranderId: user.value._id,
+            erranderId: currentUserId.value,
             orderId: order.value._id,
             coordinates: [longitude, latitude]
           });
@@ -1698,7 +1735,10 @@ const updateStatus = async (status: string) => {
  return;
  }
 
- order.value = res.data;
+ if (res.data) {
+   order.value = { ...order.value, ...res.data };
+ }
+ await loadOrder(true);
  emit('orderStatusUpdate', { orderId: route.params.id, status });
  showToast({
  title: 'Status Updated',

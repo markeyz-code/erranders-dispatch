@@ -3,6 +3,7 @@ import { useCookie } from '#app';
 
 interface User {
   _id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -24,7 +25,32 @@ export const useUser = () => {
     sameSite: 'lax',
   });
 
+  // Client-side hydration fallback from localStorage if cookies were dropped or not loaded
+  if (typeof window !== 'undefined') {
+    if (!token.value) {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) token.value = storedToken;
+    }
+    if (!user.value) {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          if (parsed && (parsed._id || parsed.id)) {
+            parsed._id = parsed._id || parsed.id;
+            user.value = parsed;
+          }
+        }
+      } catch (e) {}
+    } else if (user.value && !user.value._id && (user.value as any).id) {
+      user.value._id = (user.value as any).id;
+    }
+  }
+
   const setUser = (userData: User) => {
+    if (userData && !userData._id && (userData as any).id) {
+      userData._id = (userData as any).id;
+    }
     user.value = userData;
     if (typeof window !== 'undefined') {
       const expires = new Date(Date.now() + 7 * 86400 * 1000).toUTCString();
@@ -46,6 +72,10 @@ export const useUser = () => {
     user.value = null;
     token.value = null;
     if (typeof window !== 'undefined') {
+      document.cookie = 'errandr_dispatch_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'errandr_dispatch_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       localStorage.removeItem('errandr_cart');
       window.location.href = '/auth/login';
     }
