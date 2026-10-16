@@ -636,7 +636,7 @@
       </div>
       <h3 class="text-emerald-900 font-bold text-sm mb-1">Hand-off Accepted!</h3>
       <p class="text-emerald-700 text-sm mb-2">Another errander is on their way to complete the delivery.</p>
-      <p class="text-emerald-600 text-[10px] font-bold mt-3 bg-emerald-100 px-3 py-1.5 rounded-lg inline-block">You'll earn 60% (₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.6).toLocaleString() }}) when delivered</p>
+      <p class="text-emerald-600 text-[10px] font-bold mt-3 bg-emerald-100 px-3 py-1.5 rounded-lg inline-block">You'll earn 60% (₦{{ Math.round(getOrderEarnings(order) * 0.6).toLocaleString() }}) when delivered</p>
     </div>
   </div>
 
@@ -1106,9 +1106,18 @@ const canVerifyDelivery = computed(() => {
   return ['confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'interception_in_progress'].includes(order.value.status);
 });
 
+const getOrderEarnings = (ord: any) => {
+  if (!ord) return 0;
+  let total = ord.erranderPayout;
+  if (!total || (ord.deliveryFee >= 350 && total < 300)) {
+    total = ord.deliveryFee >= 350 ? 300 : (ord.deliveryFee || 0);
+  }
+  return total;
+};
+
 const myEarnings = computed(() => {
   if (!order.value) return 0;
-  const total = order.value.erranderPayout || order.value.deliveryFee || 0;
+  const total = getOrderEarnings(order.value);
   const hasInterception = order.value.interception && 
     (order.value.interception.status === 'accepted' || order.value.interception.status === 'completed');
   if (hasInterception && order.value.interception?.secondErrander) {

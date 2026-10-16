@@ -93,7 +93,7 @@
  </td>
  <td class="py-3.5 px-5 text-right">
  <div class="flex flex-col items-end">
- <p class="text-sm font-medium text-emerald-600 tracking-tight">+₦{{ (order.erranderPayout || order.deliveryFee || 0)?.toLocaleString() }}</p>
+ <p class="text-sm font-medium text-emerald-600 tracking-tight">+₦{{ getOrderEarnings(order)?.toLocaleString() }}</p>
  <p class="text-[9px] font-bold text-gray-400  mt-0.5 uppercase">Earnings</p>
  </div>
  </td>
@@ -157,7 +157,7 @@
  </div>
   <div class="flex justify-between items-center">
   <span class="text-sm text-gray-500 font-medium tracking-wider">Your Earnings</span>
-  <span class="text-2xl font-medium text-emerald-600 tracking-tight">₦{{ (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
+  <span class="text-2xl font-medium text-emerald-600 tracking-tight">₦{{ getOrderEarnings(selectedOrder).toLocaleString() }}</span>
   </div>
   </div>
  </div>
@@ -190,6 +190,15 @@ const orders = ref<any[]>([]);
 const activeFilter = ref('all');
 const searchQuery = ref('');
 const selectedOrder = ref<any>(null);
+
+const getOrderEarnings = (ord: any) => {
+  if (!ord) return 0;
+  let payout = ord.erranderPayout || ord.erranderShare;
+  if (!payout || (ord.deliveryFee >= 350 && payout < 300)) {
+    payout = ord.deliveryFee >= 350 ? 300 : (ord.deliveryFee || 0);
+  }
+  return payout;
+};
 
 const filters = [
  { key: 'all', label: 'All' },

@@ -106,7 +106,7 @@
             </div>
             <div v-else class="flex-shrink-0">
               <p class="text-[10px] font-medium text-gray-400 mb-0.5">You Earn</p>
-              <p class="text-base font-bold text-emerald-600 leading-tight">₦{{ order.status === 'interception_pending' ? ((order.erranderPayout || order.erranderShare || order.deliveryFee || 150) * 0.4).toLocaleString() : (order.erranderPayout || order.erranderShare || order.deliveryFee || 150).toLocaleString() }}</p>
+              <p class="text-base font-bold text-emerald-600 leading-tight">₦{{ order.status === 'interception_pending' ? (getOrderEarnings(order) * 0.4).toLocaleString() : getOrderEarnings(order).toLocaleString() }}</p>
             </div>
 
             <!-- Actions -->
@@ -227,7 +227,7 @@
                   <p class="text-[8px] font-medium text-amber-500 uppercase  mt-1">Bid to Earn</p>
                 </div>
                 <div v-else class="flex flex-col items-end">
-                  <p class="text-lg font-medium text-emerald-600 tracking-tight leading-none mb-1">₦{{ order.status === 'interception_pending' ? ((order.erranderPayout || order.erranderShare || order.deliveryFee || 150) * 0.4).toLocaleString() : (order.erranderPayout || order.erranderShare || order.deliveryFee || 150).toLocaleString() }}</p>
+                  <p class="text-lg font-medium text-emerald-600 tracking-tight leading-none mb-1">₦{{ order.status === 'interception_pending' ? (getOrderEarnings(order) * 0.4).toLocaleString() : getOrderEarnings(order).toLocaleString() }}</p>
                   <p class="text-[8px] font-medium text-gray-300 uppercase ">Paid Immediately</p>
                 </div>
               </td>
@@ -298,7 +298,7 @@
           </div>
           <div v-else class="p-4 bg-gray-50 rounded-lg">
             <p class="text-[9px] font-medium text-gray-400 uppercase  mb-1">You Earn</p>
-            <p class="text-xl font-medium text-emerald-600 tracking-tight">₦{{ selectedOrder.status === 'interception_pending' ? ((selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee) * 0.4).toLocaleString() : (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee).toLocaleString() }}</p>
+            <p class="text-xl font-medium text-emerald-600 tracking-tight">₦{{ selectedOrder.status === 'interception_pending' ? (getOrderEarnings(selectedOrder) * 0.4).toLocaleString() : getOrderEarnings(selectedOrder).toLocaleString() }}</p>
           </div>
           <div class="p-4 bg-gray-50 rounded-lg">
             <p class="text-[9px] font-medium text-gray-400 uppercase  mb-1">Prep Time</p>
@@ -537,7 +537,7 @@
               >
                 <Zap v-if="acceptingId !== selectedOrder._id" class="w-4 h-4 fill-current" />
                 <span v-else class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
-                {{ acceptingId === selectedOrder._id ? 'Accepting...' : 'Accept at ₦' + (selectedOrder.erranderPayout || selectedOrder.erranderShare || selectedOrder.deliveryFee).toLocaleString() }}
+                {{ acceptingId === selectedOrder._id ? 'Accepting...' : 'Accept at ₦' + getOrderEarnings(selectedOrder).toLocaleString() }}
               </button>
             </div>
 
@@ -598,6 +598,15 @@ const loading = ref(true)
 const availableOrders = ref<any[]>([])
 const acceptingId = ref<string | null>(null)
 const batchStatus = ref<any>(null)
+
+const getOrderEarnings = (ord: any) => {
+  if (!ord) return 0;
+  let payout = ord.erranderPayout || ord.erranderShare;
+  if (!payout || (ord.deliveryFee >= 350 && payout < 300)) {
+    payout = ord.deliveryFee >= 350 ? 300 : (ord.deliveryFee || 150);
+  }
+  return payout;
+};
 
 // Details Drawer State
 const isDrawerOpen = ref(false)

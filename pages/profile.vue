@@ -109,6 +109,28 @@
  </div>
  </div>
 
+ <!-- Campus - read only, fixed by the account -->
+ <div v-if="campus" class="bg-white rounded-lg border border-gray-50 overflow-hidden">
+ <div class="px-4 py-4 border-b border-gray-50">
+ <h3 class="text-base font-bold text-gray-900">Campus</h3>
+ </div>
+ <div class="p-4">
+ <div class="flex items-center gap-3">
+ <div class="w-10 h-10 rounded-lg bg-gray-50 text-[#FF5C1A] flex items-center justify-center shrink-0">
+ <MapPin class="w-5 h-5" />
+ </div>
+ <div class="min-w-0 flex-1">
+ <div class="flex items-center gap-2 flex-wrap">
+ <span v-if="campus.shortName" class="text-[10px] font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded-md">{{ campus.shortName }}</span>
+ <span class="text-sm font-bold text-gray-900 truncate">{{ campus.name }}</span>
+ </div>
+ <p v-if="campusLocation" class="text-sm text-gray-400 truncate mt-0.5">{{ campusLocation }}</p>
+ </div>
+ </div>
+ <p class="text-sm text-gray-400 mt-3">You receive errands from this campus only. The campus is fixed by your account and cannot be changed here.</p>
+ </div>
+ </div>
+
  <!-- Availability Toggle -->
  <div class="bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="px-4 py-4 border-b border-gray-50">
@@ -156,9 +178,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, reactive } from 'vue'
-import { ChevronRight } from 'lucide-vue-next'
+import { ChevronRight, MapPin } from 'lucide-vue-next'
 import { useUser } from '@/composables/modules/auth/user'
 import { erranders_api } from '@/api_factory/modules/erranders'
+import { institutions_api, institutionRefFrom, type Institution } from '@/api_factory/modules/institutions'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 
 definePageMeta({
@@ -171,6 +194,39 @@ const isEditing = ref(false)
 const saving = ref(false)
 const togglingStatus = ref(false)
 const errandrProfile = ref<any>(null)
+
+// The campus the rider is pinned to. Read-only: a rider cannot switch campus,
+// so there is deliberately no picker here — only a confirmation of the account.
+const campus = ref<Institution | null>(null)
+
+const campusLocation = computed(() => {
+ if (!campus.value) return ''
+ return [campus.value.city, campus.value.state].filter(Boolean).join(', ')
+ || campus.value.country
+ || ''
+})
+
+const loadCampus = async () => {
+ const populated = (user.value as any)?.institution
+
+ // The signed-in payload sometimes already carries the whole campus document.
+ if (populated && typeof populated === 'object' && populated.name) {
+ campus.value = populated as Institution
+ return
+ }
+
+ const ref_ = institutionRefFrom(populated)
+ // No campus on the account - render nothing and send no header.
+ if (!ref_) return
+
+ try {
+ const res: any = await institutions_api.get(ref_)
+ const data = res?.data?.data || res?.data
+ if (data && data.name) campus.value = data as Institution
+ } catch (e) {
+ // A campus that cannot be loaded simply hides the row; dispatch keeps working.
+ }
+}
 
 const form = reactive({
  firstName: '',
@@ -266,6 +322,7 @@ const toggleAvailability = async () => {
 }
 
 onMounted(loadProfile)
+onMounted(loadCampus)
 
 useHead({ title: 'Profile - Errandr' })
 </script>

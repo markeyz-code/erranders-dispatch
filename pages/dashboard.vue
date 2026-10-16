@@ -137,7 +137,7 @@
               </div>
               <div class="text-right flex-shrink-0">
                 <p v-if="order.status === 'negotiating'" class="font-bold text-sm text-amber-600">₦{{ (order.proposedDeliveryFee || order.deliveryFee || 0).toLocaleString() }}</p>
-                <p v-else class="font-bold text-sm text-emerald-600">₦{{ (order.erranderPayout || order.erranderShare || order.deliveryFee || 150).toLocaleString() }}</p>
+                <p v-else class="font-bold text-sm text-emerald-600">₦{{ getOrderEarnings(order).toLocaleString() }}</p>
                 <span v-if="order.status === 'negotiating'" class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded uppercase mt-0.5 inline-block border border-amber-200 animate-pulse">🔥 Bid Now</span>
                 <span v-else class="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded uppercase mt-0.5 inline-block border border-emerald-100">Claim Now</span>
               </div>
@@ -177,7 +177,7 @@
                 <p class="text-sm text-gray-400">{{ formatDate(order.createdAt) }}</p>
               </div>
               <div class="text-right flex-shrink-0">
-                <p class="font-bold text-sm text-emerald-600">+₦{{ (order.erranderPayout || order.deliveryFee || 0)?.toLocaleString() }}</p>
+                <p class="font-bold text-sm text-emerald-600">+₦{{ getOrderEarnings(order).toLocaleString() }}</p>
                 <span :class="getStatusClasses(order.status)" class="text-[10px] font-semibold px-2 py-0.5 rounded capitalize inline-block mt-0.5">
                   {{ order.status?.replace(/_/g, ' ') }}
                 </span>
@@ -248,6 +248,15 @@ import { erranders_api } from '@/api_factory/modules/erranders'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 
 const { user } = useUser()
+
+const getOrderEarnings = (ord: any) => {
+  if (!ord) return 0;
+  let payout = ord.erranderPayout || ord.erranderShare;
+  if (!payout || (ord.deliveryFee >= 350 && payout < 300)) {
+    payout = ord.deliveryFee >= 350 ? 300 : (ord.deliveryFee || 150);
+  }
+  return payout;
+};
 
 definePageMeta({
   layout: 'errander'

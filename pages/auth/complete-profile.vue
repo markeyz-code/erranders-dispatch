@@ -17,7 +17,7 @@
               <UiAnimatedInput v-model="form.phone" type="tel" label="Phone Number" required />
               <UiSelectInput v-model="form.school" label="School (Optional)" :options="nigerianSchools" />
               <UiAnimatedInput v-model="form.matricNumber" type="text" label="Matric Number (Optional)" pattern="[A-Za-z0-9/.\-]+" title="Only alphanumeric characters, slashes, and dashes allowed" minlength="5" />
-              <UiSelectInput v-model="form.gender" label="Gender" :options="['Male', 'Female', 'Other']" placeholder="Select your gender" />
+              <UiSelectInput v-model="form.gender" :options="['Male', 'Female', 'Other']" placeholder="Select your gender" />
               <UiAnimatedInput v-model="form.referredBy" type="text" label="Referral Code (Optional)" @input="formatReferralCode" />
 
               <transition name="fade">
@@ -28,7 +28,7 @@
               </transition>
 
               <button type="submit" :disabled="loading || validatingReferral"
-                class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 active:scale-[0.98] group mt-4">
+                class="w-full py-3 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 active:scale-[0.98] group mt-4">
                 <Loader2 v-if="loading || validatingReferral" class="animate-spin w-4 h-4" />
                 <span v-else>Complete Registration</span>
                 <ArrowRight v-if="!loading && !validatingReferral" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -36,11 +36,11 @@
             </form>
           </div>
           
-          <div class="mt-5 text-center flex items-center justify-center gap-4 text-sm font-bold text-gray-400 border-t border-gray-100 pt-8">
+          <!-- <div class="mt-5 text-center flex items-center justify-center gap-4 text-sm font-bold text-gray-400 border-t border-gray-100 pt-8">
             <p>&copy; {{ new Date().getFullYear() }} Errandr</p>
             <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
             <NuxtLink to="/terms" class="hover:text-gray-600 transition-colors">Terms & Privacy</NuxtLink>
-          </div>
+          </div> -->
         </div>
     </div>
   </div>
