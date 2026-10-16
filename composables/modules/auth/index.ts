@@ -179,6 +179,7 @@ export const useAuth = () => {
   const register = async (payload: any, options: { redirect?: boolean } = { redirect: true }) => {
     loading.value = true;
     try {
+      payload.role = 'errander';
       const res = await auth_api.register(payload);
       if (res?.type === 'ERROR') throw res;
       setUser(res.data.user);

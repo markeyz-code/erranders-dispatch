@@ -152,17 +152,18 @@ const handleEmailLogin = async () => {
   if (!validate()) return
 
   try {
-    await login({ email: email.value, password: password.value, role: 'dispatch' })
+    await login({ email: email.value, password: password.value, role: 'errander' })
     navigateTo('/dashboard')
   } catch (e: any) {
-    error.value = e?.data?.message || e?.response?.data?.message || 'Invalid credentials'
+    const rawMsg = e?.data?.message || e?.response?.data?.message || 'Invalid credentials'
+    error.value = Array.isArray(rawMsg) ? rawMsg.join(', ') : rawMsg
   }
 }
 
 const handleGoogleLogin = async () => {
   error.value = ''
   try {
-    const res = await firebaseLogin({ redirect: false, isSignUp: false, role: 'dispatch' })
+    const res = await firebaseLogin({ redirect: false, isSignUp: false, role: 'errander' })
     const isNewUser = res?.isNewUser
     if (isNewUser) {
       // New user trying to login — redirect to signup to complete profile
@@ -171,7 +172,8 @@ const handleGoogleLogin = async () => {
       navigateTo('/dashboard')
     }
   } catch (e: any) {
-    error.value = e?.data?.message || e?.message || 'Login failed. Please try again.'
+    const rawMsg = e?.data?.message || e?.message || 'Login failed. Please try again.'
+    error.value = Array.isArray(rawMsg) ? rawMsg.join(', ') : rawMsg
   }
 }
 </script>

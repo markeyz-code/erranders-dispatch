@@ -97,7 +97,7 @@ const form = reactive({
   email: '',
   phone: '',
   password: '',
-  role: 'dispatch'
+  role: 'errander'
 })
 
 const handleEmailSignup = async () => {
@@ -106,18 +106,20 @@ const handleEmailSignup = async () => {
     await register(form)
     navigateTo('/auth/complete-profile')
   } catch (e: any) {
-    error.value = e?.data?.message || e?.message || 'Signup failed. Please try again.'
+    const rawMsg = e?.data?.message || e?.response?.data?.message || e?.message || 'Signup failed. Please try again.'
+    error.value = Array.isArray(rawMsg) ? rawMsg.join(', ') : rawMsg
   }
 }
 
 const handleGoogleSignup = async () => {
   error.value = ''
   try {
-    const res = await firebaseLogin({ redirect: false, isSignUp: true, role: 'dispatch' })
+    await firebaseLogin({ redirect: false, isSignUp: true, role: 'errander' })
     // After Google signup, always redirect to complete-profile to fill remaining info
     navigateTo('/auth/complete-profile')
   } catch (e: any) {
-    error.value = e?.data?.message || e?.message || 'Signup failed. Please try again.'
+    const rawMsg = e?.data?.message || e?.response?.data?.message || e?.message || 'Signup failed. Please try again.'
+    error.value = Array.isArray(rawMsg) ? rawMsg.join(', ') : rawMsg
   }
 }
 </script>
