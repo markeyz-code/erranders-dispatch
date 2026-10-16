@@ -15,7 +15,7 @@
           <div class="space-y-5">
             <form @submit.prevent="handleCompleteProfile" class="space-y-5">
               <UiAnimatedInput v-model="form.phone" type="tel" label="Phone Number" required />
-              <UiSelectInput v-model="form.school" label="School (Optional)" :options="nigerianSchools" />
+              <UiSelectInput v-model="form.institution" label="Operating Campus / Institution" :options="institutionOptions" placeholder="Select your campus" required />
               <UiAnimatedInput v-model="form.matricNumber" type="text" label="Matric Number (Optional)" pattern="[A-Za-z0-9/.\-]+" title="Only alphanumeric characters, slashes, and dashes allowed" minlength="5" />
               <UiSelectInput v-model="form.gender" :options="['Male', 'Female', 'Other']" placeholder="Select your gender" />
               <UiAnimatedInput v-model="form.referredBy" type="text" label="Referral Code (Optional)" @input="formatReferralCode" />
@@ -48,9 +48,10 @@
 
 <script setup lang="ts">
 import { Loader2, ArrowRight, AlertCircle } from 'lucide-vue-next'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { auth_api } from '@/api_factory/modules/auth'
 import { erranders_api } from '@/api_factory/modules/erranders'
+import { institutions_api } from '@/api_factory/modules/institutions'
 import { GATEWAY_ENDPOINT } from '@/api_factory/axios.config'
 import { useUser } from '@/composables/modules/auth/user'
 import { useCustomToast } from '@/composables/core/useCustomToast'
@@ -63,30 +64,23 @@ const { setUser } = useUser()
 
 const error = ref('')
 const loading = ref(false)
-const form = reactive({ phone: '', referredBy: '', school: '', matricNumber: '', gender: '' })
+const form = reactive({ phone: '', referredBy: '', institution: '', school: '', matricNumber: '', gender: '' })
 
-const nigerianSchools = [
-  { label: 'University of Lagos (UNILAG)', value: 'UNILAG' },
-  { label: 'Obafemi Awolowo University (OAU)', value: 'OAU' },
-  { label: 'Ahmadu Bello University (ABU)', value: 'ABU' },
-  { label: 'University of Ibadan (UI)', value: 'UI' },
-  { label: 'Yaba College of Technology (YABATECH)', value: 'YABATECH' },
-  { label: 'Lagos State University (LASU)', value: 'LASU' },
-  { label: 'Covenant University', value: 'CU' },
-  { label: 'Babcock University', value: 'BABCOCK' },
-  { label: 'University of Nigeria Nsukka (UNN)', value: 'UNN' },
-  { label: 'University of Ilorin (UNILORIN)', value: 'UNILORIN' },
-  { label: 'Federal University of Technology Akure (FUTA)', value: 'FUTA' },
-  { label: 'Federal University of Technology Minna (FUTMINNA)', value: 'FUTMINNA' },
-  { label: 'Federal University of Technology Owerri (FUTO)', value: 'FUTO' },
-  { label: 'University of Benin (UNIBEN)', value: 'UNIBEN' },
-  { label: 'University of Port Harcourt (UNIPORT)', value: 'UNIPORT' },
-  { label: 'Afe Babalola University (ABUAD)', value: 'ABUAD' },
-  { label: 'University of Abuja (UNIABUJA)', value: 'UNIABUJA' },
-  { label: 'Nnamdi Azikiwe University (UNIZIK)', value: 'UNIZIK' },
-  { label: 'Bayero University Kano (BUK)', value: 'BUK' },
-  { label: 'Other', value: 'OTHER' }
-]
+const institutionOptions = ref<{ label: string; value: string; shortName: string }[]>([])
+const institutionsList = ref<any[]>([])
+
+onMounted(async () => {
+  try {
+    const res: any = await institutions_api.list()
+    const list = res?.data || []
+    institutionsList.value = list
+    institutionOptions.value = list.map((inst: any) => ({
+      label: `${inst.name} (${inst.shortName || inst.city})`,
+      value: inst._id,
+      shortName: inst.shortName || inst.name
+    }))
+  } catch (e) {}
+})
 
 const validatingReferral = ref(false)
 
@@ -131,11 +125,19 @@ const handleCompleteProfile = async () => {
 
   loading.value = true;
   try { 
+    const selectedInst = institutionsList.value.find(i => i._id === form.institution)
+    if (selectedInst) {
+      form.school = selectedInst.shortName || selectedInst.name
+    }
+
     // 1. Update user profile details
     const updateRes = await auth_api.updateProfile(form);
     
-    // 2. Create the Errander document (creates empty/default errander doc)
-    await erranders_api.register({});
+    // 2. Create the Errander document stamped with institution
+    await erranders_api.register({
+      institution: form.institution,
+      school: form.school
+    });
 
     // Refresh user context in store
     if (updateRes?.data?.data) {

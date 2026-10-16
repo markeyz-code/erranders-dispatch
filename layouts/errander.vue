@@ -84,6 +84,17 @@
  <!-- <span class="text-lg font-bold text-gray-900 tracking-tight">Errandr</span> -->
  </div>
  <div class="flex items-center gap-2">
+ <!-- Mobile Campus Pill -->
+ <button
+   type="button"
+   @click="openPicker"
+   class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-[11px] font-bold text-gray-900 active:scale-95 transition-all max-w-[125px]"
+   title="Change operating campus"
+ >
+   <MapPin class="w-3 h-3 text-[#FF5C1A] shrink-0" />
+   <span class="truncate">{{ currentCampusLabel }}</span>
+ </button>
+
  <NuxtLink to="/notifications" class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:text-gray-600 transition-all">
  <Bell class="w-5 h-5" />
  <div v-if="unreadCount > 0" class="absolute top-2 right-2 w-4 h-4 bg-[#FF5C1A] border border-white rounded-full flex items-center justify-center">
@@ -124,6 +135,19 @@
   </div>
   <ChevronRight class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 shrink-0 transition-colors" />
  </NuxtLink>
+
+ <!-- Campus quick switch row in mobile drawer -->
+ <button
+   type="button"
+   @click="openPicker(); showMobileMenu = false"
+   class="mx-3 mt-2 p-2.5 rounded-lg bg-orange-50/70 border border-orange-100 flex items-center justify-between gap-2 text-left group transition-all"
+ >
+   <div class="flex items-center gap-2 min-w-0">
+     <MapPin class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
+     <span class="text-xs font-bold text-gray-900 truncate">{{ currentCampusLabel }}</span>
+   </div>
+   <span class="text-[10px] font-bold text-[#FF5C1A] group-hover:underline shrink-0">Switch</span>
+ </button>
  
  <!-- Navigation -->
  <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
@@ -167,8 +191,20 @@
  <p class="text-sm text-gray-400 font-medium mt-1">{{ pageDescription }}</p>
  </div>
  
- <div class="flex items-center gap-4">
- <NuxtLink to="/notifications" class="relative group">
+ <div class="flex items-center gap-3">
+  <!-- Operating Campus Pill -->
+  <button
+    type="button"
+    @click="openPicker"
+    class="flex items-center gap-2 bg-gray-50 hover:bg-white text-gray-900 border border-gray-100 hover:border-[#FF5C1A]/50 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm group"
+    title="Change operating campus"
+  >
+    <MapPin class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
+    <span class="max-w-[150px] truncate">{{ currentCampusLabel }}</span>
+    <ChevronDown class="w-3 h-3 text-gray-400 group-hover:text-gray-700 shrink-0" />
+  </button>
+
+  <NuxtLink to="/notifications" class="relative group">
  <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-white group-hover:shadow-sm border border-gray-50 group-hover:text-[#FF5C1A] transition-all border border-transparent group-hover:border-gray-100">
  <Bell class="w-[18px] h-[18px]" />
  </div>
@@ -322,20 +358,28 @@ import ChatWidget from '@/components/ChatWidget.vue'
   ShieldCheck,
   ShieldAlert,
   Clock,
-  XCircle
+  XCircle,
+  MapPin,
+  ChevronDown
  } from 'lucide-vue-next'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useNotifications } from '@/composables/modules/notifications/useNotifications'
+import { useInstitution } from '@/composables/useInstitution'
 import InAppToast from '@/components/InAppToast.vue'
 
 const { toastQueue } = useRealtimeNotifications()
 const { unreadCount } = useNotifications()
+const { institution, openPicker } = useInstitution()
 const toastRef = ref<any>(null)
 const errandrProfile = ref<any>(null)
 
 const route = useRoute()
 const router = useRouter()
 const { user, logOut } = useUser()
+
+const currentCampusLabel = computed(() => {
+  return institution.value?.shortName || institution.value?.name || (user.value as any)?.school || 'Select Campus'
+})
 
 let profileInterval: any = null
 

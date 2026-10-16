@@ -74,8 +74,25 @@ const instanceArray = [
 const readInstitutionId = (): string => {
   if (typeof window === 'undefined') return '';
 
-  let rawUser: any = null;
+  // 1. Check explicit dispatch campus cookie
+  const matchInst = document.cookie.match(new RegExp('(^| )errandr_dispatch_institution=([^;]+)'));
+  if (matchInst) {
+    const val = decodeURIComponent(matchInst[2]).trim();
+    if (val) return val;
+  }
 
+  // 2. Check explicit storage
+  try {
+    const storedInst = localStorage.getItem('errandr_dispatch_institution');
+    if (storedInst) {
+      const parsed = JSON.parse(storedInst);
+      const id = parsed?.institution?._id || parsed?.institution?.slug || parsed?._id;
+      if (typeof id === 'string' && id.trim()) return id.trim();
+    }
+  } catch (e) {}
+
+  // 3. Fallback to authenticated user's institution
+  let rawUser: any = null;
   const match = document.cookie.match(new RegExp('(^| )errandr_dispatch_user=([^;]+)'));
   if (match) {
     try {

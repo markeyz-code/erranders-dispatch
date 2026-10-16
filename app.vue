@@ -13,6 +13,16 @@
       <NuxtLayout class="z-10">
         <NuxtPage class="z-10" />
       </NuxtLayout>
+
+      <!-- Campus switching splash and chooser for dispatch -->
+      <ClientOnly>
+        <CoreCampusPicker v-if="pickerRequested" @close="closePicker" />
+        <CoreCampusSwitchSplash
+          v-if="splashTarget"
+          :institution="splashTarget"
+          @finished="endCampusSwitch"
+        />
+      </ClientOnly>
       
       <!-- Chat Widget - Bottom Right -->
       <!-- <div class="fixed bottom-6 right-6 z-[999998]">
@@ -41,11 +51,16 @@ import { ref, onMounted } from 'vue'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useAuth } from '@/composables/modules/auth'
 import { useUser } from '@/composables/modules/auth/user'
+import { useInstitution } from '@/composables/useInstitution'
 
 const isPlatformClosed = ref(false)
 
 const { fetchProfile } = useAuth()
 const { token } = useUser()
+const { restore, loadInstitutions, pickerRequested, closePicker, splashTarget, endCampusSwitch } = useInstitution()
+
+restore()
+loadInstitutions()
 
 useRealtimeNotifications()
 
