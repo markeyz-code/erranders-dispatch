@@ -306,21 +306,21 @@ const getStatusClasses = (s: string) => {
 const getOrderTypeLabel = (order: any) => {
   if (!order) return 'Order'
   if (order.type === 'custom_errand') {
-    if (order.customDetails?.description?.includes('Barter Tx ID') || order.customDetails?.description?.includes('[Barter Tx ID:')) {
+    if (order.customDetails?.description?.includes('[Barter Tx ID:')) {
       return 'Barter Delivery'
     }
     return 'Custom Errand'
   }
-  return order.orderType || 'Store Order'
+  return 'Marketplace'
 }
 
 const getOrderTypeColor = (order: any) => {
-  if (!order) return 'bg-gray-50 text-gray-600 border-gray-200'
+  if (!order) return 'bg-gray-50 text-gray-700 border-gray-200'
   if (order.type === 'custom_errand') {
-    if (order.customDetails?.description?.includes('Barter Tx ID') || order.customDetails?.description?.includes('[Barter Tx ID:')) {
-      return 'bg-orange-50 text-orange-700 border-orange-200'
+    if (order.customDetails?.description?.includes('[Barter Tx ID:')) {
+      return 'bg-purple-50 text-purple-700 border-purple-200'
     }
-    return 'bg-purple-50 text-purple-700 border-purple-200'
+    return 'bg-amber-50 text-amber-700 border-amber-200'
   }
   return 'bg-blue-50 text-blue-700 border-blue-200'
 }

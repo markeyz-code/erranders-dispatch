@@ -22,7 +22,13 @@ export const useRealtimeSocket = () => {
     if (!process.client) return
     if (socket.value && (socket.value.connected || isConnecting.value)) return
 
-    const rawUrl = (import.meta.env.VITE_WS_URL || import.meta.env.VITE_API_BASE_URL || window.location.origin) as string
+    let rawUrl = 'https://api.erranders.org'
+    try {
+      const config = useRuntimeConfig()
+      rawUrl = (config.public.wsBase as string) || (config.public.apiBase as string) || rawUrl
+    } catch {
+      rawUrl = (import.meta.env?.VITE_WS_URL || import.meta.env?.VITE_API_BASE_URL || rawUrl) as string
+    }
     let baseUrl = rawUrl.replace(/\/$/, '') // Remove trailing slash
     
     // Ensure protocol for websockets

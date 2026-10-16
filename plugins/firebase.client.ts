@@ -6,11 +6,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const firebaseConfig = {
-    apiKey: config.public.firebaseApiKey,
-    authDomain: config.public.firebaseAuthDomain,
-    projectId: config.public.firebaseProjectId,
-    messagingSenderId: config.public.firebaseMessagingSenderId,
-    appId: config.public.firebaseAppId,
+    apiKey: config.public.firebaseApiKey || 'AIzaSyBzYV1KzAMugqh2N0DvbTP7vr4f96j1Po4',
+    authDomain: config.public.firebaseAuthDomain || 'erranders-493fe.firebaseapp.com',
+    projectId: config.public.firebaseProjectId || 'erranders-493fe',
+    messagingSenderId: config.public.firebaseMessagingSenderId || '1022790982621',
+    appId: config.public.firebaseAppId || '1:1022790982621:web:771af2aab7a6e7a200b434',
   };
 
   const app = initializeApp(firebaseConfig);

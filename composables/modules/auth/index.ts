@@ -13,11 +13,21 @@ export const useAuth = () => {
   const firebaseLoading = ref(false);
 
   const getFirebaseAuth = () => {
-    const config = useRuntimeConfig();
+    let apiKey = 'AIzaSyBzYV1KzAMugqh2N0DvbTP7vr4f96j1Po4';
+    let authDomain = 'erranders-493fe.firebaseapp.com';
+    let projectId = 'erranders-493fe';
+    try {
+      const config = useRuntimeConfig();
+      apiKey = (config.public.firebaseApiKey as string) || apiKey;
+      authDomain = (config.public.firebaseAuthDomain as string) || authDomain;
+      projectId = (config.public.firebaseProjectId as string) || projectId;
+    } catch {
+      // nuxt context fallback
+    }
     const firebaseConfig = {
-      apiKey: config.public.firebaseApiKey,
-      authDomain: config.public.firebaseAuthDomain,
-      projectId: config.public.firebaseProjectId,
+      apiKey,
+      authDomain,
+      projectId,
     };
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
     return getAuth(app);

@@ -2,10 +2,22 @@ import axios, { type AxiosResponse } from "axios";
 import { useCustomToast } from '@/composables/core/useCustomToast'
 import { useNetworkStatus } from '@/composables/core/useNetworkStatus'
 
-const $GATEWAY_ENDPOINT_WITHOUT_VERSION = import.meta.env.VITE_API_BASE_URL as string;
-const $GATEWAY_ENDPOINT = import.meta.env.VITE_API_BASE_URL + "/api/v1";
-const $GATEWAY_ENDPOINT_V2 = import.meta.env.VITE_API_BASE_URL + "/v2";
-const $IMAGE_UPLOAD_ENDPOINT = import.meta.env.VITE_IMAGE_UPLOAD_BASE_URL as string;
+const getBaseUrl = (): string => {
+  try {
+    const config = useRuntimeConfig();
+    return (config.public.apiBase as string) || 'https://api.erranders.org';
+  } catch {
+    const envApiUrl = import.meta.env?.VITE_API_BASE_URL;
+    return envApiUrl || 'https://api.erranders.org';
+  }
+};
+
+const cleanBaseUrl = getBaseUrl().replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+
+const $GATEWAY_ENDPOINT_WITHOUT_VERSION = cleanBaseUrl;
+const $GATEWAY_ENDPOINT = `${cleanBaseUrl}/api/v1`;
+const $GATEWAY_ENDPOINT_V2 = `${cleanBaseUrl}/v2`;
+const $IMAGE_UPLOAD_ENDPOINT = cleanBaseUrl;
 
 export const GATEWAY_ENDPOINT = axios.create({
   baseURL: $GATEWAY_ENDPOINT,
