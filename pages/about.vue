@@ -2,7 +2,6 @@
   <div class="min-h-screen bg-white font-sans text-gray-900 scroll-smooth">
 
 
-    <!-- Hero Section -->
     <section class="relative pt-40 pb-24 overflow-hidden">
       <div class="absolute inset-0 z-0 pointer-events-none">
         <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-parentPrimary/5 rounded-full blur-[120px] translate-x-1/4"></div>
@@ -69,7 +68,6 @@
       </div>
     </section>
 
-    <!-- Support Section -->
     <section class="py-32 bg-white overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 sm:px-10">
         <div class="flex flex-col lg:flex-row items-center gap-20">
