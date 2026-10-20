@@ -792,6 +792,18 @@ const connectNegotiationSocket = (orderId: string) => {
       formattedBidAmount.value = ''
     }
   })
+
+  negotiationSocket.on('orderCancelled', (data: any) => {
+    const orderId = data.orderId || data._id
+    if (orderId) {
+      availableOrders.value = availableOrders.value.filter(o => o._id !== orderId)
+      if (selectedOrder.value?._id === orderId) {
+        pushToast('Order Cancelled', 'The customer has cancelled this errand.', 'ERROR')
+        isDrawerOpen.value = false
+        selectedOrder.value = null
+      }
+    }
+  })
 }
 
 const disconnectNegotiationSocket = () => {
@@ -1098,7 +1110,22 @@ const handleOrderAccepted = (payload: any) => {
   }
 }
 
+const handleOrderCancelled = (payload: any) => {
+  const orderId = payload.data?.orderId || payload.orderId || payload._id
+  if (!orderId) return
+  availableOrders.value = availableOrders.value.filter(o => o._id !== orderId)
+  if (selectedOrder.value?._id === orderId) {
+    pushToast('Order Cancelled', 'The customer has cancelled this errand.', 'ERROR')
+    isDrawerOpen.value = false
+    selectedOrder.value = null
+  }
+}
+
 const handleNewNotification = (payload: any) => {
+  if (payload?.type === 'ORDER_CANCELLED' || payload?.status === 'cancelled') {
+    handleOrderCancelled(payload)
+  }
+
   if (payload?.type === 'ORDER_BIDS_UPDATE' || payload?.type === 'BID_COUNTERED') {
     if (payload.data?.orderId && selectedOrder.value?._id === payload.data.orderId) {
       fetchExistingBid(payload.data.orderId)
@@ -1128,6 +1155,8 @@ watch(() => socket.value, (newSocket) => {
   if (currentSocket) {
     currentSocket.off('notification:new-order', handleNewOrder)
     currentSocket.off('notification:order-accepted', handleOrderAccepted)
+    currentSocket.off('notification:order-cancelled', handleOrderCancelled)
+    currentSocket.off('negotiation:order-cancelled', handleOrderCancelled)
     currentSocket.off('notification:new', handleNewNotification)
   }
   
@@ -1135,6 +1164,8 @@ watch(() => socket.value, (newSocket) => {
     currentSocket = newSocket
     newSocket.on('notification:new-order', handleNewOrder)
     newSocket.on('notification:order-accepted', handleOrderAccepted)
+    newSocket.on('notification:order-cancelled', handleOrderCancelled)
+    newSocket.on('negotiation:order-cancelled', handleOrderCancelled)
     newSocket.on('notification:new', handleNewNotification)
   }
 }, { immediate: true })
@@ -1148,6 +1179,8 @@ onUnmounted(() => {
   if (currentSocket) {
     currentSocket.off('notification:new-order', handleNewOrder)
     currentSocket.off('notification:order-accepted', handleOrderAccepted)
+    currentSocket.off('notification:order-cancelled', handleOrderCancelled)
+    currentSocket.off('negotiation:order-cancelled', handleOrderCancelled)
     currentSocket.off('notification:new', handleNewNotification)
   }
   disconnectNegotiationSocket()
