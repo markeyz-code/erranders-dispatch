@@ -2,112 +2,264 @@
   <div class="min-h-screen bg-white font-sans text-gray-900 scroll-smooth selection:bg-parentPrimary selection:text-white">
     <!-- <ExamPromoBanner /> -->
     <!-- Hero Section with Background Carousel & Continuous Marquee -->
-    <section class="relative pt-24 lg:pt-32 pb-24 overflow-hidden bg-gradient-to-b from-slate-50/80 via-white to-white border-b border-slate-100">
+    <section class="relative pt-24 lg:pt-32 pb-20 overflow-hidden bg-gradient-to-b from-orange-50/40 via-white to-slate-50/50 border-b border-slate-100">
+      <!-- Soft Ambient Backdrop Glow -->
+      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-orange-300/20 via-amber-200/20 to-orange-400/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
       <!-- Soft Minimalist Grid Dot Overlay -->
-      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-70 z-0 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-60 z-0 pointer-events-none"></div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-10 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <!-- Left Column: Elegant, Balanced Content -->
+      <!-- ═══ DESKTOP-ONLY FLOATING ORGANIC HERO IMAGE (Strictly hidden on Mobile) ═══ -->
+      <div class="hidden lg:block absolute top-12 right-6 xl:right-16 z-20 group cursor-pointer transition-all duration-500 hover:scale-105">
+        <div class="relative w-40 h-40 xl:w-48 xl:h-48 drop-shadow-2xl">
+          <div class="w-full h-full overflow-hidden rounded-[2.2rem] border-4 border-white shadow-xl bg-slate-100">
+            <img
+              src="/img/hero_ninja_runner.jpg"
+              alt="Campus Errand Ninja runner"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-115"
+            />
+          </div>
+          <!-- Cute Top Badge -->
+          <div class="absolute -top-3 -right-2 px-2.5 py-1 rounded-full bg-orange-500 text-white text-[10px] font-black shadow-md flex items-center gap-1">
+            <span>🏃‍♂️</span> Active Runner
+          </div>
+          <!-- Micro Caption Pill -->
+          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3.5 py-1.5 bg-white/95 backdrop-blur-md rounded-full border border-slate-200/90 shadow-md text-xs font-black text-slate-800 flex items-center gap-1.5 transition-transform group-hover:scale-105">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>🛵 Cash Out On Campus</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
+        <!-- Campus & Language Selector Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-8">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 text-slate-700 text-xs font-bold shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <Sparkles class="w-3.5 h-3.5 text-parentPrimary" />
+            <span>Active Campus Ninjas at UNILAG, LASU, YABATECH & FUTA</span>
+          </div>
+
+          <!-- Language Selector Tabs -->
+          <div class="flex items-center gap-1.5 bg-slate-100/90 p-1 rounded-full border border-slate-200 shadow-inner">
+            <button
+              v-for="lang in ninjaLanguages"
+              :key="lang.id"
+              @click="selectNinjaLanguage(lang.id)"
+              class="px-3 py-1 rounded-full text-xs font-black transition-all flex items-center gap-1"
+              :class="activeNinjaLang === lang.id ? 'bg-white text-slate-900 shadow-xs scale-102' : 'text-slate-600 hover:text-slate-900'"
+            >
+              <span>{{ lang.flag }}</span>
+              <span>{{ lang.label }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+          <!-- Left Column: Energetic Multilingual Pitch -->
           <div class="lg:col-span-7 text-left flex flex-col items-start space-y-6">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-sm font-bold tracking-wide shadow-sm">
-              <Sparkles class="w-3.5 h-3.5 text-parentPrimary" />
-              Active at UNILAG, LASU & YABATECH
+            <!-- Active Dynamic Language & Feature Badge -->
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-black bg-parentPrimary/10 text-parentPrimary border border-parentPrimary/20 flex items-center gap-1.5">
+                <span>{{ currentNinjaPhrase.langFlag }}</span>
+                <span>{{ currentNinjaPhrase.langLabel }}</span>
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white flex items-center gap-1.5 shadow-xs">
+                <span>{{ currentNinjaPhrase.featureIcon }}</span>
+                <span>{{ currentNinjaPhrase.feature }}</span>
+              </span>
             </div>
-            
-            <h1 class="text-4xl sm:text-5xl lg:text-[4.5rem] font-medium tracking-tight leading-[1.05] text-slate-900">
-              Make Money <span class="text-parentPrimary">on Campus,</span><br />
-              Sharp Sharp!
+
+            <!-- Student Relatable Question Hook -->
+            <div class="inline-flex items-center gap-2 text-slate-700 font-extrabold text-sm sm:text-base bg-amber-50/80 px-4 py-2 rounded-2xl border border-amber-200/60">
+              <Flame class="w-4 h-4 text-parentPrimary" />
+              <span>"{{ currentNinjaPhrase.hook }}"</span>
+            </div>
+
+            <!-- Main Heading with Typewriter -->
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-slate-900 min-h-[140px] sm:min-h-[130px] lg:min-h-[150px]">
+              <span>No dey trek for free. </span>
+              <span class="text-parentPrimary">{{ typedNinjaText }}</span>
+              <span class="inline-block w-1 h-8 sm:h-10 bg-parentPrimary ml-1 animate-pulse align-middle"></span>
             </h1>
-            
-            <p class="text-base sm:text-lg text-slate-500 font-medium leading-relaxed max-w-xl">
-              Turn your free time between classes into real cash. Pick up food and items from vendors, drop them off at hostels or lecture halls, and get your money instantly. Easy peasy!
+
+            <!-- Explanatory Subtext -->
+            <p class="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl">
+              {{ currentNinjaPhrase.subtext }}
             </p>
-            
-            <div class="flex flex-row items-center gap-4 w-full sm:w-auto">
-              <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/register'" class="px-4 py-3 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-extrabold text-sm shadow-sm border border-gray-50 shadow-parentPrimary/10 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
-                {{ isLoggedIn ? 'Enter Dashboard' : 'Start Earning Now' }}
+
+            <!-- Ninja Core Feature Badges -->
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <div class="px-3 py-1 rounded-xl bg-orange-50 border border-orange-200/80 text-orange-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                <span>⚡</span> Instant Daily Bank Cashout
+              </div>
+              <div class="px-3 py-1 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                <span>🤝</span> Custom Errand Bargaining
+              </div>
+              <div class="px-3 py-1 rounded-xl bg-blue-50 border border-blue-200/80 text-blue-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                <span>🍱</span> Meal Desk Batch Deliveries
+              </div>
+              <div class="px-3 py-1 rounded-xl bg-purple-50 border border-purple-200/80 text-purple-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                <span>⏰</span> 100% Flexible Lectures Schedule
+              </div>
+              <div class="px-3 py-1 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                <span>🚶</span> Trek, Skate, or Bike Friendly
+              </div>
+              <div class="px-3 py-1 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
+                <span>🎁</span> Keep 100% of Student Tips
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+              <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/register'" class="px-6 py-3.5 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-black text-sm shadow-md shadow-parentPrimary/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+                {{ isLoggedIn ? 'Enter Ninja Dashboard' : 'Start Earning as a Ninja' }}
                 <Rocket class="w-4 h-4 text-white" />
               </NuxtLink>
+              <a href="#features" class="px-5 py-3.5 bg-white hover:bg-slate-50 text-slate-800 rounded-full font-bold text-sm border border-slate-200 shadow-xs transition-all flex items-center justify-center gap-2">
+                <span>How Ninja Hustle Works</span>
+                <ArrowRight class="w-4 h-4 text-slate-500" />
+              </a>
             </div>
           </div>
 
-          <!-- Right Column: Minimalist Light Live Rider Simulator -->
-          <div class="lg:col-span-5 relative w-full flex justify-center lg:justify-end mt-10 lg:mt-0">
-            <!-- The Main Light Glass Console -->
-            <div class="w-full max-w-[380px] bg-white border border-slate-100 rounded-[2.5rem] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.03)] relative overflow-hidden">
-              <!-- Mockup Header -->
-              <div class="flex items-center justify-between border-b border-slate-100 pb-5 mb-5">
+          <!-- Right Column: Interactive Live Ninja Console -->
+          <div class="lg:col-span-5 relative w-full flex justify-center lg:justify-end">
+            <!-- Glow behind console -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-parentPrimary/20 via-amber-300/20 to-emerald-400/10 rounded-[3rem] blur-2xl -z-10"></div>
+
+            <div class="w-full max-w-[400px] bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-[2.5rem] p-5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.08)] relative">
+              <!-- Console Header -->
+              <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
                 <div class="flex items-center gap-3">
-                  <!-- Live Profile Avatar -->
-                  <div class="w-11 h-11 rounded-xl overflow-hidden border border-slate-200 shadow-inner relative bg-slate-50">
-                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=150" class="w-full h-full object-cover" alt="Student Rider" />
+                  <div class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-orange-500/20 shadow-xs relative bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover" alt="Student Ninja Emeka" />
                   </div>
                   <div>
-                    <h3 class="text-sm font-bold text-slate-900">Emeka (Rider)</h3>
-                    <p class="text-[11px] text-emerald-500 font-bold flex items-center gap-1 mt-0.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live & Ready
+                    <div class="flex items-center gap-1.5">
+                      <h3 class="text-sm font-black text-slate-900">Emeka O.</h3>
+                      <span class="px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-black">Verified Ninja</span>
+                    </div>
+                    <p class="text-[11px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                      <span>● Online & Taking Runs (UNILAG)</span>
                     </p>
                   </div>
                 </div>
-                <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+                <div class="w-9 h-9 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center text-parentPrimary shadow-xs">
                   <Bike class="w-4 h-4" />
                 </div>
               </div>
 
-              <!-- Total Earnings Widget -->
-              <div class="bg-slate-50/60 rounded-3xl p-5 border border-slate-100 space-y-1 mb-5">
-                <div class="flex justify-between items-center text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                  <span>Today's Earnings</span>
-                  <span class="text-emerald-600 font-medium flex items-center gap-0.5 text-[11px]">
-                    <TrendingUp class="w-3 h-3" /> 14 Trips
+              <!-- Today's Wallet Earnings Card -->
+              <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white rounded-3xl p-5 border border-slate-700/60 shadow-md space-y-2 mb-4 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-parentPrimary/20 rounded-full blur-xl pointer-events-none"></div>
+                <div class="flex justify-between items-center text-slate-300 text-[11px] font-bold uppercase tracking-wider">
+                  <span class="flex items-center gap-1.5">
+                    <Wallet class="w-3.5 h-3.5 text-amber-400" />
+                    <span>Today's Ninja Wallet</span>
+                  </span>
+                  <span class="text-emerald-400 font-extrabold flex items-center gap-0.5 text-xs bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                    <TrendingUp class="w-3 h-3" /> 16 Trips
                   </span>
                 </div>
-                <h4 class="text-3xl font-medium text-slate-950 tracking-tight">₦9,800</h4>
-                <p class="text-[10px] text-slate-400 font-medium">Available for instant withdrawal</p>
+                <div class="flex items-baseline justify-between pt-1">
+                  <h4 class="text-3xl font-black text-white tracking-tight">₦14,800</h4>
+                  <span class="text-[10px] text-amber-300 font-bold bg-amber-400/10 px-2 py-0.5 rounded-md border border-amber-400/20">+₦2,100 tips</span>
+                </div>
+                <div class="pt-2 flex items-center justify-between text-[11px] border-t border-slate-700/60 text-slate-300">
+                  <span class="flex items-center gap-1">
+                    <CheckCircle2 class="w-3.5 h-3.5 text-emerald-400" /> Instant Bank Cashout
+                  </span>
+                  <span class="text-orange-400 font-bold">Paid to Kuda / Opay</span>
+                </div>
               </div>
 
-              <!-- Live Order Queue (Clean Light rows) -->
-              <div class="space-y-3">
-                <div class="p-3.5 bg-slate-50/50 rounded-2xl border border-slate-100 flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center font-bold text-sm">📍</div>
+              <!-- Live Requests Feed -->
+              <div class="space-y-2.5">
+                <!-- Request 1 (Interactive Pending Drop) -->
+                <div class="p-3.5 bg-orange-50/70 hover:bg-orange-50 rounded-2xl border border-orange-200/80 transition-all">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <div class="flex items-center gap-2">
+                      <span class="px-2 py-0.5 rounded-md bg-parentPrimary text-white text-[10px] font-black tracking-wide">NEW RUN</span>
+                      <span class="text-[11px] font-extrabold text-slate-800">Normal Errand</span>
+                    </div>
+                    <span class="text-xs font-black text-parentPrimary">₦1,200 + ₦300 Tip</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 font-medium flex items-center gap-1">
+                    <span>🍱 Chicken Republic → 📍 Makama Hall (3rd Floor)</span>
+                  </p>
+                  <div class="mt-2.5 flex items-center justify-between">
+                    <span class="text-[10px] text-slate-500">"Why come downstairs? Errand it!"</span>
+                    <button class="px-3 py-1 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-lg text-[10px] font-black uppercase tracking-wider shadow-xs transition-all active:scale-95">
+                      Accept Run ⚡
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Request 2 (In Transit) -->
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center font-bold text-sm">🛵</div>
                     <div>
-                      <p class="text-sm font-extrabold text-slate-900">New Request</p>
-                      <p class="text-[11px] text-slate-500">Pizza Hub → Jaja Hall</p>
+                      <p class="text-xs font-black text-slate-900">Custom Errand (Bargain)</p>
+                      <p class="text-[10px] text-slate-500">Library Book Return → Moremi Hall</p>
                     </div>
                   </div>
-                  <span class="px-2 py-0.5 bg-parentPrimary/10 text-parentPrimary border border-parentPrimary/10 rounded-md text-[9px] font-extrabold uppercase">ACCEPT</span>
-                </div>
-
-                <div class="p-3.5 bg-slate-50/50 rounded-2xl border border-slate-100 flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-green-50 text-emerald-500 flex items-center justify-center font-bold text-sm">🛵</div>
-                    <div>
-                      <p class="text-sm font-extrabold text-slate-900">In Transit</p>
-                      <p class="text-[11px] text-slate-500">Smoothie Daddy → Moremi</p>
-                    </div>
+                  <div class="text-right">
+                    <span class="text-xs font-black text-emerald-600">₦1,500</span>
+                    <p class="text-[9px] text-slate-400 font-bold">In Progress</p>
                   </div>
-                  <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-md text-[9px] font-extrabold uppercase">0.5km</span>
                 </div>
               </div>
 
-              <!-- Decorative Floating Widgets -->
-              <div class="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-50 flex items-center gap-2 animate-bounce [animation-duration:4s]">
-                <div class="w-7 h-7 rounded-lg bg-yellow-50 text-yellow-500 flex items-center justify-center font-medium text-sm">⭐</div>
+              <!-- Decorative Floating Badges -->
+              <div class="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-2xl p-2.5 shadow-md flex items-center gap-2">
+                <span class="text-amber-500 text-sm">⭐</span>
                 <div>
-                  <p class="text-[11px] font-medium text-slate-900">Top Rated</p>
-                  <p class="text-[9px] font-bold text-slate-400">4.9 Star Average</p>
+                  <p class="text-xs font-black text-slate-900">4.9 Rating</p>
+                  <p class="text-[9px] font-bold text-slate-400">210+ Student Reviews</p>
                 </div>
               </div>
 
-              <div class="absolute -bottom-4 -left-4 bg-white border border-slate-100 rounded-2xl p-2.5 shadow-sm border border-gray-50 flex items-center gap-2.5 animate-bounce [animation-duration:5s]">
-                <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center font-medium text-sm">⚡</div>
+              <div class="absolute -bottom-3 -left-3 bg-white border border-slate-200 rounded-2xl p-2.5 shadow-md flex items-center gap-2">
+                <span class="text-emerald-500 text-sm">⚡</span>
                 <div>
-                  <p class="text-[11px] font-medium text-slate-900">Instant Cash</p>
-                  <p class="text-[9px] font-bold text-slate-400">Payout settled instantly</p>
+                  <p class="text-xs font-black text-slate-900">0% Commission Delay</p>
+                  <p class="text-[9px] font-bold text-slate-400">Withdrawal in Seconds</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4-Column Ninja Trust Strip -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-8 border-t border-slate-200/70">
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-parentPrimary text-lg">💰</div>
+            <div>
+              <div class="text-sm font-black text-slate-900">₦10k - ₦25k+ Daily</div>
+              <div class="text-xs text-slate-500">Real Campus Hustle</div>
+            </div>
+          </div>
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 text-lg">🤝</div>
+            <div>
+              <div class="text-sm font-black text-slate-900">Custom Errands</div>
+              <div class="text-xs text-slate-500">Bargain price on your terms</div>
+            </div>
+          </div>
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 text-lg">🚶</div>
+            <div>
+              <div class="text-sm font-black text-slate-900">No Bike Needed</div>
+              <div class="text-xs text-slate-500">Walk & deliver between halls</div>
+            </div>
+          </div>
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 text-lg">⚡</div>
+            <div>
+              <div class="text-sm font-black text-slate-900">Instant Cashout</div>
+              <div class="text-xs text-slate-500">To any Nigerian bank 24/7</div>
             </div>
           </div>
         </div>
@@ -233,12 +385,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useUser } from '@/composables/modules/auth/user'
 import { 
   ArrowRight, Twitter, Instagram, Facebook,
   LogIn, Store, TrendingUp, Zap, Rocket, Activity, ClipboardList, PieChart, Star,
-  PlayCircle, Quote, Utensils, Bike, Sparkles, ShieldCheck, Clock, Footprints, Banknote
+  PlayCircle, Quote, Utensils, Bike, Sparkles, ShieldCheck, Clock, Footprints, Banknote,
+  CheckCircle2, Wallet, Flame
 } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -251,9 +404,9 @@ definePageMeta({
 const { isLoggedIn } = useUser()
 
 useHead({
-  title: 'Errander for Riders | Earn Money on Campus',
+  title: 'Errand Ninja by Erranders | Turn Campus Walks into Cash',
   meta: [
-    { name: 'description', content: 'Deliver food to fellow students and earn money on your own schedule. Join Errandr as a campus rider today.' }
+    { name: 'description', content: 'Earn ₦10,000 - ₦25,000 daily delivering food and running errands for fellow students. Ultra-flexible, safe, and instant daily bank withdrawals.' }
   ]
 })
 
@@ -261,12 +414,224 @@ const handleScroll = () => {
   scrolled.value = window.scrollY > 50
 }
 
+interface NinjaPhrase {
+  lang: 'pidgin' | 'yoruba' | 'igbo' | 'hausa'
+  langLabel: string
+  langFlag: string
+  feature: string
+  featureIcon: string
+  hook: string
+  text: string
+  subtext: string
+}
+
+const ninjaPhrases: NinjaPhrase[] = [
+  // PIDGIN
+  {
+    lang: 'pidgin',
+    langLabel: 'Pidgin Vibe',
+    langFlag: '🇳🇬',
+    feature: 'Normal Errands',
+    featureIcon: '🛵',
+    hook: 'Why trek go hostel empty-handed?',
+    text: 'Carry food or package as you dey waka go hall, cash out clean ₦12k daily sharp sharp!',
+    subtext: 'No boss, no Wahala. You dey waka that route anyway — turn your normal steps to steady credit alerts!'
+  },
+  {
+    lang: 'pidgin',
+    langLabel: 'Pidgin Vibe',
+    langFlag: '🇳🇬',
+    feature: 'Custom Errands',
+    featureIcon: '🤝',
+    hook: 'Student get urgent custom errand?',
+    text: 'Bargain price directly with students, run the special run, and keep 100% of your tips!',
+    subtext: 'Buy handouts, pick laundry, or queue for power bank — your campus hustle, your terms, your rules.'
+  },
+  {
+    lang: 'pidgin',
+    langLabel: 'Pidgin Vibe',
+    langFlag: '🇳🇬',
+    feature: 'Meal Desk & Schedule',
+    featureIcon: '🍱',
+    hook: 'Group food drop at 1:00 PM lunch?',
+    text: 'Pick 10 hostel lunch packs at once from vendor desk, earn bulk delivery bonus in 15 mins!',
+    subtext: 'Batch deliveries mean faster drops, less back-and-forth movement, and sweet bulk earnings.'
+  },
+  {
+    lang: 'pidgin',
+    langLabel: 'Pidgin Vibe',
+    langFlag: '🇳🇬',
+    feature: 'Daily Wallet',
+    featureIcon: '💰',
+    hook: 'Sun dey fight everybody outside? 😭☀️',
+    text: 'Help cozy roommates pick their orders from gate, withdraw your cash straight to your bank!',
+    subtext: 'Withdraw anytime with zero delay. Money drop sharp sharp before your next lecture begins.'
+  },
+
+  // YORUBA
+  {
+    lang: 'yoruba',
+    langLabel: 'Èdè Yorùbá',
+    langFlag: '🟢',
+    feature: 'Isẹ́ Oúnjẹ & Ẹrù',
+    featureIcon: '🛵',
+    hook: 'Kilode tí o fi ń rìn lásán lórí campus?',
+    text: 'Gbé oúnjẹ tàbí ẹrù lọ sí hostel kí o gba owó lẹ́sẹ̀kẹsẹ̀ — ma fi àkókò rẹ ṣòfò!',
+    subtext: 'Láàárín kíláàsì méjì, rí ₦8,000 sí ₦15,000 lójúmọ́ láì sí wàhálà rárá.'
+  },
+  {
+    lang: 'yoruba',
+    langLabel: 'Èdè Yorùbá',
+    langFlag: '🟢',
+    feature: 'Custom Errands & Bargain',
+    featureIcon: '🤝',
+    hook: 'Akẹ́kọ̀ọ́ fẹ́ ríránṣẹ́ pàtàkì?',
+    text: 'Ṣe àdéhùn owó tààrà pẹ̀lú ọmọ ilé-ìwé, parí isẹ́ kíá, gbogbo èbùn (tips) jẹ́ tìrẹ 100%!',
+    subtext: 'Rà ìwé handouts, gba aṣọ ifọ, tàbí gbé ẹrù — gba èrè lórí gbogbo ìrìn tí o bá rìn.'
+  },
+  {
+    lang: 'yoruba',
+    langLabel: 'Èdè Yorùbá',
+    langFlag: '🟢',
+    feature: 'Meal Desk & Payout',
+    featureIcon: '🍱',
+    hook: 'O fẹ́ owó lójúmọ́ fún ìtọ́jú ara rẹ?',
+    text: 'Wọlé gẹ́gẹ́ bí Errand Ninja — gba oúnjẹ púpọ̀ lẹ́ẹ̀kan, owó rẹ sì wọ àpamọ́wọ́ kíá!',
+    subtext: 'Fàyè gba ara rẹ láti ṣe owó ní àkókò tí o bá fẹ́, kọ́ ẹ̀kọ́ rẹ pẹ̀lú àlàáfíà.'
+  },
+
+  // IGBO
+  {
+    lang: 'igbo',
+    langLabel: 'Asụsụ Igbo',
+    langFlag: '🟡',
+    feature: 'Ozi Nri & Ngwongwo',
+    featureIcon: '🛵',
+    hook: 'Gịnị mere ị ga-eji na-agagharị n’efu na campus?',
+    text: 'Buru nri na ngwongwo gaa hostel, nweta ego dị mma ozugbo n’akpa gị!',
+    subtext: 'Jiri oge ezumike n’etiti nkuzi mee ego — nweta ₦10,000+ kwa ụbọchị n’enweghị nsogbu.'
+  },
+  {
+    lang: 'igbo',
+    langLabel: 'Asụsụ Igbo',
+    langFlag: '🟡',
+    feature: 'Custom Errands & Tips',
+    featureIcon: '🤝',
+    hook: 'Onye chọrọ ka agbara ya ozi pụrụ iche?',
+    text: 'Kpaa nkata ọnụahịa ozugbo n’onwe gị, gbaa ọsọ ọrụ ọma ahụ, ma debe ego ndụmọdụ niile!',
+    subtext: 'Buru akwụkwọ ma ọ bụ gaa n’ahịa campus — bụrụ onye isi nke aka gị dịka Ninja.'
+  },
+  {
+    lang: 'igbo',
+    langLabel: 'Asụsụ Igbo',
+    langFlag: '🟡',
+    feature: 'Meal Schedule Batch',
+    featureIcon: '🍱',
+    hook: 'Chọrọ nkwụghachi ngwa ngwa na akaụntụ gị?',
+    text: 'Gbakọta ozi nri Meal Desk ọnụ n’otu oge, gbaa ọsọ n’ime nkeji 15, ego abata ozugbo!',
+    subtext: 'Wepụ ego na akaụntụ akụ gị n’enweghị nkwụsị ọ bụla — nwee onwe gị n’ụlọ akwụkwọ.'
+  },
+
+  // HAUSA
+  {
+    lang: 'hausa',
+    langLabel: 'Harshen Hausa',
+    langFlag: '🔵',
+    feature: 'Aikin Kawo Kaya',
+    featureIcon: '🛵',
+    hook: 'Don me zaka yi tafiya a banza a harabar makaranta?',
+    text: 'Dauki abinci ko sako zuwa dakin dalibai, kuma ka sami kudi mai kyau a kowace rana!',
+    subtext: 'Yi aiki a lokacin hutun karatu — juya lokacin ka zuwa kudi na gaske a cikin asusunka.'
+  },
+  {
+    lang: 'hausa',
+    langLabel: 'Harshen Hausa',
+    langFlag: '🔵',
+    feature: 'Custom Errands',
+    featureIcon: '🤝',
+    hook: 'Dalibi yana bukatar aikin gaggawa?',
+    text: 'Yi ciniki kai tsaye da dalibai, gudanar da aikin a saukake, kuma dukkan kyaututtuka naka ne!',
+    subtext: 'Sayi litattafai ko karbi kaya — babu wahala, kai ne mai sarrafa lokacin ka.'
+  },
+  {
+    lang: 'hausa',
+    langLabel: 'Harshen Hausa',
+    langFlag: '🔵',
+    feature: 'Meal Desk & Payout',
+    featureIcon: '🍱',
+    hook: 'Kuna son cire kudi nan da nan?',
+    text: 'Dauki abincin Meal Desk a dunkule, rarraba wa dalibai a saukake, sannan ka karbi kudin ka nan take!',
+    subtext: 'Cire kudin ka zuwa asusun banki a kowane lokaci ba tare da wani jinkiri ba.'
+  }
+]
+
+const ninjaLanguages = [
+  { id: 'all', label: 'All Vibes', flag: '🔥' },
+  { id: 'pidgin', label: 'Pidgin', flag: '🇳🇬' },
+  { id: 'yoruba', label: 'Yorùbá', flag: '🟢' },
+  { id: 'igbo', label: 'Igbo', flag: '🟡' },
+  { id: 'hausa', label: 'Hausa', flag: '🔵' },
+]
+
+const activeNinjaLang = ref('all')
+const currentNinjaPhraseIndex = ref(0)
+const typedNinjaText = ref('')
+const isNinjaDeleting = ref(false)
+let ninjaTypewriterTimeout: any = null
+
+const activeNinjaPhrases = computed(() => {
+  if (activeNinjaLang.value === 'all') return ninjaPhrases
+  return ninjaPhrases.filter(p => p.lang === activeNinjaLang.value)
+})
+
+const currentNinjaPhrase = computed<NinjaPhrase>(() => {
+  const list = activeNinjaPhrases.value
+  return list[currentNinjaPhraseIndex.value % list.length] || ninjaPhrases[0]
+})
+
+const selectNinjaLanguage = (langId: string) => {
+  activeNinjaLang.value = langId
+  currentNinjaPhraseIndex.value = 0
+  typedNinjaText.value = ''
+  isNinjaDeleting.value = false
+  if (ninjaTypewriterTimeout) clearTimeout(ninjaTypewriterTimeout)
+  runNinjaTypewriter()
+}
+
+const runNinjaTypewriter = () => {
+  const phrase = currentNinjaPhrase.value.text
+  const currentLen = typedNinjaText.value.length
+
+  if (!isNinjaDeleting.value) {
+    if (currentLen < phrase.length) {
+      typedNinjaText.value = phrase.slice(0, currentLen + 1)
+      ninjaTypewriterTimeout = setTimeout(runNinjaTypewriter, 28)
+    } else {
+      ninjaTypewriterTimeout = setTimeout(() => {
+        isNinjaDeleting.value = true
+        runNinjaTypewriter()
+      }, 2600)
+    }
+  } else {
+    if (currentLen > 0) {
+      typedNinjaText.value = phrase.slice(0, currentLen - 1)
+      ninjaTypewriterTimeout = setTimeout(runNinjaTypewriter, 16)
+    } else {
+      isNinjaDeleting.value = false
+      currentNinjaPhraseIndex.value = (currentNinjaPhraseIndex.value + 1) % activeNinjaPhrases.value.length
+      ninjaTypewriterTimeout = setTimeout(runNinjaTypewriter, 350)
+    }
+  }
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  runNinjaTypewriter()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  if (ninjaTypewriterTimeout) clearTimeout(ninjaTypewriterTimeout)
 })
 
 // Data for Features Grid
