@@ -146,7 +146,6 @@
             </div>
           </div>
         </div>
-      </div>
 
       <!-- Marquee Row 1 -->
       <div class="mt-24 relative bg-slate-900 overflow-hidden py-3 transform -rotate-1 shadow-sm border border-gray-50 border-y border-slate-800 z-10">
