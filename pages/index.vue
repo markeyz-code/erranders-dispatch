@@ -1,235 +1,118 @@
 <template>
   <div class="min-h-screen bg-white font-sans text-gray-900 scroll-smooth selection:bg-parentPrimary selection:text-white">
     <!-- <ExamPromoBanner /> -->
-    <!-- Hero Section with Background Carousel & Continuous Marquee -->
-    <section class="relative pt-24 lg:pt-32 pb-20 overflow-hidden bg-gradient-to-b from-orange-50/40 via-white to-slate-50/50 border-b border-slate-100">
-      <!-- Soft Ambient Backdrop Glow -->
-      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-r from-orange-300/20 via-amber-200/20 to-orange-400/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
-      <!-- Soft Minimalist Grid Dot Overlay -->
-      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-60 z-0 pointer-events-none"></div>
+    <!-- Hero Section: Clean, Centered Simplicity (Matching Erranders for Business) -->
+    <section class="relative border-b border-slate-100 min-h-[calc(100dvh-5rem)] flex flex-col justify-center items-center py-12 lg:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-orange-50/30 via-white to-white">
+      <!-- Soft dot background grid (seeding pattern) -->
+      <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-70 pointer-events-none"></div>
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-[#FF5C1A]/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <!-- ═══ DESKTOP-ONLY FLOATING ORGANIC HERO IMAGE (Strictly hidden on Mobile) ═══ -->
-      <div class="hidden lg:block absolute top-12 right-6 xl:right-16 z-20 group cursor-pointer transition-all duration-500 hover:scale-105">
-        <div class="relative w-40 h-40 xl:w-48 xl:h-48 drop-shadow-2xl">
-          <div class="w-full h-full overflow-hidden rounded-[2.2rem] border-4 border-white shadow-xl bg-slate-100">
-            <img
-              src="/img/hero_ninja_runner.jpg"
-              alt="Campus Errand Ninja runner"
-              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-115"
-            />
-          </div>
-          <!-- Cute Top Badge -->
-          <div class="absolute -top-3 -right-2 px-2.5 py-1 rounded-full bg-orange-500 text-white text-[10px] font-black shadow-md flex items-center gap-1">
-            <span>🏃‍♂️</span> Active Runner
-          </div>
-          <!-- Micro Caption Pill -->
-          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3.5 py-1.5 bg-white/95 backdrop-blur-md rounded-full border border-slate-200/90 shadow-md text-xs font-black text-slate-800 flex items-center gap-1.5 transition-transform group-hover:scale-105">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>🛵 Cash Out On Campus</span>
-          </div>
-        </div>
-      </div>
+      <div class="max-w-7xl mx-auto relative w-full my-auto">
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-        <!-- Campus & Language Selector Bar -->
-        <div class="flex flex-wrap items-center justify-between gap-3 mb-8">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 text-slate-700 text-xs font-bold shadow-xs">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <Sparkles class="w-3.5 h-3.5 text-parentPrimary" />
-            <span>Active Campus Ninjas at UNILAG, LASU, YABATECH & FUTA</span>
-          </div>
-
-          <!-- Language Selector Tabs -->
-          <div class="flex items-center gap-1.5 bg-slate-100/90 p-1 rounded-full border border-slate-200 shadow-inner">
-            <button
-              v-for="lang in ninjaLanguages"
-              :key="lang.id"
-              @click="selectNinjaLanguage(lang.id)"
-              class="px-3 py-1 rounded-full text-xs font-black transition-all flex items-center gap-1"
-              :class="activeNinjaLang === lang.id ? 'bg-white text-slate-900 shadow-xs scale-102' : 'text-slate-600 hover:text-slate-900'"
+        <!-- Center Column Content -->
+        <div class="max-w-3xl mx-auto text-center relative z-20 space-y-6 pt-4">
+          <!-- Launch Pill -->
+          <div>
+            <NuxtLink
+              :to="isLoggedIn ? '/dashboard' : '/auth/register'"
+              class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 border border-orange-200/70 text-[#FF5C1A] text-xs font-bold hover:bg-orange-100/70 transition-colors shadow-2xs group"
             >
-              <span>{{ lang.flag }}</span>
-              <span>{{ lang.label }}</span>
-            </button>
+              <span class="w-2 h-2 rounded-full bg-[#FF5C1A] animate-pulse"></span>
+              <span>Active at UNILAG, LASU, YABATECH & FUTA</span>
+              <ArrowUpRight class="w-3.5 h-3.5 text-[#FF5C1A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </NuxtLink>
           </div>
-        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-          <!-- Left Column: Energetic Multilingual Pitch -->
-          <div class="lg:col-span-7 text-left flex flex-col items-start space-y-6">
-            <!-- Active Dynamic Language & Feature Badge -->
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-3 py-1 rounded-full text-xs font-black bg-parentPrimary/10 text-parentPrimary border border-parentPrimary/20 flex items-center gap-1.5">
-                <span>{{ currentNinjaPhrase.langFlag }}</span>
-                <span>{{ currentNinjaPhrase.langLabel }}</span>
-              </span>
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white flex items-center gap-1.5 shadow-xs">
-                <span>{{ currentNinjaPhrase.featureIcon }}</span>
-                <span>{{ currentNinjaPhrase.feature }}</span>
-              </span>
-            </div>
-
-            <!-- Student Relatable Question Hook -->
-            <div class="inline-flex items-center gap-2 text-slate-700 font-extrabold text-sm sm:text-base bg-amber-50/80 px-4 py-2 rounded-2xl border border-amber-200/60">
-              <Flame class="w-4 h-4 text-parentPrimary" />
-              <span>"{{ currentNinjaPhrase.hook }}"</span>
-            </div>
-
-            <!-- Main Heading with Typewriter -->
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.12] text-slate-900 min-h-[140px] sm:min-h-[130px] lg:min-h-[150px]">
-              <span>No dey trek for free. </span>
-              <span class="text-parentPrimary">{{ typedNinjaText }}</span>
-              <span class="inline-block w-1 h-8 sm:h-10 bg-parentPrimary ml-1 animate-pulse align-middle"></span>
+          <!-- Main Bold Heading with Rotating Carousel Tagline -->
+          <div class="space-y-3">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
+              Erranders for Campus Ninjas
             </h1>
 
-            <!-- Explanatory Subtext -->
-            <p class="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-xl">
-              {{ currentNinjaPhrase.subtext }}
-            </p>
-
-            <!-- Ninja Core Feature Badges -->
-            <div class="flex flex-wrap items-center gap-2 pt-1">
-              <div class="px-3 py-1 rounded-xl bg-orange-50 border border-orange-200/80 text-orange-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                <span>⚡</span> Instant Daily Bank Cashout
-              </div>
-              <div class="px-3 py-1 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                <span>🤝</span> Custom Errand Bargaining
-              </div>
-              <div class="px-3 py-1 rounded-xl bg-blue-50 border border-blue-200/80 text-blue-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                <span>🍱</span> Meal Desk Batch Deliveries
-              </div>
-              <div class="px-3 py-1 rounded-xl bg-purple-50 border border-purple-200/80 text-purple-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                <span>⏰</span> 100% Flexible Lectures Schedule
-              </div>
-              <div class="px-3 py-1 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                <span>🚶</span> Trek, Skate, or Bike Friendly
-              </div>
-              <div class="px-3 py-1 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-900 text-xs font-bold flex items-center gap-1.5 shadow-xs">
-                <span>🎁</span> Keep 100% of Student Tips
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
-              <NuxtLink :to="isLoggedIn ? '/dashboard' : '/auth/register'" class="px-6 py-3.5 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-full font-black text-sm shadow-md shadow-parentPrimary/25 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
-                {{ isLoggedIn ? 'Enter Ninja Dashboard' : 'Start Earning as a Ninja' }}
-                <Rocket class="w-4 h-4 text-white" />
-              </NuxtLink>
-              <a href="#features" class="px-5 py-3.5 bg-white hover:bg-slate-50 text-slate-800 rounded-full font-bold text-sm border border-slate-200 shadow-xs transition-all flex items-center justify-center gap-2">
-                <span>How Ninja Hustle Works</span>
-                <ArrowRight class="w-4 h-4 text-slate-500" />
-              </a>
+            <!-- Rotating Headline Micro-Carousel -->
+            <div class="relative h-10 sm:h-12 overflow-hidden flex items-center justify-center">
+              <TransitionGroup name="hero-slide" tag="div" class="w-full">
+                <p
+                  :key="currentHeadingIndex"
+                  class="absolute inset-0 flex items-center justify-center text-lg sm:text-2xl font-black tracking-tight text-[#FF5C1A]"
+                >
+                  <span>{{ heroHeadings[currentHeadingIndex] }}</span>
+                </p>
+              </TransitionGroup>
             </div>
           </div>
 
-          <!-- Right Column: Interactive Live Ninja Console -->
-          <div class="lg:col-span-5 relative w-full flex justify-center lg:justify-end">
-            <!-- Glow behind console -->
-            <div class="absolute inset-0 bg-gradient-to-tr from-parentPrimary/20 via-amber-300/20 to-emerald-400/10 rounded-[3rem] blur-2xl -z-10"></div>
+          <!-- Subtitle -->
+          <p class="text-sm sm:text-base text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">
+            Why trek across campus empty-handed? Deliver food packages and urgent items for students along your normal path. Flexible schedule, zero boss, and instant 24/7 bank payouts.
+          </p>
 
-            <div class="w-full max-w-[400px] bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-[2.5rem] p-5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.08)] relative">
-              <!-- Console Header -->
-              <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-orange-500/20 shadow-xs relative bg-slate-100">
-                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover" alt="Student Ninja Emeka" />
-                  </div>
-                  <div>
-                    <div class="flex items-center gap-1.5">
-                      <h3 class="text-sm font-black text-slate-900">Emeka O.</h3>
-                      <span class="px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-black">Verified Ninja</span>
-                    </div>
-                    <p class="text-[11px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
-                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                      <span>● Online & Taking Runs (UNILAG)</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="w-9 h-9 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center text-parentPrimary shadow-xs">
-                  <Bike class="w-4 h-4" />
-                </div>
-              </div>
+          <!-- Cute Pill Action Buttons (DevFest style with arrow badge circles) -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+            <NuxtLink
+              :to="isLoggedIn ? '/dashboard' : '/auth/register'"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-full bg-[#FF5C1A] text-white text-sm font-bold shadow-md shadow-[#FF5C1A]/25 hover:bg-[#E54D12] active:scale-[0.98] transition-all group"
+            >
+              <span>{{ isLoggedIn ? 'Enter Ninja Dashboard' : 'Start Earning as a Ninja' }}</span>
+              <span class="w-6 h-6 rounded-full bg-white/20 group-hover:bg-white/30 flex items-center justify-center transition-colors">
+                <ArrowUpRight class="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </span>
+            </NuxtLink>
 
-              <!-- Today's Wallet Earnings Card -->
-              <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white rounded-3xl p-5 border border-slate-700/60 shadow-md space-y-2 mb-4 relative overflow-hidden">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-parentPrimary/20 rounded-full blur-xl pointer-events-none"></div>
-                <div class="flex justify-between items-center text-slate-300 text-[11px] font-bold uppercase tracking-wider">
-                  <span class="flex items-center gap-1.5">
-                    <Wallet class="w-3.5 h-3.5 text-amber-400" />
-                    <span>Today's Ninja Wallet</span>
-                  </span>
-                  <span class="text-emerald-400 font-extrabold flex items-center gap-0.5 text-xs bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                    <TrendingUp class="w-3 h-3" /> 16 Trips
-                  </span>
-                </div>
-                <div class="flex items-baseline justify-between pt-1">
-                  <h4 class="text-3xl font-black text-white tracking-tight">₦14,800</h4>
-                  <span class="text-[10px] text-amber-300 font-bold bg-amber-400/10 px-2 py-0.5 rounded-md border border-amber-400/20">+₦2,100 tips</span>
-                </div>
-                <div class="pt-2 flex items-center justify-between text-[11px] border-t border-slate-700/60 text-slate-300">
-                  <span class="flex items-center gap-1">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-emerald-400" /> Instant Bank Cashout
-                  </span>
-                  <span class="text-orange-400 font-bold">Paid to Kuda / Opay</span>
-                </div>
-              </div>
+            <a
+              href="#features"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-full bg-slate-950 text-white text-sm font-bold shadow-md shadow-slate-950/20 hover:bg-slate-800 active:scale-[0.98] transition-all group"
+            >
+              <span>How Ninja Hustle Works</span>
+              <span class="w-6 h-6 rounded-full bg-white/15 group-hover:bg-white/25 flex items-center justify-center transition-colors">
+                <ArrowUpRight class="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </span>
+            </a>
+          </div>
 
-              <!-- Live Requests Feed -->
-              <div class="space-y-2.5">
-                <!-- Request 1 (Interactive Pending Drop) -->
-                <div class="p-3.5 bg-orange-50/70 hover:bg-orange-50 rounded-2xl border border-orange-200/80 transition-all">
-                  <div class="flex items-center justify-between mb-1.5">
-                    <div class="flex items-center gap-2">
-                      <span class="px-2 py-0.5 rounded-md bg-parentPrimary text-white text-[10px] font-black tracking-wide">NEW RUN</span>
-                      <span class="text-[11px] font-extrabold text-slate-800">Normal Errand</span>
-                    </div>
-                    <span class="text-xs font-black text-parentPrimary">₦1,200 + ₦300 Tip</span>
-                  </div>
-                  <p class="text-[11px] text-slate-600 font-medium flex items-center gap-1">
-                    <span>🍱 Chicken Republic → 📍 Makama Hall (3rd Floor)</span>
-                  </p>
-                  <div class="mt-2.5 flex items-center justify-between">
-                    <span class="text-[10px] text-slate-500">"Why come downstairs? Errand it!"</span>
-                    <button class="px-3 py-1 bg-parentPrimary hover:bg-[#E54D12] text-white rounded-lg text-[10px] font-black uppercase tracking-wider shadow-xs transition-all active:scale-95">
-                      Accept Run ⚡
-                    </button>
-                  </div>
-                </div>
+          <!-- Trust points -->
+          <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-semibold text-slate-500 pt-2">
+            <span class="flex items-center gap-1.5"><CheckCircle2 class="w-3.5 h-3.5 text-emerald-600" /> Walk, skate, or ride</span>
+            <span class="flex items-center gap-1.5"><CheckCircle2 class="w-3.5 h-3.5 text-emerald-600" /> 100% Student tips are yours</span>
+            <span class="flex items-center gap-1.5"><CheckCircle2 class="w-3.5 h-3.5 text-emerald-600" /> Instant 24/7 bank cashouts</span>
+          </div>
+        </div>
 
-                <!-- Request 2 (In Transit) -->
-                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
-                  <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center font-bold text-sm">🛵</div>
-                    <div>
-                      <p class="text-xs font-black text-slate-900">Custom Errand (Bargain)</p>
-                      <p class="text-[10px] text-slate-500">Library Book Return → Moremi Hall</p>
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <span class="text-xs font-black text-emerald-600">₦1,500</span>
-                    <p class="text-[9px] text-slate-400 font-bold">In Progress</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Decorative Floating Badges -->
-              <div class="absolute -top-3 -right-3 bg-white border border-slate-200 rounded-2xl p-2.5 shadow-md flex items-center gap-2">
-                <span class="text-amber-500 text-sm">⭐</span>
-                <div>
-                  <p class="text-xs font-black text-slate-900">4.9 Rating</p>
-                  <p class="text-[9px] font-bold text-slate-400">210+ Student Reviews</p>
-                </div>
-              </div>
-
-              <div class="absolute -bottom-3 -left-3 bg-white border border-slate-200 rounded-2xl p-2.5 shadow-md flex items-center gap-2">
-                <span class="text-emerald-500 text-sm">⚡</span>
-                <div>
-                  <p class="text-xs font-black text-slate-900">0% Commission Delay</p>
-                  <p class="text-[9px] font-bold text-slate-400">Withdrawal in Seconds</p>
-                </div>
-              </div>
+        <!-- ═══ DESKTOP-ONLY FLOATING ORGANIC HERO IMAGES (Strictly hidden on Mobile) ═══ -->
+        <!-- Card 1: Top Right (Ninja Photo with Active Runner Pill) -->
+        <div class="hidden lg:block absolute top-4 right-4 xl:right-12 z-10 group cursor-pointer transition-all duration-500 hover:scale-105">
+          <div class="relative w-44 h-44 xl:w-52 xl:h-52 drop-shadow-xl">
+            <div class="w-full h-full overflow-hidden rounded-[2.5rem] border-4 border-white shadow-xl bg-slate-100">
+              <img
+                src="/img/hero_ninja_runner.jpg"
+                alt="Campus Errand Ninja runner"
+                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-115"
+              />
+            </div>
+            <!-- Micro Caption Pill -->
+            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap px-3.5 py-1.5 bg-white/95 backdrop-blur-md rounded-full border border-slate-200/90 shadow-md text-xs font-black text-slate-800 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>🏃‍♂️ Active Campus Ninja</span>
             </div>
           </div>
+        </div>
+
+        <!-- Card 2: Bottom Left (Instant Settlement Badge) -->
+        <div class="hidden lg:block absolute bottom-4 left-4 xl:left-12 z-10 group cursor-pointer transition-all duration-500 hover:scale-105">
+          <div class="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-xl space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <span class="text-xs font-black text-slate-900">₦12k - ₦25k Daily</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium">Work Between Classes</p>
+            <div class="pt-1 flex items-center gap-1.5 text-xs font-black text-emerald-600">
+              <CheckCircle2 class="w-3.5 h-3.5" /> Instant Bank Alert
+            </div>
+          </div>
+        </div>
+
+
         </div>
 
         <!-- 4-Column Ninja Trust Strip -->
