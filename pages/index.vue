@@ -279,6 +279,22 @@ import {
 const router = useRouter()
 const scrolled = ref(false)
 
+/**
+ * Rotating hero headline.
+ *
+ * These two refs were deleted in the hero rewrite while the template kept using them, so
+ * every visit crashed on `heroHeadings[currentHeadingIndex]` — undefined indexed by
+ * undefined.
+ */
+const heroHeadings = [
+  'Deliver food, groceries and parcels',
+  'Pick up from any campus vendor',
+  'Earn on your own schedule',
+  'Cash out straight to your bank',
+]
+const currentHeadingIndex = ref(0)
+let heroHeadingTimer: ReturnType<typeof setInterval> | null = null
+
 definePageMeta({
   layout: 'landing'
 })
@@ -511,7 +527,14 @@ onMounted(() => {
   runNinjaTypewriter()
 })
 
+onMounted(() => {
+  heroHeadingTimer = setInterval(() => {
+    currentHeadingIndex.value = (currentHeadingIndex.value + 1) % heroHeadings.length
+  }, 3200)
+})
+
 onUnmounted(() => {
+  if (heroHeadingTimer) clearInterval(heroHeadingTimer)
   window.removeEventListener('scroll', handleScroll)
   if (ninjaTypewriterTimeout) clearTimeout(ninjaTypewriterTimeout)
 })
