@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full bg-white flex items-center justify-center p-4 relative overflow-hidden">
     <!-- Pure White Background -->
-    <div class="w-full max-w-[340px] relative z-10">
+    <div class="w-full max-w-[500px] relative z-10">
       <!-- Back to Login -->
       <NuxtLink to="/auth/login" class="absolute -top-16 left-0 flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors">
         <ArrowLeft class="w-4 h-4" /> Back to login
@@ -30,7 +30,7 @@
           />
 
           <button type="submit" :disabled="loading || !email"
-            class="w-full py-2 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 group active:scale-[0.98]">
+            class="w-full py-3.5 bg-[#FF5C1A] hover:bg-[#E54D12] text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm border border-gray-50 shadow-[#FF5C1A]/20 group active:scale-[0.98]">
             <Loader2 v-if="loading" class="animate-spin w-4 h-4" />
             <span v-else>Send Reset Code</span>
             <ArrowRight v-if="!loading" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />

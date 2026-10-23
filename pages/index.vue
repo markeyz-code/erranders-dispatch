@@ -11,7 +11,7 @@
       <div class="max-w-7xl mx-auto relative w-full my-auto">
 
         <!-- Center Column Content -->
-        <div class="max-w-3xl mx-auto text-center relative z-20 space-y-6 pt-4">
+        <div class="max-w-3xl mx-auto text-center mt-16 relative z-20 space-y-6 pt-4">
           <!-- Launch Pill -->
           <div>
             <NuxtLink

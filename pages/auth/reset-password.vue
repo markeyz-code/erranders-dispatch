@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen w-full bg-white flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="w-full max-w-[340px] relative z-10">
+    <div class="w-full max-w-[500px] relative z-10">
       <!-- Main Content -->
       <div class="w-full">
         <!-- Header -->

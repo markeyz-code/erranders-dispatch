@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen w-full bg-white flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="w-full max-w-[340px] relative z-10">
+  <div class="min-h-screen w-full bg-white flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
+    <div class="w-full max-w-[500px] relative z-10">
       <div class="w-full">
         <!-- Header -->
         <div class="text-center space-y-3 mb-6">
@@ -90,11 +90,11 @@
         </div>
       </div>
       
-      <div class="mt-5 text-center flex items-center justify-center gap-4 text-sm font-bold text-gray-400">
+      <!-- <div class="mt-5 text-center flex items-center justify-center gap-4 text-sm font-bold text-gray-400">
         <p>&copy; {{ new Date().getFullYear() }} Errandr</p>
         <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
         <NuxtLink to="/terms" class="hover:text-gray-600 transition-colors">Terms & Privacy</NuxtLink>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

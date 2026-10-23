@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen w-full bg-white flex items-center justify-center p-4 relative overflow-hidden">
-    <div class="w-full max-w-[340px] relative z-10">
+    <div class="w-full max-w-[500px] relative z-10">
       <NuxtLink to="/auth/forgot-password" class="absolute -top-16 left-0 flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors">
         <ArrowLeft class="w-4 h-4" /> Back
       </NuxtLink>
