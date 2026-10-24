@@ -240,13 +240,16 @@ const statusEmoji = (s: string) => ({
  interception_pending: '🔄',
  interception_in_progress: '🏃‍♂️',
  delivered: '🎉',
- cancelled: '❌'
+ cancelled: '❌',
+ negotiating: '💬',
+ awaiting_payment: '💳'
 }[s] || '📋');
 
 const getStatusClasses = (s: string) => {
  if (['delivered', 'confirmed'].includes(s)) return 'bg-emerald-50 text-emerald-700 border border-emerald-100';
  if (['in_transit', 'picked_up'].includes(s)) return 'bg-blue-50 text-blue-700 border border-blue-100';
  if (['pending', 'preparing', 'ready_for_pickup'].includes(s)) return 'bg-amber-50 text-amber-700 border border-amber-100';
+ if (['negotiating', 'awaiting_payment'].includes(s)) return 'bg-indigo-50 text-indigo-700 border border-indigo-100';
  if (['interception_pending', 'interception_in_progress'].includes(s)) return 'bg-purple-50 text-purple-700 border border-purple-100';
  if (s === 'cancelled') return 'bg-rose-50 text-rose-700 border border-rose-100';
  return 'bg-gray-50 text-gray-500 border border-gray-50';

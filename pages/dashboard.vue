@@ -280,11 +280,11 @@ const stats = computed(() => [
   { label: 'Deliveries Done', value: earningsData.value.totalDeliveries || orders.value.filter(o => o.status === 'delivered').length || '0', emoji: '🏁', bgClass: 'bg-emerald-50' },
   { label: 'Total Earned', value: `₦${(earningsData.value.totalEarnings || 0).toLocaleString()}`, emoji: '💰', bgClass: 'bg-amber-50' },
   { label: 'Avg. Rating', value: (earningsData.value.rating || errandrProfile.value?.rating || 0).toFixed(1), emoji: '⭐', bgClass: 'bg-purple-50' },
-  { label: 'Active Orders', value: orders.value.filter(o => ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit'].includes(o.status)).length || '0', emoji: '📦', bgClass: 'bg-blue-50' },
+  { label: 'Active Orders', value: orders.value.filter(o => ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'negotiating', 'awaiting_payment'].includes(o.status)).length || '0', emoji: '📦', bgClass: 'bg-blue-50' },
 ])
 
 const activeOrders = computed(() => {
-  return orders.value.filter(o => ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit'].includes(o.status))
+  return orders.value.filter(o => ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'negotiating', 'awaiting_payment'].includes(o.status))
 })
 
 const batchStatus = ref<any>(null)
@@ -301,13 +301,16 @@ const statusEmoji = (s: string) => ({
   picked_up: '🏃',
   in_transit: '🚀',
   delivered: '🎉',
-  cancelled: '❌'
+  cancelled: '❌',
+  negotiating: '💬',
+  awaiting_payment: '💳'
 }[s] || '📋')
 
 const getStatusClasses = (s: string) => {
   if (['delivered', 'confirmed'].includes(s)) return 'bg-emerald-50 text-emerald-700';
   if (['in_transit', 'picked_up'].includes(s)) return 'bg-blue-50 text-blue-700';
   if (['pending', 'preparing', 'ready_for_pickup'].includes(s)) return 'bg-amber-50 text-amber-700';
+  if (['negotiating', 'awaiting_payment'].includes(s)) return 'bg-indigo-50 text-indigo-700';
   if (s === 'cancelled') return 'bg-rose-50 text-rose-700';
   return 'bg-gray-50 text-gray-500';
 }
