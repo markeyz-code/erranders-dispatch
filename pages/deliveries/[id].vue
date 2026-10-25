@@ -578,6 +578,21 @@
  <span v-else class="text-lg group-hover:scale-110 transition-transform">✅</span> 
  {{ completing ? 'VERIFYING SECURE PIN...' : 'Finalize Secure Delivery' }}                                                       
  </button>
+
+ <!-- Instant SMS Resend Button for Rider to assist customer -->
+ <div class="pt-2 relative z-10 flex flex-col items-center gap-1.5">
+ <button 
+ type="button"
+ @click="resendPinToCustomer"
+ :disabled="sendingPinSms"
+ class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl text-amber-900 text-xs font-bold transition-all active:scale-95 disabled:opacity-50 w-full sm:w-auto shadow-sm"
+ >
+ <Loader2 v-if="sendingPinSms" class="w-4 h-4 animate-spin text-amber-700" />
+ <span v-else class="text-sm">📲</span>
+ <span>Customer can't find PIN? SMS Code to Customer</span>
+ </button>
+ <p class="text-[11px] text-gray-500 font-medium">Sends the 4-digit code directly to customer's phone via SMS</p>
+ </div>
  
  <div class="pt-6 mt-6 border-t border-gray-100 text-center relative z-10 space-y-3">
  <p class="text-gray-500 text-[10px] font-bold uppercase ">Customer unavailable?</p>
@@ -1880,6 +1895,28 @@ const completeOrder = async () => {
  } finally {
  completing.value = false;
  }
+};
+
+const sendingPinSms = ref(false);
+
+const resendPinToCustomer = async () => {
+  sendingPinSms.value = true;
+  try {
+    await api.post(`/orders/${route.params.id}/resend-delivery-pin`);
+    showToast({
+      title: 'SMS Sent',
+      message: 'Delivery PIN has been sent directly to the customer via SMS.',
+      toastType: 'success'
+    });
+  } catch (err: any) {
+    showToast({
+      title: 'Could Not Send SMS',
+      message: err?.response?.data?.message || 'Failed to send SMS to customer.',
+      toastType: 'error'
+    });
+  } finally {
+    sendingPinSms.value = false;
+  }
 };
 
 const uploadingDropoff = ref(false);
