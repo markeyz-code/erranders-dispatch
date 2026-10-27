@@ -44,4 +44,8 @@ export const auth_api = {
   firebaseLogin: (payload: { idToken: string; role?: string; isSignUp?: boolean }) => {
     return GATEWAY_ENDPOINT.post('/auth/firebase', payload);
   },
+
+  refreshToken: (refreshToken: string) => {
+    return GATEWAY_ENDPOINT.post('/auth/refresh', { refreshToken });
+  },
 };

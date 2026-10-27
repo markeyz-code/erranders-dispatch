@@ -7,7 +7,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, getRedirectResult, signInWithRedirect } from 'firebase/auth';
 
 export const useAuth = () => {
-  const { setUser, setToken, logOut } = useUser();
+  const { setUser, setToken, setRefreshToken, logOut } = useUser();
   const { showToast } = useCustomToast();
   const loading = ref(false);
   const firebaseLoading = ref(false);
@@ -51,6 +51,7 @@ export const useAuth = () => {
         if (userData && tokenValue) {
           setUser(userData);
           setToken(tokenValue);
+          if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
           showToast({
             title: "Welcome!",
             message: "You've successfully signed in with Google.",
@@ -110,6 +111,7 @@ export const useAuth = () => {
 
       setUser(userData);
       setToken(tokenValue);
+      if (responseData?.refreshToken) setRefreshToken(responseData.refreshToken);
 
       showToast({
         title: "Welcome!",
@@ -158,6 +160,7 @@ export const useAuth = () => {
       if (res?.type === 'ERROR') throw res;
       setUser(res.data.user);
       setToken(res.data.token);
+      if (res.data?.refreshToken) setRefreshToken(res.data.refreshToken);
       showToast({
         title: "Welcome Back!",
         message: "You've successfully logged in.",
@@ -184,6 +187,7 @@ export const useAuth = () => {
       if (res?.type === 'ERROR') throw res;
       setUser(res.data.user);
       setToken(res.data.token);
+      if (res.data?.refreshToken) setRefreshToken(res.data.refreshToken);
       showToast({
         title: "Account Created!",
         message: "Welcome to Errandr.",
@@ -207,8 +211,7 @@ export const useAuth = () => {
       if (res?.type === 'ERROR') throw res;
       setUser(res.data.user || res.data);
     } catch (e: any) {
-      console.error('Fetch profile error:', e);
-      logOut();
+      console.warn('Could not fetch dispatch profile:', e);
     }
   };
 
@@ -219,6 +222,7 @@ export const useAuth = () => {
       if (res?.type === 'ERROR') throw res;
       setUser(res.data.user);
       setToken(res.data.token);
+      if (res.data?.refreshToken) setRefreshToken(res.data.refreshToken);
       showToast({
         title: "Verified!",
         message: "Email successfully verified.",

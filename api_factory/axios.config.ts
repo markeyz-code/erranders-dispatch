@@ -157,7 +157,7 @@ instanceArray.forEach((instance) => {
     (response: CustomAxiosResponse) => {
       return response;
     },
-    (err: any) => {
+    async (err: any) => {
       // Check for timeout or network connection error
       if (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message?.includes('Network Error') || typeof err.response === "undefined") {
         try {
@@ -171,19 +171,61 @@ instanceArray.forEach((instance) => {
         };
       }
       if (err.response.status === 401) {
-        console.log(err.response.data.error)
-        // Only log out if we're not already on auth pages
-        const isOnAuthPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/auth')
-        if (!isOnAuthPage && typeof window !== 'undefined') {
-          document.cookie = 'errandr_dispatch_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-          document.cookie = 'errandr_dispatch_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          window.location.href = '/auth/login';
+        const originalRequest = err.config;
+
+        if (originalRequest && !originalRequest._retry && typeof window !== 'undefined') {
+          originalRequest._retry = true;
+          let refreshToken = '';
+          const match = document.cookie.match(new RegExp('(^| )errandr_dispatch_refresh_token=([^;]+)'));
+          if (match) {
+            refreshToken = decodeURIComponent(match[2]);
+          } else if (typeof localStorage !== 'undefined') {
+            refreshToken = localStorage.getItem('refreshToken') || localStorage.getItem('errandr_dispatch_refresh_token') || '';
+          }
+
+          if (refreshToken) {
+            try {
+              const res = await axios.post(`${$GATEWAY_ENDPOINT}/auth/refresh`, { refreshToken });
+              const resData = res.data?.data || res.data;
+              const newToken = resData?.token;
+              const newRefresh = resData?.refreshToken;
+              const newUser = resData?.user;
+
+              if (newToken) {
+                const { setToken, setRefreshToken, setUser } = useUser();
+                setToken(newToken);
+                if (newRefresh) setRefreshToken(newRefresh);
+                if (newUser) setUser(newUser);
+
+                originalRequest.headers = originalRequest.headers || {};
+                if (typeof originalRequest.headers.set === 'function') {
+                  originalRequest.headers.set('Authorization', `Bearer ${newToken}`);
+                } else {
+                  originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                }
+                return instance(originalRequest);
+              }
+            } catch (refreshErr) {
+              console.warn('Dispatch token refresh failed:', refreshErr);
+            }
+          }
+        }
+
+        // Only log out if we're on a protected route requiring auth
+        const isOnAuthPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/auth');
+        const isProtectedRoute = typeof window !== 'undefined' && (
+          window.location.pathname.startsWith('/dashboard') || 
+          window.location.pathname.startsWith('/orders') || 
+          window.location.pathname.startsWith('/deliveries')
+        );
+
+        if (!isOnAuthPage && isProtectedRoute && typeof window !== 'undefined') {
+          const { logOut } = useUser();
+          logOut();
         }
         useCustomToast().showToast({
-          title: "Error",
-          message: err?.response?.data?.message || err?.response?.data?.error || "An error occured",
+          title: "Session Alert",
+          message: err?.response?.data?.message || err?.response?.data?.error || "Please login to continue",
           toastType: "error",
           duration: 3000
         });
