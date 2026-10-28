@@ -58,11 +58,11 @@ useHead({
 const termsSections = [
   {
     title: "Acceptance of Terms",
-    content: "By accessing or using the Errandr platform (\"Service\"), you agree to be bound by these Terms of Service. Disagreement with any part of these terms prevents usage of our Service. These terms apply to all Students, Vendors, and Riders."
+    content: "By accessing or using the Erranders platform (\"Service\"), operated by ERRANDERS COMPANY LIMITED (\"Erranders\", \"we\", \"us\", or \"our\"), you agree to be bound by these Terms of Service. Disagreement with any part of these terms prevents usage of our Service. These terms apply to all Students, Vendors, and Riders."
   },
   {
     title: "Description of Service",
-    content: "Errandr is a technology platform connecting food buyers, sellers, and delivery personnel within university campus environments. We facilitate coordination but do not prepare, sell, or deliver food ourselves."
+    content: "Erranders is a technology platform connecting food buyers, sellers, and delivery personnel within university campus environments. We facilitate coordination but do not prepare, sell, or deliver food ourselves."
   },
   {
     title: "User Accounts",
@@ -74,15 +74,15 @@ const termsSections = [
   },
   {
     title: "Vendor Responsibilities",
-    content: "Vendors are solely responsible for product quality and safety, complying with all health codes. Errandr facilitates the connection but does not guarantee the end-product quality."
+    content: "Vendors are solely responsible for product quality and safety, complying with all health codes. Erranders facilitates the connection but does not guarantee the end-product quality."
   },
   {
     title: "Rider Code of Conduct",
     content: "Riders are independent contractors. Hygiene and care are non-negotiable. Any tampering results in immediate, permanent suspension. Riders must at all times comply with University rules."
   },
   {
-    title: "Intellectual Property",
-    content: "Errandr Technologies Ltd exclusively owns the Service and its original content. Our trademarks and trade dress are protected by Nigerian law and cannot be used without prior written consent."
+    title: "Intellectual Property & Corporate Entity",
+    content: "ERRANDERS COMPANY LIMITED exclusively owns the Service, platform, and its original content. Our trademarks and trade dress are protected by Nigerian law and cannot be used without prior written consent."
   },
   {
     title: "Privacy Policy",
