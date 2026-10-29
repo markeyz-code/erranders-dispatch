@@ -17,17 +17,32 @@ messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
   try {
-    const title = payload?.notification?.title || payload?.data?.title || '🚨 NEW ALERT!';
-    const body = payload?.notification?.body || payload?.data?.body || 'You have a new update.';
-    
+    const data = payload?.data || {};
+    const title = payload?.notification?.title || data.title || 'New errand available';
+    const body = payload?.notification?.body || data.body || 'You have a new update.';
+    const orderId = data.orderId || '';
+    const isErrand = data.type === 'NEW_ORDER' || data.type === 'INCOMING_CALL';
+
     const notificationOptions = {
       body: body,
       icon: '/icon.png',
       badge: '/icon.png',
-      requireInteraction: true, // This ensures the notification stays until clicked
-      vibrate: [500, 250, 500, 250, 500, 250, 500, 250, 500, 250, 500, 250, 500, 250, 500], // Heavy "ringing" vibration
-      data: payload?.data || {},
-      tag: 'order-alert-' + Date.now()
+      // Stays on screen until the rider acts on it, rather than vanishing after a second.
+      requireInteraction: true,
+      // Audible even when the phone is not on silent, so a backgrounded app still reaches
+      // the rider. A browser cannot loop a ringtone from a service worker — that needs a
+      // native wrapper — so this is the loudest signal the platform allows here.
+      silent: false,
+      vibrate: isErrand
+        ? [600, 250, 600, 250, 600, 250, 600, 250, 600, 250, 600]
+        : [200, 100, 200],
+      data: { ...data, orderId, url: orderId ? `/deliveries/${orderId}` : '/' },
+      // One card per errand, replaced rather than a stack of identical alerts.
+      tag: orderId ? `errand-${orderId}` : `alert-${Date.now()}`,
+      renotify: true,
+      actions: isErrand
+        ? [{ action: 'view', title: 'View errand' }, { action: 'dismiss', title: 'Dismiss' }]
+        : [],
     };
 
     self.registration.showNotification(title, notificationOptions);
@@ -38,18 +53,21 @@ messaging.onBackgroundMessage((payload) => {
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
+  if (event.action === 'dismiss') return;
+
+  // Open the errand the notification is about, not the home screen — a rider tapping
+  // 'new errand' wants the job, not a menu.
+  const target = (event.notification.data && event.notification.data.url) || '/';
+
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
-      if (clientList.length > 0) {
-        let client = clientList[0];
-        for (let i = 0; i < clientList.length; i++) {
-          if (clientList[i].focused) {
-            client = clientList[i];
-          }
+      for (let i = 0; i < clientList.length; i++) {
+        if ('navigate' in clientList[i]) {
+          return clientList[i].navigate(target).then(function(c) { return c && c.focus(); });
         }
-        return client.focus();
+        if (clientList[i].focused) return clientList[i].focus();
       }
-      return clients.openWindow('/');
+      return clients.openWindow(target);
     })
   );
 });
