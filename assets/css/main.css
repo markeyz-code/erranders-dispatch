@@ -1,3 +1,8 @@
+:root {
+  /* Consumed by tailwind's font-sans. Undefined it fell back to Arial. */
+  --font-family: 'Onest', sans-serif;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
