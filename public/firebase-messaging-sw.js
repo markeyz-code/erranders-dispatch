@@ -36,7 +36,9 @@ messaging.onBackgroundMessage((payload) => {
       vibrate: isErrand
         ? [600, 250, 600, 250, 600, 250, 600, 250, 600, 250, 600]
         : [200, 100, 200],
-      data: { ...data, orderId, url: orderId ? `/deliveries/${orderId}` : '/' },
+      // The ringing screen, not the delivery page: that page has no audio, so tapping
+      // the card would have answered the errand silently.
+      data: { ...data, orderId, url: orderId ? `/incoming/${orderId}` : '/' },
       // One card per errand, replaced rather than a stack of identical alerts.
       tag: orderId ? `errand-${orderId}` : `alert-${Date.now()}`,
       renotify: true,
