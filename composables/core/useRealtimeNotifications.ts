@@ -22,19 +22,32 @@ const playSound = (path: string) => {
   }
 }
 
-const playNotificationSound = () => playSound('/sounds/new_notification.m4a')
+const playNotificationSound = () => playSound('/sounds/notification.wav')
 const playOrderAcceptedSound = () => playSound('/sounds/order_accepted.m4a')
 const playOrderStatusUpdateSound = () => playSound('/sounds/order_status_update.m4a')
 const playCounterOfferSound = () => playSound('/sounds/counter_offer.m4a')
 
-if (typeof document !== 'undefined') {
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   const unlockAudio = () => {
-    const audio = new Audio('/sounds/new_notification.m4a')
-    audio.volume = 0;
-    audio.play().catch(() => {});
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+      }
+    } catch (_) {}
     document.removeEventListener('click', unlockAudio);
+    document.removeEventListener('touchstart', unlockAudio);
   };
-  document.addEventListener('click', unlockAudio);
+  document.addEventListener('click', unlockAudio, { once: true });
+  document.addEventListener('touchstart', unlockAudio, { once: true });
 }
 
 const playNewOrderSound = () => {
@@ -95,23 +108,34 @@ export const useRealtimeNotifications = () => {
   
   // Queue for in-app toast display (consumed by InAppToast component)
 
-
-
   const pushToast = (notification: any) => {
-    if (notification.type === 'NEW_ORDER_AVAILABLE') {
-      playNewOrderSound()
-    } else if (notification.type === 'ORDER_BIDS_UPDATE' || notification.type === 'BID_COUNTERED') {
-      playCounterOfferSound()
-    } else if (notification.type === 'ORDER_ACCEPTED' || notification.type === 'ORDER_BID_ACCEPTED') {
-      playOrderAcceptedSound()
-    } else if (notification.type === 'ORDER_STATUS_UPDATE') {
-      playOrderStatusUpdateSound()
-    } else {
-      playNotificationSound()
+    if (!notification) return
+
+    // Never play sound or add persistent records for internal toast clearing commands
+    if (notification.type === 'CLEAR_ORDER_TOASTS') {
+      toastQueue.value.push(notification)
+      return
     }
+
+    // Only play sound if notification has actual visible content
+    if (notification.title || notification.body) {
+      if (notification.type === 'NEW_ORDER_AVAILABLE') {
+        playNewOrderSound()
+      } else if (notification.type === 'ORDER_BIDS_UPDATE' || notification.type === 'BID_COUNTERED') {
+        playCounterOfferSound()
+      } else if (notification.type === 'ORDER_ACCEPTED' || notification.type === 'ORDER_BID_ACCEPTED') {
+        playOrderAcceptedSound()
+      } else if (notification.type === 'ORDER_STATUS_UPDATE') {
+        playOrderStatusUpdateSound()
+      } else {
+        playNotificationSound()
+      }
+    }
+
     toastQueue.value.push(notification)
-    // Also add to persistent notifications store
-    addNotification(notification)
+    if (notification.title || notification.body) {
+      addNotification(notification)
+    }
   }
 
   const handleNewOrder = (payload: any) => {
@@ -128,6 +152,15 @@ export const useRealtimeNotifications = () => {
 
   const handleNotification = (payload: any) => {
     if (!payload) return
+
+    // Ensure notification is intended for this errander if target is present
+    const currentUserId = user.value?._id || user.value?.id
+    const targetUserId = payload.userId || payload.customerId || payload.erranderId || payload.data?.erranderId || payload.data?.userId
+    if (targetUserId && currentUserId && targetUserId.toString() !== currentUserId.toString()) {
+      return
+    }
+
+    if (!payload.title && !payload.body && !payload.message) return
 
     // Aggressively push errander to details page if their bid was accepted
     if (payload.type === 'ORDER_BID_ACCEPTED' && payload.data?.orderId) {
