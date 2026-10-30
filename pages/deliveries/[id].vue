@@ -210,9 +210,14 @@
          <span class="text-sm font-bold text-gray-900">Total: ₦{{ (item.subtotal || (item.price * (item.quantity || item.qty))).toLocaleString() }}</span>
          </div>
 
-         <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="flex gap-2 mt-3 pt-3 border-t border-gray-200">
-           <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
-           <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
+         <div v-if="['confirmed', 'preparing', 'ready_for_pickup', 'picked_up'].includes(order.status) && item.status !== 'unavailable' && item.status !== 'substituted' && item.status !== 'pending_substitute'" class="mt-3 pt-3 border-t border-gray-200">
+           <div class="flex gap-2">
+             <button @click="promptUnavailable(item)" class="flex-1 py-2 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold hover:bg-red-100 border border-red-200 transition-all">Mark Unavailable</button>
+             <button @click="openSubstituteModal(item)" class="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold hover:bg-blue-100 border border-blue-200 transition-all">Suggest Substitute</button>
+           </div>
+           <NuxtLink to="/help/substitutions" class="mt-2 block text-center text-[11px] font-semibold text-gray-400 underline hover:text-gray-700">
+             What happens if it is out of stock?
+           </NuxtLink>
          </div>
          <div v-if="item.status === 'unavailable'" class="mt-3 pt-2 border-t border-red-100">
            <span class="text-sm font-bold text-red-500 bg-red-50 px-2 py-1 rounded">❌ Unavailable & Refunded</span>
