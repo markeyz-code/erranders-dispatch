@@ -41,10 +41,10 @@
       <div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="space-y-1">
           <p class="text-sm font-semibold text-gray-600">
-            &copy; {{ new Date().getFullYear() }} ERRANDERS COMPANY LIMITED. All rights reserved.
+            Erranders is a product of Erranders Company Limited.
           </p>
-          <p class="text-xs text-gray-400 font-medium">
-            Erranders Dispatch Hub is operated by ERRANDERS COMPANY LIMITED.
+          <p class="text-xs font-medium text-gray-400">
+            &copy; {{ new Date().getFullYear() }} Erranders Company Limited. All rights reserved.
           </p>
         </div>
       </div>
