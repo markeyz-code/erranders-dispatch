@@ -14,12 +14,40 @@ export default defineNuxtConfig({
     host: 'localhost'
   },
 
-    nitro: {
+  nitro: {
     prerender: {
-      routes: ['/', '/404.html'],
+      routes: ['/', '/404.html', '/200.html'],
       ignore: ['/dynamic-routes', '/api'],
       failOnError: false
-    }
+    },
+    routeRules: {
+      '/': {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      },
+      '/**/*.html': {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      },
+      '/sw.js': {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      },
+      '/_nuxt/**': {
+        headers: {
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      },
+    },
   },
 
   imports: {
@@ -45,6 +73,9 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
         { name: "format-detection", content: "telephone=no" },
+        { "http-equiv": "Cache-Control", content: "no-cache, no-store, must-revalidate" },
+        { "http-equiv": "Pragma", content: "no-cache" },
+        { "http-equiv": "Expires", content: "0" },
 
         // ✅ SEO meta
         {
@@ -139,14 +170,34 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: ['**/*.{js,css,png,svg,ico,webp,woff2}'],
+      cleanupOutdatedCaches: true,
+      skipWaiting: true,
+      clientsClaim: true,
+      runtimeCaching: [
+        {
+          urlPattern: ({ request }) => request.mode === 'navigate',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'dispatch-pages-cache',
+            networkTimeoutSeconds: 3,
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 24 * 60 * 60,
+            },
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+      ],
       importScripts: [
         `/firebase-messaging-sw.js?apiKey=${process.env.NUXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBzYV1KzAMugqh2N0DvbTP7vr4f96j1Po4'}&projectId=${process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID || 'erranders-493fe'}&messagingSenderId=${process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '1022790982621'}&appId=${process.env.NUXT_PUBLIC_FIREBASE_APP_ID || '1:1022790982621:web:771af2aab7a6e7a200b434'}`
       ]
     },
     client: {
       installPrompt: true,
-      periodicSyncForUpdates: 3600
+      periodicSyncForUpdates: 60
     },
     devOptions: {
       enabled: true,
