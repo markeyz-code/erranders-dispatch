@@ -1,5 +1,27 @@
 export default defineNuxtPlugin((nuxtApp) => {
-  // 1. Listen for Vite chunk preload errors (chunk hash mismatch after new deployments)
+  const config = useRuntimeConfig();
+  const currentBuild = (config.public.buildTime as string) || Date.now().toString();
+
+  // 1. Version change detection: if deployment timestamp changed, wipe all caches immediately
+  if (typeof window !== 'undefined') {
+    const savedBuild = localStorage.getItem('errandr_build_version');
+    if (savedBuild && savedBuild !== currentBuild) {
+      console.log(`[CacheBuster] App version changed from ${savedBuild} to ${currentBuild}. Wiping all caches...`);
+      localStorage.setItem('errandr_build_version', currentBuild);
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          return Promise.all(names.map((name) => caches.delete(name)));
+        }).then(() => {
+          console.log('[CacheBuster] All stale caches purged.');
+          window.location.reload();
+        }).catch(() => {});
+      }
+    } else if (!savedBuild) {
+      localStorage.setItem('errandr_build_version', currentBuild);
+    }
+  }
+
+  // 2. Listen for Vite chunk preload errors (chunk hash mismatch after new deployments)
   if (typeof window !== 'undefined') {
     window.addEventListener('vite:preloadError', (event) => {
       event.preventDefault();
@@ -14,7 +36,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
   }
 
-  // 2. Nuxt global error hook for dynamic import / chunk failures
+  // 3. Nuxt global error hook for dynamic import / chunk failures
   nuxtApp.hook('app:error', (error: any) => {
     const msg = error?.message || '';
     if (
@@ -34,7 +56,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   });
 
-  // 3. Router error hook for navigation chunk failures
+  // 4. Router error hook for navigation chunk failures
   const router = useRouter();
   if (router) {
     router.onError((error: any) => {
@@ -56,7 +78,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
   }
 
-  // 4. Aggressive Service Worker update handling & auto-activation
+  // 5. Aggressive Service Worker update handling & auto-activation
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -74,20 +96,21 @@ export default defineNuxtPlugin((nuxtApp) => {
       }).catch(() => {});
     };
 
+    // Check immediately on load and on visibility change
+    checkForSwUpdates();
+
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         checkForSwUpdates();
       }
     });
-
-    setTimeout(checkForSwUpdates, 3000);
   }
 
-  // 5. Proactively purge obsolete cache buckets
+  // 6. Proactively purge obsolete cache buckets
   if (typeof window !== 'undefined' && 'caches' in window) {
     caches.keys().then((keys) => {
       for (const key of keys) {
-        if (!key.includes('v3') && !key.includes('workbox-precache')) {
+        if (!key.includes('v3')) {
           console.log('[CacheBuster] Purged stale browser cache:', key);
           caches.delete(key).catch(() => {});
         }
@@ -95,4 +118,3 @@ export default defineNuxtPlugin((nuxtApp) => {
     }).catch(() => {});
   }
 });
-

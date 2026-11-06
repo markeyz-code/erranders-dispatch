@@ -207,6 +207,7 @@ export default defineNuxtConfig({
   },
     runtimeConfig: {
     public: {
+      buildTime: Date.now().toString(),
       apiBase: process.env.VITE_API_BASE_URL || "https://api.erranders.org",
       wsBase: process.env.WS_BASE_URL || process.env.VITE_WS_URL || "https://api.erranders.org",
       firebaseApiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBzYV1KzAMugqh2N0DvbTP7vr4f96j1Po4',
