@@ -82,5 +82,17 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     setTimeout(checkForSwUpdates, 3000);
   }
+
+  // 5. Proactively purge obsolete cache buckets
+  if (typeof window !== 'undefined' && 'caches' in window) {
+    caches.keys().then((keys) => {
+      for (const key of keys) {
+        if (!key.includes('v3') && !key.includes('workbox-precache')) {
+          console.log('[CacheBuster] Purged stale browser cache:', key);
+          caches.delete(key).catch(() => {});
+        }
+      }
+    }).catch(() => {});
+  }
 });
 

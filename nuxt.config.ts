@@ -169,7 +169,7 @@ export default defineNuxtConfig({
       ]
     },
     workbox: {
-      navigateFallback: '/',
+      navigateFallback: null,
       globPatterns: ['**/*.{js,css,png,svg,ico,webp,woff2}'],
       cleanupOutdatedCaches: true,
       skipWaiting: true,
@@ -179,7 +179,7 @@ export default defineNuxtConfig({
           urlPattern: ({ request }) => request.mode === 'navigate',
           handler: 'NetworkFirst',
           options: {
-            cacheName: 'dispatch-pages-cache',
+            cacheName: 'dispatch-pages-cache-v3',
             networkTimeoutSeconds: 3,
             expiration: {
               maxEntries: 50,
@@ -200,9 +200,8 @@ export default defineNuxtConfig({
       periodicSyncForUpdates: 60
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
       suppressWarnings: true,
-      navigateFallbackAllowlist: [/^\/$/],
       type: 'module'
     }
   },
