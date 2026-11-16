@@ -13,6 +13,14 @@
     </div>
 
     <!-- Alert for Batching -->
+    <!-- A card whose order vanished says so, instead of opening a bid form that cannot work. -->
+    <div
+      v-if="staleNotice"
+      class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800"
+    >
+      {{ staleNotice }}
+    </div>
+
     <div v-if="batchStatus?.isActive" class="bg-parentPrimary/[0.03] border border-parentPrimary/10 rounded-lg p-5 flex items-center gap-4 group hover:bg-parentPrimary/5 transition-all">
       <div class="w-12 h-12 rounded-xl bg-parentPrimary flex items-center justify-center text-white text-xl flex-shrink-0">📦</div>
       <div>
@@ -596,6 +604,7 @@ const { socket } = useRealtimeSocket()
 const { toastQueue } = useRealtimeNotifications()
 const loading = ref(true)
 const availableOrders = ref<any[]>([])
+const staleNotice = ref('')
 const acceptingId = ref<string | null>(null)
 const batchStatus = ref<any>(null)
 
@@ -841,7 +850,19 @@ const viewDetails = async (order: any) => {
     socket.value.emit('viewing_errand', { orderId: order._id, isViewing: true })
   }
   if (order._id) {
-    api.post(`/orders/${order._id}/view`).catch(e => console.error('Failed to record view:', e))
+    api.post(`/orders/${order._id}/view`).catch((e) => {
+      // A card can outlive its order: claimed, cancelled, or delivered while this page was open. Opening it
+      // then bid on a record that no longer exists, which is what produced "Order not found".
+      if (e?.response?.status === 404) {
+        availableOrders.value = availableOrders.value.filter((o) => o._id !== order._id)
+        isDrawerOpen.value = false
+        staleNotice.value = 'That errand is no longer available. The list has been refreshed.'
+        setTimeout(() => (staleNotice.value = ''), 6000)
+        loadAvailableOrders()
+      } else {
+        console.error('Failed to record view:', e)
+      }
+    })
   }
   
   // Fetch any existing bid we might have for this order
