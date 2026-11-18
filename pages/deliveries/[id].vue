@@ -15,6 +15,20 @@
   </div>
 
   <div class="max-w-4xl w-full mx-auto space-y-4 md:space-y-6 md:space-y-10 pb-32 animate-fade-in mt-6" v-else-if="order">
+  <!-- Order Cancelled Banner -->
+  <div v-if="order.status === 'cancelled'" class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-6 text-center space-y-3 mb-6 animate-fade-in">
+    <div class="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto shadow-sm">❌</div>
+    <h3 class="text-xl font-bold text-rose-900">This Errand Has Been Cancelled</h3>
+    <p class="text-sm text-rose-700 max-w-md mx-auto">
+      {{ order.cancelReason ? `Reason: ${order.cancelReason}` : 'This errand was cancelled and is no longer active. You do not need to fulfill this delivery.' }}
+    </p>
+    <div class="pt-2">
+      <NuxtLink to="/deliveries" class="inline-block px-6 py-3 bg-rose-600 text-white font-bold text-sm rounded-xl hover:bg-rose-700 transition-all shadow-sm">
+        Return to My Deliveries
+      </NuxtLink>
+    </div>
+  </div>
+
  <!-- Stunning Header -->
  <div class="relative p-4 md:p-5 rounded-xl md:rounded-lg overflow-hidden border border-gray-50 bg-white  group">
  <!-- Animated Background Effects -->
@@ -41,7 +55,7 @@
  </div>
  </div>
 
- <div class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-50 ">
+ <div v-if="order.status !== 'cancelled'" class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-50 ">
  <div class="flex items-center justify-between">
  <span class="text-sm font-bold text-gray-500 tracking-wide uppercase">Delivery Progress</span>
  <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-full border border-[#FF5C1A]/20">Step {{ currentStep + 1 }} of 4</span>
@@ -1994,6 +2008,13 @@ let statusPollingInterval: any = null;
   on('notification:order-status-update', (payload: any) => {
     if (matchesOrder(payload.orderId) || matchesOrder(payload.data?.orderId)) {
       loadOrder();
+    }
+  });
+
+  on('notification:order-cancelled', (payload: any) => {
+    if (matchesOrder(payload?.orderId) || matchesOrder(payload?.data?.orderId)) {
+      loadOrder();
+      showToast({ title: 'Errand Cancelled', message: 'This delivery was cancelled.', toastType: 'error' });
     }
   });
   

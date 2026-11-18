@@ -242,12 +242,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useUser } from '@/composables/modules/auth/user'
 import { erranders_api } from '@/api_factory/modules/erranders'
+import { useRealtimeSocket } from '@/composables/core/useRealtimeSocket'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 
 const { user } = useUser()
+const { socket, connectSocket } = useRealtimeSocket()
 
 const getOrderEarnings = (ord: any) => {
   if (!ord) return 0;
@@ -406,7 +408,21 @@ const loadDashboard = async () => {
   }
 }
 
-onMounted(loadDashboard)
+onMounted(() => {
+  loadDashboard();
+  connectSocket();
+  if (socket.value) {
+    socket.value.on('notification:order-cancelled', loadDashboard);
+    socket.value.on('notification:order-status-update', loadDashboard);
+  }
+});
+
+onUnmounted(() => {
+  if (socket.value) {
+    socket.value.off('notification:order-cancelled', loadDashboard);
+    socket.value.off('notification:order-status-update', loadDashboard);
+  }
+});
 </script>
 
 <style scoped>
