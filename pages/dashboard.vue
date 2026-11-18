@@ -408,19 +408,82 @@ const loadDashboard = async () => {
   }
 }
 
+const handleNewOrder = (payload: any) => {
+  const orderData = payload?.data || payload
+  if (!orderData || orderData.type === 'ORDER_ACCEPTED') return
+  const id = orderData.orderId || orderData._id
+  if (!id) return
+
+  const exists = availableOrders.value.some(o => o._id === id)
+  if (!exists) {
+    availableOrders.value.unshift({
+      _id: id,
+      orderNumber: orderData.orderNumber,
+      vendor: {
+        storeName: orderData.vendorName,
+        logo: orderData.vendorLogo,
+        address: orderData.vendorAddress
+      },
+      deliveryAddress: orderData.deliveryAddress,
+      total: orderData.total,
+      deliveryFee: orderData.deliveryFee,
+      erranderPayout: orderData.erranderPayout,
+      erranderShare: orderData.erranderShare,
+      status: orderData.status,
+      type: orderData.type,
+      locationType: orderData.locationType,
+      proposedDeliveryFee: orderData.proposedDeliveryFee,
+      createdAt: orderData.createdAt || new Date().toISOString(),
+      customDetails: orderData.customDetails,
+    })
+  }
+}
+
+const handleOrderAccepted = (payload: any) => {
+  const orderId = payload?.data?.orderId || payload?.orderId || payload?.data?._id || payload?._id
+  if (!orderId) return
+  availableOrders.value = availableOrders.value.filter(o => o._id !== orderId)
+  loadDashboard()
+}
+
+const handleOrderCancelled = (payload: any) => {
+  const orderId = payload?.data?.orderId || payload?.orderId || payload?.data?._id || payload?._id
+  if (orderId) {
+    availableOrders.value = availableOrders.value.filter(o => o._id !== orderId)
+  }
+  loadDashboard()
+}
+
+let dashboardSocket: any = null
+
+watch(() => socket.value, (newSocket) => {
+  if (dashboardSocket) {
+    dashboardSocket.off('notification:new-order', handleNewOrder)
+    dashboardSocket.off('notification:order-accepted', handleOrderAccepted)
+    dashboardSocket.off('notification:order-cancelled', handleOrderCancelled)
+    dashboardSocket.off('notification:order-status-update', loadDashboard)
+  }
+
+  if (newSocket) {
+    dashboardSocket = newSocket
+    newSocket.on('notification:new-order', handleNewOrder)
+    newSocket.on('notification:order-accepted', handleOrderAccepted)
+    newSocket.on('notification:order-cancelled', handleOrderCancelled)
+    newSocket.on('notification:order-status-update', loadDashboard)
+  }
+}, { immediate: true })
+
 onMounted(() => {
   loadDashboard();
   connectSocket();
-  if (socket.value) {
-    socket.value.on('notification:order-cancelled', loadDashboard);
-    socket.value.on('notification:order-status-update', loadDashboard);
-  }
 });
 
 onUnmounted(() => {
-  if (socket.value) {
-    socket.value.off('notification:order-cancelled', loadDashboard);
-    socket.value.off('notification:order-status-update', loadDashboard);
+  if (dashboardSocket) {
+    dashboardSocket.off('notification:new-order', handleNewOrder)
+    dashboardSocket.off('notification:order-accepted', handleOrderAccepted)
+    dashboardSocket.off('notification:order-cancelled', handleOrderCancelled)
+    dashboardSocket.off('notification:order-status-update', loadDashboard)
   }
 });
 </script>
