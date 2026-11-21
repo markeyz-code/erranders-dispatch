@@ -401,7 +401,7 @@
     <h3 class="text-[#FF5C1A] font-bold text-lg mb-2 self-start">Pay the Vendor</h3>
     <p class="text-gray-600 text-sm mb-4 self-start leading-relaxed text-left">
       The customer's payment is held securely in the system. 
-      You need to transfer <strong>₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</strong> directly to the vendor's bank account.
+      You need to transfer <strong>₦{{ (order.customDetails?.estimatedItemCost || 0).toLocaleString() }}</strong> directly to the vendor's bank account.
     </p>
 
     <!-- Photo Upload Section -->
@@ -439,21 +439,31 @@
     </div>
 
     <div v-if="vendorBankForm.accountName" class="w-full mb-4">
-      <label class="block text-sm font-bold text-gray-700 mb-1">4. Amount to Transfer (₦)</label>
+      <div class="flex items-center justify-between mb-1">
+        <label class="block text-sm font-bold text-gray-700">4. Amount to Transfer (₦)</label>
+        <button 
+          v-if="order.customDetails?.estimatedItemCost" 
+          type="button" 
+          @click="vendorBankForm.amount = order.customDetails.estimatedItemCost"
+          class="text-[11px] font-bold text-[#FF5C1A] hover:underline"
+        >
+          Use Exact Budget (₦{{ order.customDetails.estimatedItemCost.toLocaleString() }})
+        </button>
+      </div>
       <input 
         type="text" 
         :value="vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : ''" 
         @input="e => { 
-          const val = e.target.value.replace(/\\D/g, ''); 
+          const val = (e.target as HTMLInputElement).value.replace(/\\D/g, ''); 
           vendorBankForm.amount = val ? parseInt(val, 10) : 0;
-          e.target.value = vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : '';
+          (e.target as HTMLInputElement).value = vendorBankForm.amount ? vendorBankForm.amount.toLocaleString() : '';
         }"
         placeholder="Enter exact amount" 
         class="w-full bg-gray-50 text-sm py-3 px-4 rounded-xl border border-gray-25 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none" 
       />
-      <p class="text-[10px] text-gray-500 mt-1">Maximum allowed: ₦{{ ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }}</p>
-      <p v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))" class="text-[11px] text-amber-600 mt-1 font-semibold bg-amber-50 p-2 rounded border border-amber-100">
-        Price is higher than customer's limit. You must request approval before transferring.
+      <p class="text-[10px] text-gray-500 mt-1">Exact Item Budget: ₦{{ (order.customDetails?.estimatedItemCost || 0).toLocaleString() }}</p>
+      <p v-if="vendorBankForm.amount > (order.customDetails?.estimatedItemCost || 0)" class="text-[11px] text-amber-600 mt-1 font-semibold bg-amber-50 p-2 rounded border border-amber-100">
+        Amount (₦{{ vendorBankForm.amount.toLocaleString() }}) exceeds customer's item budget (₦{{ (order.customDetails?.estimatedItemCost || 0).toLocaleString() }}). You must request customer approval before transferring.
       </p>
     </div>
     
@@ -481,7 +491,7 @@
     </div>
     <div v-else class="flex gap-2 w-full">
       <button 
-        v-if="vendorBankForm.amount > ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0))"
+        v-if="vendorBankForm.amount > (order.customDetails?.estimatedItemCost || 0)"
         @click="requestPriceApproval"
         :disabled="!isVendorAccountVerified || !itemsPhotoUrl || !vendorBankForm.amount || vendorBankForm.amount <= 0 || submittingReconciliation"
         class="flex-1 w-full py-3.5 bg-amber-500 text-white rounded-xl text-sm font-bold  hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
@@ -506,7 +516,7 @@
     </div>
     <div>
       <p class="text-green-900 font-bold text-sm">Vendor has been paid!</p>
-      <p class="text-green-700 text-sm">₦{{ order.actualItemCost?.toLocaleString() || ((order.customDetails?.estimatedItemCost || 0) + (order.customDetails?.itemCostBuffer || 0)).toLocaleString() }} transferred successfully.</p>
+      <p class="text-green-700 text-sm">₦{{ (order.actualItemCost || order.customDetails?.estimatedItemCost || 0).toLocaleString() }} transferred successfully.</p>
     </div>
   </div>
 
@@ -1976,6 +1986,9 @@ const startLocation = () => {
         if (!background) order.value = null;
       } else {
         order.value = res.data;
+        if (order.value?.type === 'custom_errand' && order.value.customDetails?.estimatedItemCost && !vendorBankForm.value.amount) {
+          vendorBankForm.value.amount = order.value.customDetails.estimatedItemCost;
+        }
       }
     } catch (e: any) {
       console.error(e);
