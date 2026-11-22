@@ -101,13 +101,13 @@
  <span class="text-[8px] font-bold text-white">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
  </div>
  </NuxtLink>
- <button
- @click="showMobileMenu = !showMobileMenu"
- class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-900 text-white text-xs font-bold active:scale-95 transition-all"
- aria-label="Account and more"
+ <NuxtLink
+   to="/profile"
+   class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-900 text-white text-xs font-bold active:scale-95 transition-all"
+   aria-label="Your profile"
  >
- {{ userInitials }}
- </button>
+   {{ userInitials }}
+ </NuxtLink>
  </div>
  </header>
 
@@ -116,78 +116,6 @@
    <h1 class="text-[19px] font-black text-gray-900 tracking-tight leading-none">{{ pageTitle }}</h1>
    <p class="text-[12.5px] text-gray-400 font-medium mt-1.5">{{ pageDescription }}</p>
  </div>
-
- <!-- Mobile Overlay -->
- <Transition name="overlay">
- <div v-if="showMobileMenu" class="lg:hidden fixed inset-0 bg-black/30 z-40 backdrop-blur-sm" @click="showMobileMenu = false" />
- </Transition>
-
- <!-- Mobile Sidebar -->
- <Transition name="slide">
- <aside v-if="showMobileMenu" class="lg:hidden w-72 bg-white min-h-screen fixed left-0 top-0 z-50 flex flex-col border-r border-gray-100">
- <!-- Header with close -->
- <div class="px-4 py-3 flex items-center justify-between border-b border-gray-100">
-  <img src="@/assets/img/logo-light.png" class="h-8 w-auto" />
-  <button @click="showMobileMenu = false" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"><X class="w-4 h-4" /></button>
- </div>
-
- <!-- User Profile -->
- <NuxtLink to="/profile" @click="showMobileMenu = false" class="mx-3 mt-3 p-3 rounded-lg bg-gray-50 flex items-center gap-3 hover:bg-gray-100 transition-colors group">
-  <div class="w-9 h-9 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold text-sm shrink-0">
-   {{ userInitials }}
-  </div>
-  <div class="min-w-0 flex-1">
-   <p class="text-sm font-semibold text-gray-900 truncate leading-tight">{{ userDisplayName }}</p>
-   <p class="text-[11px] text-gray-400 truncate leading-tight mt-0.5">{{ user?.email }}</p>
-  </div>
-  <ChevronRight class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 shrink-0 transition-colors" />
- </NuxtLink>
-
- <!-- Campus quick switch row in mobile drawer -->
- <button
-   type="button"
-   @click="openPicker(); showMobileMenu = false"
-   class="mx-3 mt-2 p-2.5 rounded-lg bg-orange-50/70 border border-orange-100 flex items-center justify-between gap-2 text-left group transition-all"
- >
-   <div class="flex items-center gap-2 min-w-0">
-     <MapPin class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
-     <span class="text-xs font-bold text-gray-900 truncate">{{ currentCampusLabel }}</span>
-   </div>
-   <span class="text-[10px] font-bold text-[#FF5C1A] group-hover:underline shrink-0">Switch</span>
- </button>
- 
- <!-- Navigation -->
- <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
-  <template v-for="item in navItems" :key="item.path">
-    <NuxtLink
-      v-if="!isRestricted(item.path)"
-      :to="item.path"
-      class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all"
-      :class="isActive(item.path) ? 'bg-[#FF5C1A] text-white' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
-      @click="showMobileMenu = false"
-    >
-      <component :is="item.icon" class="w-[18px] h-[18px] mr-3" />
-      {{ item.label }}
-    </NuxtLink>
-    <button
-      v-else
-      @click="handleNavClick($event, item.path)"
-      class="flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all opacity-40 cursor-not-allowed text-gray-500"
-    >
-      <component :is="item.icon" class="w-[18px] h-[18px] mr-3" />
-      {{ item.label }}
-    </button>
-  </template>
- </nav>
-
- <!-- Logout -->
- <div class="px-3 py-3 border-t border-gray-100">
-  <button @click="handleLogoutClick" class="flex items-center w-full px-3 py-2.5 text-sm font-medium text-rose-500 hover:bg-rose-50 rounded-lg transition-colors">
-   <LogOut class="w-[18px] h-[18px] mr-3" /> Log Out
-  </button>
- </div>
- </aside>
- </Transition>
 
  <!-- Main Content -->
  <main class="rider-main flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">

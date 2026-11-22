@@ -1,30 +1,51 @@
 <template>
   <div class="space-y-8 animate-fade-in max-w-7xl mx-auto pb-16 from-slate-50/80 via-white to-white   rounded-lg  overflow-hidden">
-    <!-- Welcome Header -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Welcome back, {{ user?.firstName || 'Rider' }} 👋</h1>
-        <p class="text-gray-500 text-sm mt-1">Here's a summary of your delivery activity.</p>
+    <!-- The one card a rider checks before starting: am I on, and what is waiting -->
+    <section class="duty-card">
+      <div class="duty-top">
+        <p class="duty-eyebrow">
+          <span class="duty-spark" aria-hidden="true">✦</span>
+          Errand Ninja
+        </p>
+        <button
+          type="button"
+          class="duty-toggle"
+          :class="{ on: isOnDuty }"
+          :aria-pressed="isOnDuty"
+          :disabled="togglingDuty"
+          @click="toggleDuty"
+        >
+          <span class="duty-knob"></span>
+          <span class="duty-state">{{ togglingDuty ? '…' : (isOnDuty ? 'ON' : 'OFF') }}</span>
+        </button>
       </div>
-    </div>
 
-    <!-- Stats Cards -->
-    <div v-if="loadingStats" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div v-for="i in 4" :key="i" class="  rounded-lg  h-28 animate-pulse "></div>
-    </div>
-    <div v-else class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div 
-        v-for="stat in stats" 
-        :key="stat.label" 
-        class="stat-card"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <div :class="stat.bgClass" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg">
-            {{ stat.emoji }}
-          </div>
+      <h2 class="duty-hello">Hello, {{ user?.firstName || 'Rider' }}.</h2>
+      <p class="duty-sub">
+        {{ isOnDuty ? 'You are on duty and visible for jobs.' : 'You are off duty. Turn this on to receive jobs.' }}
+      </p>
+
+      <div class="duty-meta">
+        <div>
+          <p class="duty-meta-label">Tier</p>
+          <p class="duty-meta-value">{{ tierLabel }}</p>
         </div>
-        <p class="stat-label">{{ stat.label }}</p>
-        <h3 class="stat-value">{{ stat.value }}</h3>
+        <div>
+          <p class="duty-meta-label">Delivered</p>
+          <p class="duty-meta-value">{{ stats[0].value }}</p>
+        </div>
+        <div>
+          <p class="duty-meta-label">Open jobs</p>
+          <p class="duty-meta-value">{{ activeOrders.length }} for you</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What the numbers are, quietly, under the card -->
+    <div class="quick-stats">
+      <div v-for="stat in stats.slice(1)" :key="stat.label" class="quick-stat">
+        <p class="quick-value">{{ stat.value }}</p>
+        <p class="quick-label">{{ stat.label }}</p>
       </div>
     </div>
 
@@ -47,43 +68,31 @@
           <div v-if="loadingOrders" class="p-5">
             <div class="h-20 bg-gray-50 rounded-xl animate-pulse"></div>
           </div>
-          <div v-else-if="activeOrders.length > 0" class="divide-y space-y-3.5 p-3 divide-gray-50">
-            <div v-for="order in activeOrders" :key="order._id" class="p-4   rounded-lg   hover:border border-gray-25 transition-all transform hover:-translate-y-0.5">
-              <div class="flex flex-col md:flex-row gap-6 items-start">
-                <div class="w-14 h-14 rounded-lg bg-blue-50 flex items-center justify-center text-2xl flex-shrink-0">
-                  {{ statusEmoji(order.status) }}
-                </div>
-                
-                <div class="flex-1 space-y-4">
-                  <div>
-                    <h4 class="text-lg font-bold text-gray-900 tracking-tight mb-1 flex items-center gap-2">
-                      Order #{{ order.orderNumber }}
-                      <span :class="getOrderTypeColor(order)" class="text-[10px] px-2 py-0.5 rounded uppercase border font-bold">{{ getOrderTypeLabel(order) }}</span>
-                    </h4>
-                    <p class="text-sm text-gray-400">
-                      {{ order.type === 'custom_errand' ? order.customDetails?.pickupLocation : (order.vendor?.storeName || 'Store') }} 
-                      → 
-                      {{ order.type === 'custom_errand' ? order.customDetails?.dropoffLocation : (order.deliveryAddress || 'Delivery') }}
-                    </p>
-                  </div>
-                  
-                  <div class="flex flex-wrap gap-3">
-                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-600 line-clamp-1">
-                      <div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A] shrink-0" />
-                      {{ order.type === 'custom_errand' ? order.customDetails?.pickupLocation : (order.vendor?.storeName || 'Pick-up') }}
-                    </div>
-                    <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-600 line-clamp-1">
-                      <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
-                      {{ order.type === 'custom_errand' ? order.customDetails?.dropoffLocation : (order.deliveryAddress || 'Drop-off') }}
-                    </div>
-                  </div>
-                </div>
-                
-                <NuxtLink :to="`/deliveries/${order._id}`" class="px-4 py-3 bg-gray-900 text-white rounded-xl font-semibold text-sm border border-gray-25 hover:bg-black hover:border border-gray-25 transition-all flex-shrink-0">
-                  Manage Dispatch
-                </NuxtLink>
+          <div v-else-if="activeOrders.length > 0" class="ad-list">
+            <article v-for="order in activeOrders" :key="order._id" class="ad-card">
+              <div class="ad-top">
+                <p class="ad-ref">#{{ order.orderNumber }}</p>
+                <span class="ad-type" :class="order.type === 'custom_errand' ? 'custom' : 'store'">
+                  {{ order.type === 'custom_errand' ? 'Custom errand' : 'Store order' }}
+                </span>
               </div>
-            </div>
+
+              <p class="ad-route">
+                {{ order.type === 'custom_errand' ? (order.customDetails?.pickupLocation || 'Pick up') : (order.vendor?.storeName || 'Store') }}
+                <span class="ad-arrow" aria-hidden="true">→</span>
+                {{ order.type === 'custom_errand' ? (order.customDetails?.dropoffLocation || 'Drop off') : (order.deliveryAddress || 'Delivery') }}
+              </p>
+
+              <div class="ad-chips">
+                <span class="ad-chip">{{ statusEmoji(order.status) }} {{ statusLabel(order.status) }}</span>
+                <span v-if="getOrderEarnings(order) > 0" class="ad-chip money">₦{{ getOrderEarnings(order).toLocaleString() }}</span>
+              </div>
+
+              <NuxtLink :to="`/deliveries/${order._id}`" class="ad-action">
+                Manage dispatch
+                <ChevronRight class="w-4 h-4" aria-hidden="true" />
+              </NuxtLink>
+            </article>
           </div>
           
           <div v-else class="py-16 text-center px-4">
@@ -278,6 +287,35 @@ const availableOrders = ref<any[]>([])
 const errandrProfile = ref<any>(null)
 const earningsData = ref<any>({ totalEarnings: 0, totalDeliveries: 0, rating: 0 })
 
+/** Availability, and the tier label a rider recognises. */
+const isOnDuty = computed(() => {
+  const status = String(errandrProfile.value?.status || (user.value as any)?.status || '').toLowerCase();
+  return status === 'available' || status === 'online' || status === 'busy';
+})
+
+const tierLabel = computed(() => {
+  const tier = errandrProfile.value?.verificationLevel ?? errandrProfile.value?.tier;
+  if (tier === undefined || tier === null || tier === '') return 'Tier 1';
+  const n = Number(tier);
+  return Number.isFinite(n) ? `Tier ${n}` : String(tier);
+})
+
+const togglingDuty = ref(false)
+
+const toggleDuty = async () => {
+  if (togglingDuty.value) return
+  togglingDuty.value = true
+  try {
+    await erranders_api.toggleOnline()
+    const res: any = await erranders_api.getProfile()
+    if (res?.data) errandrProfile.value = res.data
+  } catch (e) {
+    console.error('Could not change availability:', e)
+  } finally {
+    togglingDuty.value = false
+  }
+}
+
 const stats = computed(() => [
   { label: 'Deliveries Done', value: earningsData.value.totalDeliveries || orders.value.filter(o => o.status === 'delivered').length || '0', emoji: '🏁', bgClass: 'bg-emerald-50' },
   { label: 'Total Earned', value: `₦${(earningsData.value.totalEarnings || 0).toLocaleString()}`, emoji: '💰', bgClass: 'bg-amber-50' },
@@ -294,6 +332,18 @@ const batchStatus = ref<any>(null)
 const recentOrders = computed(() => {
   return orders.value.filter(o => ['delivered', 'cancelled'].includes(o.status)).slice(0, 5)
 })
+
+const statusLabel = (s: string) =>
+  ({
+    pending: 'Awaiting payment',
+    confirmed: 'Ready to collect',
+    preparing: 'Being prepared',
+    ready_for_pickup: 'Ready to collect',
+    picked_up: 'Collected',
+    in_transit: 'On the way',
+    negotiating: 'Negotiating',
+    awaiting_payment: 'Awaiting payment',
+  } as Record<string, string>)[s] || String(s || '').replace(/_/g, ' ');
 
 const statusEmoji = (s: string) => ({
   pending: '⏳',
@@ -519,5 +569,210 @@ onUnmounted(() => {
   letter-spacing: -0.03em;
   line-height: 1.05;
   color: #14110d;
+}
+
+.duty-card {
+  padding: 20px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #1b1613 0%, #14110d 60%);
+  color: #fff;
+}
+
+.duty-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.duty-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b9b0a4;
+}
+
+.duty-spark { color: #ff5c1a; }
+
+.duty-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+}
+
+.duty-toggle.on { background: #ff5c1a; }
+
+.duty-knob {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.duty-state {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.duty-hello {
+  margin: 18px 0 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.duty-sub {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #b9b0a4;
+}
+
+.duty-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.duty-meta-label {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8f877c;
+}
+
+.duty-meta-value {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 750;
+  color: #fff;
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.quick-stat {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+}
+
+.quick-value {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #14110d;
+}
+
+.quick-label {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #9aa1ac;
+}
+
+.ad-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+}
+
+.ad-card {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #eef0f3;
+}
+
+.ad-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ad-ref {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #14110d;
+}
+
+.ad-type {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.ad-type.custom { background: #fff7ed; color: #b45309; }
+.ad-type.store { background: #ecfdf5; color: #047857; }
+
+.ad-route {
+  margin: 10px 0 0;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.35;
+  color: #14110d;
+}
+
+.ad-arrow { color: #b6bcc6; padding: 0 2px; }
+
+.ad-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ad-chip {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f4f5f7;
+  color: #6b7280;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.ad-chip.money { background: #ecfdf5; color: #047857; }
+
+.ad-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #14110d;
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 750;
+  text-decoration: none;
 }
 </style>
