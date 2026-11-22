@@ -73,38 +73,8 @@
  <!-- In-App Toast Mount -->
  <InAppToast ref="toastRef" />
 
- <!-- Mobile Header -->
- <header class="lg:hidden bg-white border-b border-gray-100 sticky top-0 z-40 px-4 py-3 flex items-center justify-end gap-2">
- <div class="flex items-center gap-2">
- <!-- Mobile Campus Pill -->
- <button
-   type="button"
-   @click="openPicker"
-   class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gray-50 border border-gray-100 text-[11px] font-bold text-gray-900 active:scale-95 transition-all max-w-[125px]"
-   title="Change operating campus"
- >
-   <MapPin class="w-3 h-3 text-[#FF5C1A] shrink-0" />
-   <span class="truncate">{{ currentCampusLabel }}</span>
- </button>
-
- <NuxtLink to="/notifications" class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:text-gray-600 transition-all">
- <Bell class="w-5 h-5" />
- <div v-if="unreadCount > 0" class="absolute top-2 right-2 w-4 h-4 bg-[#FF5C1A] border border-white rounded-full flex items-center justify-center">
- <span class="text-[8px] font-bold text-white">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
- </div>
- </NuxtLink>
- <NuxtLink
-   to="/profile"
-   class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-900 text-white text-xs font-bold active:scale-95 transition-all"
-   aria-label="Your profile"
- >
-   {{ userInitials }}
- </NuxtLink>
- </div>
- </header>
-
  <!-- Main Content -->
- <main class="rider-main flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
+ <main class="rider-main flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0 pt-[env(safe-area-inset-top)] lg:pt-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
  <!-- Desktop Header -->
  <header class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-30 px-5 py-3.5 hidden lg:flex items-center justify-end">
  <div class="flex items-center gap-3">
@@ -549,5 +519,14 @@ watch(() => route.path, () => showMobileMenu.value = false)
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.01em;
+}
+</style>
+
+<style scoped>
+/* The mobile app bar is gone; content starts under the status bar instead. */
+@media (max-width: 1023px) {
+  .rider-main {
+    padding-top: max(10px, env(safe-area-inset-top));
+  }
 }
 </style>

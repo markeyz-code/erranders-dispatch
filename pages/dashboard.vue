@@ -1,5 +1,20 @@
 <template>
   <div class="space-y-8 animate-fade-in max-w-7xl mx-auto pb-16 from-slate-50/80 via-white to-white   rounded-lg  overflow-hidden">
+    <!-- The only global controls left: campus, alerts, you. No bar, no logo. -->
+    <div class="utility-row lg:hidden">
+      <button type="button" class="util-chip" @click="openCampusPicker">
+        <MapPin class="w-3.5 h-3.5" />
+        <span>{{ campusLabel }}</span>
+      </button>
+
+      <NuxtLink to="/notifications" class="util-icon" aria-label="Notifications">
+        <Bell class="w-5 h-5" />
+        <span v-if="unreadCount > 0" class="util-badge">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
+      </NuxtLink>
+
+      <NuxtLink to="/profile" class="util-avatar" aria-label="Your profile">{{ userInitials }}</NuxtLink>
+    </div>
+
     <!-- The one card a rider checks before starting: am I on, and what is waiting -->
     <section class="duty-card">
       <div class="duty-top">
@@ -258,6 +273,19 @@ import { useRealtimeSocket } from '@/composables/core/useRealtimeSocket'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 
 const { user } = useUser()
+const { institution, openPicker } = useInstitution()
+const { unreadCount } = useNotifications()
+
+const campusLabel = computed(() => {
+  const name = (institution?.value as any)?.shortName || (institution?.value as any)?.name
+  return name || 'Campus'
+})
+
+const userInitials = computed(() =>
+  `${user.value?.firstName?.[0] || ''}${user.value?.lastName?.[0] || ''}`.toUpperCase() || 'ME',
+)
+
+const openCampusPicker = () => openPicker()
 const { socket, connectSocket } = useRealtimeSocket()
 
 const getOrderEarnings = (ord: any) => {
@@ -773,6 +801,80 @@ onUnmounted(() => {
   color: #fff;
   font-size: 14.5px;
   font-weight: 750;
+  text-decoration: none;
+}
+
+/* The three things that used to live in a bar, as a thin row on the screen that needs them. */
+.utility-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.util-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+  color: #14110d;
+  font-size: 12.5px;
+  font-weight: 750;
+  max-width: 45vw;
+}
+
+.util-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.util-chip :deep(svg) {
+  color: #ff5c1a;
+  flex: none;
+}
+
+.util-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+  color: #4b5563;
+}
+
+.util-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #ff5c1a;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 800;
+  line-height: 17px;
+  text-align: center;
+}
+
+.util-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #14110d;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
   text-decoration: none;
 }
 </style>
