@@ -7,7 +7,7 @@
         <h1 class="text-xl font-bold text-gray-900">Earnings & Payouts</h1>
         <p class="text-gray-500 text-sm">Track your delivery earnings and manage withdrawals.</p>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="earn-actions">
         <button @click="showStatementModal = true" class="px-4 py-2 bg-white text-gray-700 rounded-lg font-medium text-sm border border-gray-25 hover:bg-gray-50 transition-colors flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           Generate Statement
@@ -37,8 +37,8 @@
               <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
           </div>
-          <p class="text-2xl font-bold text-gray-900">
-            <span class="text-sm text-gray-400">₦</span>{{ balance?.toLocaleString() || '0' }}
+          <p class="earn-balance">
+            <span class="earn-currency">₦</span>{{ balance?.toLocaleString() || '0' }}
           </p>
           <div class="mt-3 inline-flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-50">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -515,4 +515,41 @@ useHead({ title: 'Earnings - Errandr Dashboard' });
 }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* Two buttons and a number are all this screen is for; make them readable at arm's length. */
+.earn-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .earn-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .earn-actions button {
+    justify-content: center;
+    padding: 12px 10px;
+    font-size: 13.5px;
+  }
+}
+
+.earn-balance {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #14110d;
+}
+
+.earn-currency {
+  font-size: 17px;
+  font-weight: 700;
+  color: #9aa1ac;
+  margin-right: 2px;
+}
 </style>
