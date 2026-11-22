@@ -190,7 +190,7 @@
  </Transition>
 
  <!-- Main Content -->
- <main class="flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
+ <main class="rider-main flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
  <!-- Desktop Header -->
  <header class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-30 px-5 py-5 hidden lg:flex items-center justify-between">
  <div>

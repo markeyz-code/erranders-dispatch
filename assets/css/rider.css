@@ -1,0 +1,56 @@
+/*
+ * Shared look for the rider app.
+ *
+ * Each screen grew its own type scale and control sizes, so the same button was 32px on one page and 44px on the next.
+ * These rules only touch elements, not utility classes, so no page has to change and nothing here fights a specific
+ * screen's intent.
+ */
+
+.rider-main {
+  /* One type scale. */
+  --r-ink: #14110d;
+  --r-mute: #9aa1ac;
+  --r-line: #eef0f3;
+  --r-accent: #ff5c1a;
+}
+
+.rider-main h1 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--r-ink);
+}
+
+@media (max-width: 640px) {
+  /* The app bar already says which screen this is. */
+  .rider-main h1 {
+    font-size: 20px;
+  }
+}
+
+/* Controls a thumb has to hit. */
+.rider-main input:not([type='checkbox']):not([type='radio']),
+.rider-main select,
+.rider-main textarea {
+  min-height: 46px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+.rider-main button {
+  border-radius: 12px;
+}
+
+/* A card is a card, whatever page it is on. */
+.rider-main .rounded-lg.border {
+  border-color: var(--r-line);
+  border-radius: 14px;
+}
+
+/* Room to scroll past the last item, above the tab bar. */
+@media (max-width: 1023px) {
+  .rider-main {
+    padding-bottom: 8px;
+  }
+}
