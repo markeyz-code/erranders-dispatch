@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div v-if="showChatWidget" class="z-[90] fixed bottom-6 right-6 md:bottom-8 md:right-8">
+    <div v-if="showChatWidget" class="z-[90] fixed bottom-[86px] right-4 md:bottom-8 md:right-8">
       <Transition name="slide-up">
         <div
           v-if="isOpen"
