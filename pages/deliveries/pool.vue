@@ -43,100 +43,92 @@
     </div>
 
     <div v-else class="bg-white rounded-lg border border-gray-50 overflow-hidden">
-      <!-- Mobile Card Layout (visible on small screens only) -->
-      <div class="md:hidden divide-y divide-gray-100">
-        <div 
-          v-for="order in availableOrders" 
-          :key="'m-'+order._id"
+      <!-- Mobile: one card per errand, read top to bottom -->
+      <div class="md:hidden">
+        <article
+          v-for="order in availableOrders"
+          :key="'m-' + order._id"
+          class="errand-card"
           @click="viewDetails(order)"
-          class="p-4 hover:bg-gray-50/50 transition-all cursor-pointer active:bg-gray-100/50"
         >
-          <!-- Card Header: Icon + Title + Badges -->
-          <div class="flex items-start gap-3 mb-3">
-            <div class="w-10 h-10 rounded-xl bg-gray-950 flex items-center justify-center text-lg overflow-hidden flex-shrink-0">
-              <img v-if="order.type !== 'custom_errand' && order.vendor?.logo" :src="order.vendor.logo" class="w-full h-full object-cover" />
-              <img v-else-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')" src="https://i.ibb.co/3WfK9mY/barter-logo-white.png" class="w-6 h-6 object-contain" />
-              <span v-else class="text-white text-[9px] font-bold">CUS</span>
+          <header class="card-top">
+            <div class="card-kind">
+              <span class="kind-dot" :class="order.type === 'custom_errand' ? 'custom' : 'store'"></span>
+              <span class="kind-label">
+                <template v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')">Declutter delivery</template>
+                <template v-else-if="order.type === 'custom_errand'">Custom errand</template>
+                <template v-else>{{ order.vendor?.storeName || 'Store order' }}</template>
+              </span>
             </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-sm font-semibold text-gray-900 truncate">
-                <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')">Barter Delivery</span>
-                <span v-else>{{ order.type === 'custom_errand' ? 'Custom Errand' : (order.vendor?.storeName || 'Store Order') }}</span>
-              </h3>
-              <div class="flex items-center gap-1.5 mt-1 flex-wrap">
-                <span class="text-[8px] font-medium  text-[#FF5C1A] uppercase bg-[#FF5C1A]/5 px-1.5 py-0.5 rounded">#{{ order.orderNumber?.slice(-8) }}</span>
-                <span v-if="order.isGroupOrder" class="text-[8px] font-bold  text-emerald-700 uppercase bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">👥 GROUP</span>
-                <span v-if="order.isAutopilot" class="text-[8px] font-bold  text-blue-700 uppercase bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">🤖 AUTO-PILOT</span>
-                <span v-if="order.isPooledErrand" class="text-[8px] font-bold  text-teal-700 uppercase bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">🔄 POOLED</span>
-                <span v-if="order.customerGender" class="text-[8px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
-                  {{ order.customerGender === 'Male' ? '🙋🏽‍♂️' : (order.customerGender === 'Female' ? '🙋🏽‍♀️' : '👤') }}
-                </span>
-                <span v-if="order.status === 'negotiating'" class="text-[8px] font-bold  text-amber-700 uppercase bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 animate-pulse">🔥 NEGOTIATING</span>
-                <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('Barter Tx ID')" class="text-[8px] font-bold text-orange-700 uppercase bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200 flex items-center gap-1">🔄 BARTER P2P</span>
-                <span v-if="order.status === 'interception_pending'" class="text-[8px] font-bold  text-purple-700 uppercase bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200 animate-pulse">🤝 HAND-OFF</span>
-                <span v-if="order.locationType === 'outside_campus'" class="text-[8px] font-bold  text-blue-700 uppercase bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">📍 Off-Campus</span>
-                <span v-if="order.locationType === 'campus_environs'" class="text-[8px] font-bold  text-indigo-700 uppercase bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">📍 Environs</span>
-                <span class="text-[8px] font-bold text-gray-400 flex items-center gap-0.5">
-                  <Clock class="w-2.5 h-2.5" /> {{ formatTime(order.createdAt) }}
-                </span>
-              </div>
+            <p class="card-clock">{{ formatTime(order.createdAt) }}</p>
+          </header>
+
+          <!-- The number a rider looks for first -->
+          <div class="card-price">
+            <div>
+              <p class="price-label">{{ order.status === 'negotiating' ? 'Student proposed' : 'You earn' }}</p>
+              <p class="price-value" :class="{ negotiate: order.status === 'negotiating' }">
+                <template v-if="order.status === 'negotiating'">
+                  <template v-if="(order.proposedDeliveryFee || order.deliveryFee) > 0">₦{{ (order.proposedDeliveryFee || order.deliveryFee).toLocaleString() }}</template>
+                  <template v-else>Make an offer</template>
+                </template>
+                <template v-else>
+                  ₦{{ order.status === 'interception_pending' ? Math.round(getOrderEarnings(order) * 0.4).toLocaleString() : getOrderEarnings(order).toLocaleString() }}
+                </template>
+              </p>
             </div>
+            <p class="card-ref">#{{ order.orderNumber?.slice(-8) }}</p>
           </div>
 
-          <!-- Card Body: Description / Items -->
-          <div class="p-2.5 bg-gray-50/70 rounded-lg border border-gray-50/50 mb-3">
-            <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="text-sm text-gray-600 line-clamp-2 mb-1.5 whitespace-pre-line">
-              {{ order.customDetails.description }}
-            </p>
-            <p v-if="order.status === 'interception_pending'" class="text-sm text-purple-700 font-bold bg-purple-50 p-2 rounded-lg border border-purple-200 mb-1.5">
-              📍 Pick up from: {{ order.interception?.point }}
-            </p>
-            <div v-if="order.type === 'custom_errand' && order.customDetails?.estimatedItemCost > 0" class="flex items-center gap-1.5 text-[10px] font-medium text-gray-500 mb-1">
-              <Banknote class="w-3 h-3 text-emerald-500" /> Item Cost: <strong class="text-gray-700">₦{{ order.customDetails.estimatedItemCost.toLocaleString() }}</strong>
-            </div>
-            <div v-if="order.type !== 'custom_errand' && order.items?.length > 0" class="text-[10px] font-medium text-gray-500 line-clamp-1">
-              📦 {{ order.items.length }} Item{{ order.items.length > 1 ? 's' : '' }}: <span class="text-gray-400">{{ order.items.map((i: any) => i.name).join(', ') }}</span>
-            </div>
+          <!-- Where it goes -->
+          <p v-if="order.type === 'custom_errand' && order.customDetails?.description" class="card-desc">
+            {{ order.customDetails.description }}
+          </p>
+          <p v-if="order.status === 'interception_pending'" class="card-handoff">
+            Hand-off point: {{ order.interception?.point }}
+          </p>
+          <p v-if="order.type === 'custom_errand' && order.customDetails?.estimatedItemCost > 0" class="card-meta">
+            Item cost ₦{{ order.customDetails.estimatedItemCost.toLocaleString() }}
+          </p>
+          <p v-else-if="order.type !== 'custom_errand' && order.items?.length" class="card-meta">
+            {{ order.items.length }} item{{ order.items.length > 1 ? 's' : '' }} · {{ order.items.map((i: any) => i.name).join(', ') }}
+          </p>
+
+          <div v-if="order.type === 'custom_errand' && order.customDetails?.attachedVoiceNote" class="card-audio" @click.stop>
+            <audio :src="order.customDetails.attachedVoiceNote" controls class="w-full" preload="metadata" />
           </div>
 
-          <!-- Voice Note -->
-          <div v-if="order.type === 'custom_errand' && order.customDetails?.attachedVoiceNote" class="mb-3" @click.stop>
-            <audio :src="order.customDetails.attachedVoiceNote" controls class="h-8 w-full max-w-[250px]  rounded-full" preload="metadata" />
+          <!-- Only the flags that change how the job is done -->
+          <div class="card-chips">
+            <span v-if="order.status === 'negotiating'" class="chip hot">Negotiating</span>
+            <span v-if="order.status === 'interception_pending'" class="chip accent">Hand-off</span>
+            <span v-if="order.isGroupOrder" class="chip">Group order</span>
+            <span v-if="order.isPooledErrand" class="chip">Pooled</span>
+            <span v-if="order.locationType === 'outside_campus'" class="chip">Off-campus</span>
+            <span v-else-if="order.locationType === 'campus_environs'" class="chip">Environs</span>
+            <span v-if="order.isAutopilot" class="chip">Autopilot</span>
           </div>
 
-          <!-- Card Footer: Earnings + Actions -->
-          <div class="flex items-center justify-between gap-3">
-            <!-- Earnings -->
-            <div v-if="order.status === 'negotiating'" class="flex-shrink-0">
-              <p class="text-[10px] font-medium text-amber-600 mb-0.5">Student proposed</p>
-              <p v-if="(order.proposedDeliveryFee || order.deliveryFee) > 0" class="text-base font-bold text-amber-700 leading-tight">₦{{ (order.proposedDeliveryFee || order.deliveryFee).toLocaleString() }}</p>
-              <p v-else class="text-sm font-bold text-amber-700 leading-tight">Make an Offer</p>
-            </div>
-            <div v-else class="flex-shrink-0">
-              <p class="text-[10px] font-medium text-gray-400 mb-0.5">You Earn</p>
-              <p class="text-base font-bold text-emerald-600 leading-tight">₦{{ order.status === 'interception_pending' ? (getOrderEarnings(order) * 0.4).toLocaleString() : getOrderEarnings(order).toLocaleString() }}</p>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex items-center gap-2 flex-shrink-0">
-              <button 
-                v-if="order.status === 'negotiating'"
-                @click.stop="viewDetails(order)"
-                class="px-3 py-2 bg-amber-500 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-amber-600 transition-all"
-              >
-                Place Bid
-              </button>
-              <button 
-                @click.stop="order.status === 'interception_pending' ? acceptInterception(order._id) : acceptOrder(order._id)"
-                :disabled="acceptingId === order._id"
-                class="px-3 py-2 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-parentPrimary transition-all disabled:opacity-50"
-              >
-                <span v-if="acceptingId === order._id" class="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin inline-block"></span>
-                <span v-else>Accept</span>
-              </button>
-            </div>
+          <div class="card-actions">
+            <button
+              v-if="order.status === 'negotiating'"
+              type="button"
+              class="btn-bid"
+              @click.stop="viewDetails(order)"
+            >
+              Place bid
+            </button>
+            <button
+              type="button"
+              class="btn-accept"
+              :disabled="acceptingId === order._id"
+              @click.stop="order.status === 'interception_pending' ? acceptInterception(order._id) : acceptOrder(order._id)"
+            >
+              <span v-if="acceptingId === order._id" class="btn-spin"></span>
+              <span v-else>Accept</span>
+            </button>
           </div>
-        </div>
+        </article>
       </div>
 
       <!-- Desktop Table Layout (hidden on small screens) -->
@@ -1229,5 +1221,215 @@ useHead({
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/*
+ * Errand cards.
+ *
+ * The old card carried eleven coloured badges above the job, so the first thing a rider read was noise. The payout is
+ * the subject now, the references are quiet, and only flags that change how the job is done survive.
+ */
+.errand-card {
+  padding: 16px;
+  border-bottom: 1px solid #f1f2f4;
+  background: #fff;
+  cursor: pointer;
+}
+
+.errand-card:active {
+  background: #fafafa;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-kind {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.kind-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+}
+
+.kind-dot.custom {
+  background: #ff5c1a;
+}
+
+.kind-dot.store {
+  background: #10b981;
+}
+
+.kind-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #14110d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-clock {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #9aa1ac;
+  flex: none;
+}
+
+.card-price {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.price-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9aa1ac;
+}
+
+.price-value {
+  margin: 2px 0 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0f6b3d;
+  line-height: 1.1;
+}
+
+.price-value.negotiate {
+  color: #b45309;
+}
+
+.card-ref {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #b6bcc6;
+}
+
+.card-desc {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4b5563;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
+}
+
+.card-handoff {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  color: #6d28d9;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.card-meta {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #9aa1ac;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-audio {
+  margin-top: 10px;
+}
+
+.card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.chip {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f4f5f7;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.chip.hot {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+.chip.accent {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.btn-bid,
+.btn-accept {
+  flex: 1;
+  padding: 13px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.btn-bid {
+  background: #ffedd5;
+  color: #b45309;
+}
+
+.btn-accept {
+  background: #ff5c1a;
+  color: #fff;
+}
+
+.btn-accept:disabled {
+  opacity: 0.6;
+}
+
+.btn-spin {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 999px;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
