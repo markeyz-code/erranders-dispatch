@@ -16,15 +16,15 @@
       <div 
         v-for="stat in stats" 
         :key="stat.label" 
-        class="  rounded-lg border border-[0.5px] border-gray-50 p-4 transition-all duration-300 transform hover:scale-105 group"
+        class="stat-card"
       >
         <div class="flex items-center justify-between mb-4">
           <div :class="stat.bgClass" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg">
             {{ stat.emoji }}
           </div>
         </div>
-        <p class="text-sm text-gray-400 font-medium mb-1">{{ stat.label }}</p>
-        <h3 class="text-2xl font-bold text-gray-900 tracking-tight">{{ stat.value }}</h3>
+        <p class="stat-label">{{ stat.label }}</p>
+        <h3 class="stat-value">{{ stat.value }}</h3>
       </div>
     </div>
 
@@ -495,5 +495,29 @@ onUnmounted(() => {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* The four numbers are the dashboard; give them room and drop the hover-scale, which does nothing on a phone. */
+.stat-card {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+}
+
+.stat-label {
+  margin: 10px 0 2px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #9aa1ac;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: #14110d;
 }
 </style>
