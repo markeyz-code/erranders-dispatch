@@ -308,7 +308,8 @@
  </main>
 
  <!-- Bottom tabs: the five places a rider goes, within thumb reach -->
- <nav class="bottom-tabs lg:hidden" aria-label="Main">
+ <!-- Hidden where the screen owns its own bottom edge, such as the chat composer. -->
+ <nav v-if="!isFullScreenRoute" class="bottom-tabs lg:hidden" aria-label="Main">
    <NuxtLink
      v-for="tab in bottomTabs"
      :key="tab.path"
@@ -488,6 +489,16 @@ const handleNavClick = (e: Event, path: string) => {
   }
 }
 
+/**
+ * Screens that are their own full-page context.
+ *
+ * The chat view is a fixed overlay with a message composer at the very bottom; a tab bar there would sit on top of the
+ * box a rider types into.
+ */
+const isFullScreenRoute = computed(() =>
+  route.path.startsWith('/deliveries/chats') || route.path.startsWith('/incoming'),
+)
+
 const bottomTabs = computed(() => [
   { path: '/dashboard', label: 'Home', icon: LayoutDashboard },
   { path: '/deliveries/pool', label: 'Pool', icon: Layers },
@@ -578,7 +589,7 @@ watch(() => route.path, () => showMobileMenu.value = false)
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 50;
+  z-index: 45;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
