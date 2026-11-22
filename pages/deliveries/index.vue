@@ -49,8 +49,32 @@
  </NuxtLink>
  </div>
 
+ <!-- My deliveries: cards on a phone, the table on a desk -->
+ <div v-else>
+ <div class="md:hidden">
+   <NuxtLink
+     v-for="order in filteredOrders"
+     :key="'m-' + order._id"
+     :to="`/deliveries/${order._id}`"
+     class="delivery-card"
+   >
+     <div class="dc-top">
+       <span class="dc-status" :class="statusTone(order.status)">{{ statusLabel(order.status) }}</span>
+       <span class="dc-time">{{ relativeTime(order.createdAt) }}</span>
+     </div>
+
+     <p class="dc-store">{{ order.vendor?.storeName || (order.type === 'custom_errand' ? 'Custom errand' : 'Store order') }}</p>
+     <p class="dc-ref">#{{ order.orderNumber }}<template v-if="order.dropoffAddress || order.deliveryAddress"> · {{ order.dropoffAddress || order.deliveryAddress }}</template></p>
+
+     <div class="dc-foot">
+       <p class="dc-earn">₦{{ getOrderEarnings(order)?.toLocaleString() }}</p>
+       <ChevronRight class="w-4 h-4 text-gray-300" />
+     </div>
+   </NuxtLink>
+ </div>
+
  <!-- Deliveries Table -->
- <div v-else class="bg-white rounded-lg border border-gray-50 overflow-hidden">
+ <div class="hidden md:block bg-white rounded-lg border border-gray-50 overflow-hidden">
  <div class="overflow-x-auto">
  <table class="w-full text-left">
  <thead>
@@ -108,6 +132,7 @@
  </tr>
  </tbody>
  </table>
+ </div>
  </div>
  </div>
 
@@ -230,6 +255,39 @@ const filteredOrders = computed(() => {
  return list;
 });
 
+/** A rider needs the state in words, and a colour that matches the urgency. */
+const statusLabel = (s: string) =>
+  ({
+    pending: 'Awaiting payment',
+    confirmed: 'Ready to collect',
+    preparing: 'Being prepared',
+    ready_for_pickup: 'Ready to collect',
+    picked_up: 'Collected',
+    in_transit: 'On the way',
+    delivered: 'Delivered',
+    cancelled: 'Cancelled',
+    refunded: 'Refunded',
+    negotiating: 'Negotiating',
+  } as Record<string, string>)[s] || String(s || '').replace(/_/g, ' ');
+
+const statusTone = (s: string) => {
+  if (['delivered'].includes(s)) return 'done';
+  if (['picked_up', 'in_transit'].includes(s)) return 'moving';
+  if (['confirmed', 'ready_for_pickup', 'preparing'].includes(s)) return 'ready';
+  if (['cancelled', 'refunded'].includes(s)) return 'dead';
+  return 'idle';
+};
+
+/** "12 min ago" beats a date when the question is how long something has been waiting. */
+const relativeTime = (value: string) => {
+  const mins = Math.max(0, Math.round((Date.now() - new Date(value).getTime()) / 60000));
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return new Date(value).toLocaleDateString();
+};
+
 const statusEmoji = (s: string) => ({
  pending: '⏳',
  confirmed: '✅',
@@ -282,5 +340,101 @@ useHead({ title: 'My Deliveries - Errandr' });
 @keyframes fadeIn {
  from { opacity: 0; transform: translateY(12px); }
  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Delivery cards: the table needs a desktop width; a phone gets one row per delivery. */
+.delivery-card {
+  display: block;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+}
+
+.delivery-card:active {
+  background: #fafafa;
+}
+
+.dc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dc-status {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 750;
+}
+
+.dc-status.ready {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+.dc-status.moving {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.dc-status.done {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.dc-status.dead {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.dc-status.idle {
+  background: #f4f5f7;
+  color: #6b7280;
+}
+
+.dc-time {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #9aa1ac;
+}
+
+.dc-store {
+  margin: 10px 0 0;
+  font-size: 15.5px;
+  font-weight: 750;
+  color: #14110d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dc-ref {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: #9aa1ac;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f4f5f7;
+}
+
+.dc-earn {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f6b3d;
 }
 </style>
