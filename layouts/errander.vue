@@ -202,7 +202,57 @@
      </span>
      <span class="tab-label">{{ tab.label }}</span>
    </NuxtLink>
+
+   <button type="button" class="tab" :class="{ on: moreSheetOpen }" @click="moreSheetOpen = true">
+     <span class="tab-icon"><Users class="w-[22px] h-[22px]" /></span>
+     <span class="tab-label">More</span>
+   </button>
  </nav>
+
+ <!-- More: the rest, without a second navigation system -->
+ <Transition name="sheet">
+   <div v-if="moreSheetOpen" class="sheet-wrap">
+     <div class="sheet-scrim" @click="moreSheetOpen = false" />
+     <div class="sheet">
+       <div class="sheet-grip" aria-hidden="true" />
+
+       <NuxtLink to="/profile" class="sheet-row" @click="moreSheetOpen = false">
+         <span class="sheet-avatar">{{ userInitials }}</span>
+         <span class="sheet-text">
+           <span class="sheet-title">{{ userDisplayName }}</span>
+           <span class="sheet-sub">{{ user?.email }}</span>
+         </span>
+       </NuxtLink>
+
+       <button type="button" class="sheet-row" @click="moreSheetOpen = false; openPicker()">
+         <MapPin class="w-[18px] h-[18px]" />
+         <span class="sheet-title">{{ currentCampusLabel }}</span>
+         <span class="sheet-action">Switch</span>
+       </button>
+
+       <NuxtLink to="/earnings" class="sheet-row" @click="moreSheetOpen = false">
+         <Wallet class="w-[18px] h-[18px]" />
+         <span class="sheet-title">Earnings</span>
+       </NuxtLink>
+
+       <NuxtLink to="/notifications" class="sheet-row" @click="moreSheetOpen = false">
+         <Bell class="w-[18px] h-[18px]" />
+         <span class="sheet-title">Notifications</span>
+         <span v-if="unreadCount > 0" class="sheet-badge">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
+       </NuxtLink>
+
+       <NuxtLink to="/profile" class="sheet-row" @click="moreSheetOpen = false">
+         <User class="w-[18px] h-[18px]" />
+         <span class="sheet-title">Profile</span>
+       </NuxtLink>
+
+       <button type="button" class="sheet-row danger" @click="moreSheetOpen = false; handleLogoutClick()">
+         <LogOut class="w-[18px] h-[18px]" />
+         <span class="sheet-title">Log out</span>
+       </button>
+     </div>
+   </div>
+ </Transition>
 
  <!-- Logout Confirmation Modal -->
  <Transition name="fade">
@@ -264,7 +314,8 @@ import ChatWidget from '@/components/ChatWidget.vue'
   Clock,
   XCircle,
   MapPin,
-  ChevronDown
+  ChevronDown,
+  Users
  } from 'lucide-vue-next'
 import { useRealtimeNotifications } from '@/composables/core/useRealtimeNotifications'
 import { useNotifications } from '@/composables/modules/notifications/useNotifications'
@@ -383,8 +434,10 @@ const bottomTabs = computed(() => [
   { path: '/deliveries/pool', label: 'Pool', icon: Layers },
   { path: '/deliveries', label: 'Deliveries', icon: Bike },
   { path: '/deliveries/chats', label: 'Chats', icon: MessageSquare, badge: unreadCount.value },
-  { path: '/earnings', label: 'Earnings', icon: Wallet },
 ])
+
+/** Everything that is not a place to be: earnings, alerts, you, the campus you work, and leaving. */
+const moreSheetOpen = ref(false)
 
 const navItems = [
  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -528,5 +581,125 @@ watch(() => route.path, () => showMobileMenu.value = false)
   .rider-main {
     padding-top: max(10px, env(safe-area-inset-top));
   }
+}
+
+/* The More sheet: everything that is not a destination, one tap from the bar. */
+.sheet-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px 12px calc(20px + env(safe-area-inset-bottom));
+  border-radius: 20px 20px 0 0;
+  background: #fff;
+  box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.18);
+}
+
+.sheet-grip {
+  width: 40px;
+  height: 4px;
+  margin: 4px auto 10px;
+  border-radius: 999px;
+  background: #e5e7eb;
+}
+
+.sheet-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #14110d;
+  font-size: 15px;
+  font-weight: 650;
+  text-decoration: none;
+  text-align: left;
+}
+
+.sheet-row:active {
+  background: #f7f7f8;
+}
+
+.sheet-row.danger {
+  color: #dc2626;
+}
+
+.sheet-avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #14110d;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.sheet-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sheet-title {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sheet-sub {
+  font-size: 12.5px;
+  color: #9aa1ac;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sheet-action {
+  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 750;
+  color: #ff5c1a;
+}
+
+.sheet-badge {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #ff5c1a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.sheet-enter-active,
+.sheet-leave-active {
+  transition: opacity 0.18s ease;
+}
+
+.sheet-enter-from,
+.sheet-leave-to {
+  opacity: 0;
 }
 </style>

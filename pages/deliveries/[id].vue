@@ -29,44 +29,33 @@
     </div>
   </div>
 
- <!-- Stunning Header -->
- <div class="relative p-4 md:p-5 rounded-xl md:rounded-lg overflow-hidden border border-gray-50 bg-white  group">
- <!-- Animated Background Effects -->
- <div class="absolute -right-20 -top-20 w-64 h-64 bg-[#FF5C1A]/10 rounded-full blur-[80px] group-hover:scale-150 group-hover:opacity-70 transition-all duration-1000 ease-in-out" />
- 
- <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6 mb-10 relative z-10">
- <div class="space-y-2">
- <div class="inline-flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full border border-gray-50 ">
- <span class="w-2 h-2 rounded-full bg-[#FF5C1A] animate-pulse"></span>
- <p class="text-[10px] font-bold text-gray-500 uppercase ">Live Delivery Tracking</p>
- </div>
- <div class="flex flex-col gap-1 items-start">
-   <h1 class="text-3xl font-black text-gray-900 tracking-tight">Order #{{ order.orderNumber }}</h1>
-   <div class="flex gap-2 flex-wrap items-center mt-1">
-     <span v-if="order.isGroupOrder" class="inline-block text-[10px] font-bold  text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded border border-emerald-100">👥 GROUP ORDER</span>
-     <span v-if="order.isAutopilot" class="inline-block text-[10px] font-bold  text-blue-600 uppercase bg-blue-50 px-2 py-1 rounded border border-blue-100">🤖 AUTO-PILOT</span>
-     <span v-if="order.isPooledErrand" class="inline-block text-[10px] font-bold  text-teal-600 uppercase bg-teal-50 px-2 py-1 rounded border border-teal-100">🔄 POOLED ERRAND</span>
-     <span v-if="order.type === 'custom_errand' && order.customDetails?.description?.includes('[Barter Tx ID:')" class="inline-block text-[10px] font-bold text-blue-600 uppercase bg-blue-50 px-2 py-1 rounded border border-blue-100">🤝 BARTER DELIVERY</span>
-   </div>
- </div>
- </div>
- <div class="flex items-center gap-3 bg-gray-50 p-2 rounded-lg border border-gray-50 ">
- <StatusBadge :status="order.status" class="scale-110 " />
- </div>
- </div>
+ <!-- Tracking header: where this is, what it pays, how far along -->
+ <header class="track-head">
+   <button type="button" class="track-back" aria-label="Go back" @click="router.back()">
+     <ChevronLeft class="w-5 h-5" />
+   </button>
+   <p class="track-ref">#{{ order.orderNumber }}</p>
+   <StatusBadge :status="order.status" />
+ </header>
 
- <div v-if="order.status !== 'cancelled'" class="space-y-4 relative z-10 bg-gray-50 p-5 rounded-lg border border-gray-50 ">
- <div class="flex items-center justify-between">
- <span class="text-sm font-bold text-gray-500 tracking-wide uppercase">Delivery Progress</span>
- <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-full border border-[#FF5C1A]/20">Step {{ currentStep + 1 }} of 4</span>
- </div>
- <div class="flex items-center gap-3">
- <div v-for="(step, i) in steps" :key="step" class="flex-1 h-2.5 rounded-full transition-all duration-1000 relative overflow-hidden " :class="currentStep >= i ? 'bg-[#FF5C1A]' : 'bg-gray-200'">
- <div v-if="currentStep === i" class="absolute inset-0 bg-white/30 animate-pulse" />
- </div>
- </div>
- </div>
- </div>
+ <section class="track-card">
+   <div class="track-money">
+     <div>
+       <p class="track-label">You earn</p>
+       <p class="track-payout">₦{{ myEarnings.toLocaleString() }}</p>
+     </div>
+     <p v-if="order.isGroupOrder || order.isPooledErrand || order.type === 'custom_errand'" class="track-kind">
+       {{ order.type === 'custom_errand' ? (order.isBarter || order.customDetails?.description?.includes('[Barter Tx ID:') ? 'Declutter delivery' : 'Custom errand') : 'Store order' }}
+     </p>
+   </div>
+
+   <div v-if="order.status !== 'cancelled'" class="track-progress">
+     <div v-for="(step, i) in steps" :key="step" class="track-step">
+       <div class="track-bar" :class="{ done: currentStep >= i }"></div>
+       <p class="track-step-label" :class="{ done: currentStep >= i }">{{ formatStatus(step) }}</p>
+     </div>
+   </div>
+ </section>
 
  <div class="grid grid-cols-1 lg:grid-cols-5 gap-5 md:gap-10">
  <!-- Delivery Info & Content -->
@@ -2069,3 +2058,111 @@ onUnmounted(() => {
 
 useHead({ title: computed(() => `Delivery #${order.value?.orderNumber || ''} - Errandr`) });
 </script>
+
+<style scoped>
+/* ─── Tracking screen ─── */
+.track-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0 2px;
+}
+
+.track-back {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+  color: #14110d;
+}
+
+.track-ref {
+  flex: 1;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #14110d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: #14110d;
+  color: #fff;
+}
+
+.track-money {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.track-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8f877c;
+}
+
+.track-payout {
+  margin: 4px 0 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.track-kind {
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 11.5px;
+  font-weight: 750;
+  color: #e8e2d9;
+}
+
+.track-progress {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.track-step {
+  min-width: 0;
+}
+
+.track-bar {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.track-bar.done {
+  background: #ff5c1a;
+}
+
+.track-step-label {
+  margin: 7px 0 0;
+  font-size: 10.5px;
+  font-weight: 650;
+  color: #8f877c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-step-label.done {
+  color: #fff;
+}
+</style>
