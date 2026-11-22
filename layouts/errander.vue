@@ -74,15 +74,7 @@
  <InAppToast ref="toastRef" />
 
  <!-- Mobile Header -->
- <header class="lg:hidden bg-white border-b border-gray-100 sticky top-0 z-40 px-5 py-3.5 flex items-center justify-between">
- <div class="flex items-center gap-2.5">
-  <!-- <img src="@/assets/img/logo-light.png" class="h-10 w-auto" /> -->
- <!-- <div class="w-9 h-9 bg-gradient-to-br from-[#FF5C1A] to-indigo-500 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm border border-gray-50 shadow-[#FF5C1A]/10">
- E
- </div> -->
- <img src="@/assets/img/logo-light.png" class="h-10 w-auto" />
- <!-- <span class="text-lg font-bold text-gray-900 tracking-tight">Errandr</span> -->
- </div>
+ <header class="lg:hidden bg-white border-b border-gray-100 sticky top-0 z-40 px-4 py-3 flex items-center justify-end gap-2">
  <div class="flex items-center gap-2">
  <!-- Mobile Campus Pill -->
  <button
@@ -111,21 +103,10 @@
  </div>
  </header>
 
- <!-- Which screen this is, on a phone -->
- <div class="lg:hidden px-5 pt-4 pb-1">
-   <h1 class="text-[19px] font-black text-gray-900 tracking-tight leading-none">{{ pageTitle }}</h1>
-   <p class="text-[12.5px] text-gray-400 font-medium mt-1.5">{{ pageDescription }}</p>
- </div>
-
  <!-- Main Content -->
  <main class="rider-main flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
  <!-- Desktop Header -->
- <header class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-30 px-5 py-5 hidden lg:flex items-center justify-between">
- <div>
- <h1 class="text-xl font-bold text-gray-900 tracking-tight leading-none">{{ pageTitle }}</h1>
- <p class="text-sm text-gray-400 font-medium mt-1">{{ pageDescription }}</p>
- </div>
- 
+ <header class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-30 px-5 py-3.5 hidden lg:flex items-center justify-end">
  <div class="flex items-center gap-3">
   <!-- Operating Campus Pill -->
   <button
