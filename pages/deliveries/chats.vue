@@ -7,80 +7,58 @@
         activeChat ? 'hidden md:flex' : 'flex'
       ]"
     >
-      <!-- Header -->
-      <div class="h-[60px] px-4 bg-[#008069] flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-3">
-          <button @click="navigateTo('/dashboard')" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Back to Dashboard">
-            <ArrowLeft class="w-5 h-5" />
-          </button>
-          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold overflow-hidden cursor-pointer">
-            {{ user ? (user.firstName?.[0] || user.email?.[0] || 'R').toUpperCase() : 'R' }}
-          </div>
-          <span class="font-semibold text-white text-base truncate">{{ user?.firstName || 'Rider' }}</span>
-        </div>
-        <div class="flex items-center gap-4 text-white">
-          <MessageSquare class="w-5 h-5 cursor-pointer hover:text-gray-200 transition-colors" />
-          <MoreVertical class="w-5 h-5 cursor-pointer hover:text-gray-200 transition-colors" />
-        </div>
+      <!-- Header: ours, not a messenger's -->
+      <div class="chats-head">
+        <button type="button" class="chats-back" aria-label="Back to Home" @click="navigateTo('/dashboard')">
+          <ArrowLeft class="w-5 h-5" />
+        </button>
+        <h1 class="chats-title">Chats</h1>
+        <span class="chats-me">{{ myInitials }}</span>
       </div>
 
       <!-- Search -->
-      <div class="p-2 bg-white border-b border-gray-200">
-        <div class="bg-[#F0F2F5] rounded-lg flex items-center px-4 py-1.5 transition-all border border-transparent focus-within:bg-white focus-within:border-[#00A884]">
-          <Search class="w-4 h-4 text-[#54656F] mr-3" />
-          <input 
-            v-model="searchQuery" 
-            type="text" 
-            placeholder="Search chats" 
-            class="bg-transparent border-none outline-none text-[15px] w-full placeholder:text-[#54656F] text-[#111B21] py-1"
-          />
-        </div>
+      <div class="chats-search">
+        <Search class="w-[18px] h-[18px]" />
+        <input v-model="searchQuery" type="text" placeholder="Search by name or order" aria-label="Search chats" />
       </div>
 
       <!-- Chat List -->
-      <div class="flex-1 overflow-y-auto bg-white">
-        <div v-if="loading" class="p-4 space-y-3">
-          <div v-for="i in 5" :key="i" class="h-16 bg-gray-100 animate-pulse rounded-lg" />
+      <div class="chats-list">
+        <div v-if="loading" class="chats-skeleton">
+          <div v-for="i in 5" :key="i" class="skeleton-row" />
         </div>
-        <div v-else-if="filteredChats.length === 0" class="flex flex-col items-center justify-center h-full text-[#54656F] space-y-2 p-4 text-center">
-          <MessageSquare class="w-12 h-12 opacity-20" />
-          <p class="text-[14px]">No active chats found.</p>
+
+        <div v-else-if="filteredChats.length === 0" class="chats-empty">
+          <MessageSquare class="w-10 h-10" />
+          <p class="chats-empty-title">No chats yet</p>
+          <p class="chats-empty-sub">Conversations with customers and vendors appear here once a delivery starts.</p>
         </div>
-        <div v-else class="flex flex-col">
+
+        <template v-else>
           <button
             v-for="chat in filteredChats"
             :key="chat.id"
+            type="button"
+            class="chat-row"
+            :class="{ on: activeChat?.id === chat.id }"
             @click="selectChat(chat)"
-            class="w-full text-left flex items-center px-3 py-3 hover:bg-[#F5F6F6] transition-colors group"
-            :class="{ 'bg-[#F0F2F5]': activeChat?.id === chat.id }"
           >
-            <!-- Avatar -->
-            <div class="w-12 h-12 rounded-full bg-[#E8F8F5] flex items-center justify-center text-[#008069] font-bold text-lg flex-shrink-0 mr-3">
-              {{ getInitials(chat.receiverName) }}
-            </div>
-            
-            <!-- Info -->
-            <div class="flex-1 min-w-0 border-b border-gray-100 pb-3 pt-1 group-last:border-none">
-              <div class="flex items-center justify-between mb-0.5">
-                <h3 class="font-normal text-[#111B21] text-[16px] truncate">
-                  {{ chat.receiverName }}
-                </h3>
-                <span class="text-[12px] whitespace-nowrap ml-2" :class="activeChat?.id === chat.id ? 'text-[#111B21]' : 'text-[#54656F]'">
-                  {{ formatTime(chat.order.createdAt) }}
+            <span class="chat-avatar">{{ initialsOf(chat) }}</span>
+
+            <span class="chat-body">
+              <span class="chat-line">
+                <span class="chat-name">{{ nameOf(chat) }}</span>
+                <span class="chat-time">{{ formatTime(chat.order?.createdAt) }}</span>
+              </span>
+              <span class="chat-line">
+                <span class="chat-preview">
+                  {{ chat.receiverType ? String(chat.receiverType) : 'Chat' }}<template v-if="chat.order?.orderNumber"> · #{{ chat.order.orderNumber }}</template>
                 </span>
-              </div>
-              <div class="flex items-center justify-between">
-                <p class="text-[14px] text-[#54656F] truncate flex items-center gap-1">
-                  <CheckCheck class="w-4 h-4 text-[#34B7F1]" />
-                  {{ chat.receiverType }} • Order #{{ chat.order.orderNumber }}
-                </p>
-                <div v-if="unreadCounts[chat.order._id] > 0" class="w-5 h-5 rounded-full bg-[#25D366] text-white flex items-center justify-center text-[11px] font-bold">
-                  {{ unreadCounts[chat.order._id] }}
-                </div>
-              </div>
-            </div>
+                <span v-if="unreadCounts[chat.order?._id] > 0" class="chat-badge">{{ unreadCounts[chat.order._id] }}</span>
+              </span>
+            </span>
           </button>
-        </div>
+        </template>
       </div>
     </div>
 
@@ -224,6 +202,23 @@ const selectChat = (chat: any) => {
   }
 }
 
+/** Never print "undefined" at someone: a missing name falls back to who they are in the trade. */
+const nameOf = (chat: any) =>
+  String(chat?.receiverName || chat?.receiver?.firstName || (chat?.receiverType === 'Vendor' ? 'Vendor' : 'Customer')).trim()
+
+const initialsOf = (chat: any) => {
+  const name = nameOf(chat)
+  const parts = name.split(' ').filter(Boolean)
+  const letters = (parts[0]?.[0] || '') + (parts[1]?.[0] || '')
+  return (letters || name[0] || 'C').toUpperCase()
+}
+
+const myInitials = computed(() => {
+  const first = String(user.value?.firstName || '').trim()
+  const last = String(user.value?.lastName || '').trim()
+  return ((first[0] || '') + (last[0] || first[1] || '')).toUpperCase() || 'R'
+})
+
 const getInitials = (name: string) => {
   if (!name) return 'U'
   const parts = name.split(' ')
@@ -252,3 +247,203 @@ onMounted(() => {
   })
 })
 </script>
+
+<style scoped>
+/* The chat list, in this app's clothes rather than a messenger's. */
+.chats-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eef0f3;
+  background: #fff;
+  flex: none;
+}
+
+.chats-back {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid #eef0f3;
+  background: #fff;
+  color: #14110d;
+}
+
+.chats-title {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #14110d;
+}
+
+.chats-me {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #14110d;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.chats-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 12px 14px;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: #f4f5f7;
+  color: #9aa1ac;
+  flex: none;
+}
+
+.chats-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+  color: #14110d;
+  outline: none;
+}
+
+.chats-list {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid #f4f5f7;
+  background: #fff;
+  text-align: left;
+}
+
+.chat-row:active,
+.chat-row.on {
+  background: #fbf8f4;
+}
+
+.chat-avatar {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: #fff1e8;
+  color: #ff5c1a;
+  font-size: 14px;
+  font-weight: 800;
+  flex: none;
+}
+
+.chat-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chat-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.chat-name {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: #14110d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-time {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #9aa1ac;
+  flex: none;
+}
+
+.chat-preview {
+  flex: 1;
+  font-size: 13px;
+  color: #9aa1ac;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-badge {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #ff5c1a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.chats-skeleton {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-row {
+  height: 58px;
+  border-radius: 12px;
+  background: #f4f5f7;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+
+.chats-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 60px 24px;
+  text-align: center;
+  color: #c3c8d0;
+}
+
+.chats-empty-title {
+  margin: 8px 0 0;
+  font-size: 15px;
+  font-weight: 750;
+  color: #14110d;
+}
+
+.chats-empty-sub {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #9aa1ac;
+  max-width: 34ch;
+}
+</style>
