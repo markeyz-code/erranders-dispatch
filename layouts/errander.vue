@@ -103,12 +103,19 @@
  </NuxtLink>
  <button
  @click="showMobileMenu = !showMobileMenu"
- class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-600 active:scale-95 transition-all"
+ class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-900 text-white text-xs font-bold active:scale-95 transition-all"
+ aria-label="Account and more"
  >
- <Menu class="w-5 h-5" />
+ {{ userInitials }}
  </button>
  </div>
  </header>
+
+ <!-- Which screen this is, on a phone -->
+ <div class="lg:hidden px-5 pt-4 pb-1">
+   <h1 class="text-[19px] font-black text-gray-900 tracking-tight leading-none">{{ pageTitle }}</h1>
+   <p class="text-[12.5px] text-gray-400 font-medium mt-1.5">{{ pageDescription }}</p>
+ </div>
 
  <!-- Mobile Overlay -->
  <Transition name="overlay">
@@ -183,7 +190,7 @@
  </Transition>
 
  <!-- Main Content -->
- <main class="flex-1 flex flex-col min-h-screen transition-all duration-300" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
+ <main class="flex-1 flex flex-col min-h-screen transition-all duration-300 pb-24 lg:pb-0" :class="isSidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'">
  <!-- Desktop Header -->
  <header class="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-30 px-5 py-5 hidden lg:flex items-center justify-between">
  <div>
@@ -299,6 +306,23 @@
  </div>
  </footer> -->
  </main>
+
+ <!-- Bottom tabs: the five places a rider goes, within thumb reach -->
+ <nav class="bottom-tabs lg:hidden" aria-label="Main">
+   <NuxtLink
+     v-for="tab in bottomTabs"
+     :key="tab.path"
+     :to="tab.path"
+     class="tab"
+     :class="{ on: isActive(tab.path) }"
+   >
+     <span class="tab-icon">
+       <component :is="tab.icon" class="w-[22px] h-[22px]" />
+       <span v-if="tab.badge" class="tab-badge">{{ tab.badge > 9 ? '9+' : tab.badge }}</span>
+     </span>
+     <span class="tab-label">{{ tab.label }}</span>
+   </NuxtLink>
+ </nav>
 
  <!-- Logout Confirmation Modal -->
  <Transition name="fade">
@@ -464,6 +488,14 @@ const handleNavClick = (e: Event, path: string) => {
   }
 }
 
+const bottomTabs = computed(() => [
+  { path: '/dashboard', label: 'Home', icon: LayoutDashboard },
+  { path: '/deliveries/pool', label: 'Pool', icon: Layers },
+  { path: '/deliveries', label: 'Deliveries', icon: Bike },
+  { path: '/deliveries/chats', label: 'Chats', icon: MessageSquare, badge: unreadCount.value },
+  { path: '/earnings', label: 'Earnings', icon: Wallet },
+])
+
 const navItems = [
  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
  { path: '/deliveries/pool', label: 'Available Errands', icon: Layers },
@@ -532,5 +564,70 @@ watch(() => route.path, () => showMobileMenu.value = false)
 @keyframes scaleIn {
  from { opacity: 0; transform: scale(0.95) translateY(8px); }
  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/*
+ * Mobile-first navigation.
+ *
+ * The app was driven by a desktop sidebar with a slide-in drawer on a phone: the primary destinations sat behind a
+ * hamburger in the top corner, which is the furthest point from a thumb. They are now permanent tabs along the bottom
+ * edge, where a rider's hand already is, with the header reduced to identity and alerts.
+ */
+.bottom-tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid #eef0f3;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 2px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #9aa1ac;
+  transition: color 0.15s ease;
+}
+
+.tab.on {
+  color: #ff5c1a;
+}
+
+.tab-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.tab-badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #ff5c1a;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 16px;
+  text-align: center;
+}
+
+.tab-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 </style>
